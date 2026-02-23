@@ -19,4 +19,24 @@ public interface I_ServerAPI {
 
 	BigDecimal getOutstandingBalance();
 
+	/**
+	 * 
+	 * @param itemID
+	 */
+	int checkStock(String itemID);
+
+	/**
+	 * 
+	 * @param merchantID
+	 * @param items
+	 */
+	void submitOrder(String merchantID, Map<String, Integer> items);
+
+	/**
+	 * 
+	 * @param username
+	 * @param password
+	 */
+	boolean authenticateMerchant(String username, String password);
+
 }

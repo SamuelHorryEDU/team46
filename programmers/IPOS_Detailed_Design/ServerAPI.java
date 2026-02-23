@@ -34,4 +34,29 @@ public class ServerAPI implements submitOrder, I_ServerAPI {
 		throw new UnsupportedOperationException();
 	}
 
+	public BigDecimal getOutstandingBalance() {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * 
+	 * @param orderId
+	 */
+	public OrderStatus getOrderStatus(String orderId) {
+		throw new UnsupportedOperationException();
+	}
+
+	public List<Product> getCatalogue() {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * 
+	 * @param fromDate
+	 * @param toDate
+	 */
+	public List<Order> getOrderHistory(LocalDate fromDate, LocalDate toDate) {
+		throw new UnsupportedOperationException();
+	}
+
 }
