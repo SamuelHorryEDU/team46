@@ -39,4 +39,11 @@ public interface I_ServerAPI {
 	 */
 	boolean authenticateMerchant(String username, String password);
 
+	/**
+	 * 
+	 * @param merchantID
+	 * @param items
+	 */
+	void placeOrder(String merchantID, List<OrderItem> items);
+
 }

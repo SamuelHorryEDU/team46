@@ -30,7 +30,7 @@ public class ServerAPI implements submitOrder, I_ServerAPI {
 	 * @param username
 	 * @param password
 	 */
-	public boolean authenticateMerchant(String username, String password) {
+	public void authenticateMerchant(String username, String password) {
 		throw new UnsupportedOperationException();
 	}
 
