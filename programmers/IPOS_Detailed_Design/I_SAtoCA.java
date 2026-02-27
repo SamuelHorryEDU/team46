@@ -1,6 +1,6 @@
 package IPOS_Detailed_Design;
 
-public interface I_ServerAPI {
+public interface I_SAtoCA {
 
 	/**
 	 * 
@@ -15,7 +15,7 @@ public interface I_ServerAPI {
 	 * 
 	 * @param orderId
 	 */
-	OrderStatus getOrderStatus(String orderId);
+	OrderStatus getOrderStatus(string orderId);
 
 	BigDecimal getOutstandingBalance();
 
@@ -37,13 +37,13 @@ public interface I_ServerAPI {
 	 * @param username
 	 * @param password
 	 */
-	boolean authenticateMerchant(String username, String password);
+	boolean authenticateMerchant(string username, string password);
 
 	/**
 	 * 
 	 * @param merchantID
 	 * @param items
 	 */
-	void placeOrder(String merchantID, List<OrderItem> items);
+	OrderConfirmation placeOrder(string merchantID, List<OrderItem> items);
 
 }

@@ -2,17 +2,9 @@ package IPOS_Detailed_Design;
 
 import Design_Model.IPOS_Detailed_Design.I_ServerAPI.*;
 
-public class ServerAPI implements submitOrder, I_ServerAPI {
+public class SAtoCA implements submitOrder, I_SAtoCA {
 
-	public ServerAPI() {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param itemID
-	 */
-	public int checkStock(String itemID) {
+	public SAtoCA() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -21,7 +13,7 @@ public class ServerAPI implements submitOrder, I_ServerAPI {
 	 * @param merchantID
 	 * @param items
 	 */
-	public boolean submitOrder(String merchantID, Map<String, Integer> items) {
+	public OrderConfirmation placeOrder(string merchantID, List<OrderItem> items) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -30,7 +22,7 @@ public class ServerAPI implements submitOrder, I_ServerAPI {
 	 * @param username
 	 * @param password
 	 */
-	public void authenticateMerchant(String username, String password) {
+	public boolean authenticateMerchant(string username, string password) {
 		throw new UnsupportedOperationException();
 	}
 
