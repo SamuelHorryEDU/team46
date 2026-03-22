@@ -1,4 +1,9 @@
 package IPOS_Detailed_Design;
 
-public class OrderStatus {
+public enum OrderStatus {
+    ACCEPTED,
+    PROCESSING,
+    DISPATCHED,
+    DELIVERED,
+    CANCELLED
 }
