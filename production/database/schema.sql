@@ -1,4 +1,5 @@
 -- Create the database
+-- Version 3
 CREATE DATABASE IF NOT EXISTS ipos_sa_db;
 USE ipos_sa_db;
 
@@ -7,10 +8,23 @@ CREATE TABLE Users (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(50) UNIQUE NOT NULL,
     Password VARCHAR(255) NOT NULL,
-    Role ENUM('Admin', 'Manager', 'Merchant') NOT NULL,
-    ContactDetails VARCHAR(255),
+    Role ENUM(
+      'Admin',
+      'Director of Operations',
+      'Merchant',
+      'Senior accountant',
+      'Accountant',
+      'Warehouse employee',
+      'Delivery department employee'
+    ) NOT NULL,
+    AccountNo VARCHAR(20) UNIQUE,
+    AccountHolderName VARCHAR(100),
+    ContactName VARCHAR(100),
+    Address VARCHAR(255),
+    Phone VARCHAR(20),
     CreditLimit DECIMAL(10,2),
-    DiscountPlan ENUM('Fixed', 'Flexible'),
+    DiscountPlan ENUM('Fixed', 'Flexible', 'Variable'),
+    DiscountRate VARCHAR(255),
     AccountStatus ENUM('Normal', 'Suspended', 'In_Default') DEFAULT 'Normal',
     OutstandingBalance DECIMAL(10,2) DEFAULT 0.00
 );
@@ -38,7 +52,7 @@ CREATE TABLE Orders (
     MerchantID INT,
     OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     TotalAmount DECIMAL(10,2),
-    OrderStatus ENUM('ACCEPTED', 'PROCESSING', 'DISPATCHED', 'DELIVERED', 'CANCELLED') DEFAULT 'ACCEPTED', -- Added CANCELLED
+    OrderStatus ENUM('ACCEPTED', 'PROCESSING', 'READY_TO_DISPATCH', 'DISPATCHED', 'DELIVERED', 'CANCELLED') DEFAULT 'ACCEPTED', -- Added CANCELLED
     EstimatedDelivery DATETIME, -- New: Separated for OrderConfirmation DTO
     DispatchDetails VARCHAR(255),
     FOREIGN KEY (MerchantID) REFERENCES Users(UserID)
