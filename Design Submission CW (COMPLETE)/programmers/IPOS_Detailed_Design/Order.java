@@ -10,7 +10,7 @@ public class Order {
     public Order(int orderId) {
         this.orderId = orderId;
         this.items = new ArrayList<>();
-        this.status = OrderStatus.PENDING;
+        this.status = OrderStatus.PROCESSING;
     }
 
     public void addItem(OrderItem item) {
@@ -26,12 +26,12 @@ public class Order {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = OrderStatus.valueOf(status);
     }
 
     public int getOrderId() { return orderId; }
     public List<OrderItem> getItems() { return items; }
-    public String getStatus() { return status; }
+    public OrderStatus getStatus() { return status; }
 
 
 }

@@ -1,6 +1,9 @@
 package IPOS_Detailed_Design;
 
 import Design_Model.IPOS_Detailed_Design.I_ServerAPI.*;
+import java.util.List;
+import java.time.LocalDate;
+import java.math.BigDecimal;
 
 public class SAtoCA implements submitOrder, I_SAtoCA {
 
@@ -13,7 +16,7 @@ public class SAtoCA implements submitOrder, I_SAtoCA {
 	 * @param merchantID
 	 * @param items
 	 */
-	public OrderConfirmation placeOrder(string merchantID, List<OrderItem> items) {
+	public <string> OrderConfirmation placeOrder(string merchantID, List<OrderItem> items) {
 		throw new UnsupportedOperationException();
 	}
 
