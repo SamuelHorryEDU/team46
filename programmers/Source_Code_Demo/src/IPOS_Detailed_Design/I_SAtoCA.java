@@ -23,4 +23,3 @@ public interface I_SAtoCA {
 
     OrderConfirmation placeOrder(String merchantID, List<OrderItem> items);
 }
-
