@@ -1,4 +1,8 @@
 package IPOS_Detailed_Design;
+import java.util.List;
+import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.util.Map;
 
 public interface I_SAtoCA {
 
@@ -15,7 +19,7 @@ public interface I_SAtoCA {
 	 * 
 	 * @param orderId
 	 */
-	OrderStatus getOrderStatus(string orderId);
+	<string> OrderStatus getOrderStatus(string orderId);
 
 	BigDecimal getOutstandingBalance();
 
@@ -37,13 +41,13 @@ public interface I_SAtoCA {
 	 * @param username
 	 * @param password
 	 */
-	boolean authenticateMerchant(string username, string password);
+	<string> boolean authenticateMerchant(string username, string password);
 
 	/**
 	 * 
 	 * @param merchantID
 	 * @param items
 	 */
-	OrderConfirmation placeOrder(string merchantID, List<OrderItem> items);
+	<string> OrderConfirmation placeOrder(string merchantID, List<OrderItem> items);
 
 }
