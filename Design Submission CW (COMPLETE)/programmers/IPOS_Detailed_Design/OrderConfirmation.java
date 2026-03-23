@@ -1,24 +1,53 @@
 package IPOS_Detailed_Design;
 
-public class OrderConfirmation {
-    private int orderId;
-    private String message;
-    private double totalAmount;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-    public OrderConfirmation(int orderId, String message, double totalAmount) {
+public class OrderConfirmation {
+    private String orderId;
+    private LocalDateTime orderDateTime;
+    private BigDecimal totalAmount;
+    private OrderStatus status;
+
+    public OrderConfirmation() {
+    }
+
+    public OrderConfirmation(String orderId, LocalDateTime orderDateTime, BigDecimal totalAmount, OrderStatus status) {
         this.orderId = orderId;
-        this.message = message;
+        this.orderDateTime = orderDateTime;
+        this.totalAmount = totalAmount;
+        this.status = status;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
+    }
+
+    public void setOrderDateTime(LocalDateTime orderDateTime) {
+        this.orderDateTime = orderDateTime;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public void printConfirmation() {
-        System.out.println("Order ID: " + orderId);
-        System.out.println("Message: " + message);
-        System.out.println("Total: £" + totalAmount);
+    public OrderStatus getStatus() {
+        return status;
     }
 
-    // Getters
-    public int getOrderId() { return orderId; }
-    public String getMessage() { return message; }
-    public double getTotalAmount() { return totalAmount; }
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
 }

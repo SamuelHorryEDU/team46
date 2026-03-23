@@ -1,57 +1,57 @@
 package IPOS_Detailed_Design;
 
-import Design_Model.IPOS_Detailed_Design.I_ServerAPI.*;
-import java.util.List;
-import java.time.LocalDate;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
-public class SAtoCA implements submitOrder, I_SAtoCA {
+public class SAtoCA implements I_SAtoCA {
+
+	private final AccountService accountService;
+	private final OrderService orderService;
 
 	public SAtoCA() {
-		throw new UnsupportedOperationException();
+		this.accountService = new AccountService();
+		this.orderService = new OrderService();
 	}
 
-	/**
-	 * 
-	 * @param merchantID
-	 * @param items
-	 */
-	public <string> OrderConfirmation placeOrder(string merchantID, List<OrderItem> items) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param username
-	 * @param password
-	 */
-	public boolean authenticateMerchant(string username, string password) {
-		throw new UnsupportedOperationException();
-	}
-
-	public BigDecimal getOutstandingBalance() {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param orderId
-	 */
-	public OrderStatus getOrderStatus(String orderId) {
-		throw new UnsupportedOperationException();
-	}
-
-	public List<Product> getCatalogue() {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param fromDate
-	 * @param toDate
-	 */
+	@Override
 	public List<Order> getOrderHistory(LocalDate fromDate, LocalDate toDate) {
-		throw new UnsupportedOperationException();
+		return orderService.getOrderHistory(fromDate, toDate);
 	}
 
+	@Override
+	public List<Product> getCatalogue() {
+		return orderService.getCatalogue();
+	}
+
+	@Override
+	public OrderStatus getOrderStatus(String orderId) {
+		return orderService.getOrderStatus(orderId);
+	}
+
+	@Override
+	public BigDecimal getOutstandingBalance() {
+		return accountService.getOutstandingBalance("M001");
+	}
+
+	@Override
+	public int checkStock(String itemID) {
+		return orderService.checkStock(itemID);
+	}
+
+	@Override
+	public void submitOrder(String merchantID, Map<String, Integer> items) {
+		orderService.submitOrder(merchantID, items);
+	}
+
+	@Override
+	public boolean authenticateMerchant(String username, String password) {
+		return accountService.authenticateMerchant(username, password);
+	}
+
+	@Override
+	public OrderConfirmation placeOrder(String merchantID, List<OrderItem> items) {
+		return orderService.placeOrder(merchantID, items);
+	}
 }

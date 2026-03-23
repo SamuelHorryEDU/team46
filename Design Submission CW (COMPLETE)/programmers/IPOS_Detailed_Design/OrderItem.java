@@ -1,22 +1,30 @@
 package IPOS_Detailed_Design;
 
 public class OrderItem {
-    private String productName;
+    private String productId;
     private int quantity;
-    private double price;
 
-    public OrderItem(String productName, int quantity, double price) {
-        this.productName = productName;
+    public OrderItem() {
+    }
+
+    public OrderItem(String productId, int quantity) {
+        this.productId = productId;
         this.quantity = quantity;
-        this.price = price;
     }
 
-    public double getTotalPrice() {
-        return price * quantity;
+    public String getProductId() {
+        return productId;
     }
 
-    // Getters
-    public String getProductName() { return productName; }
-    public int getQuantity() { return quantity; }
-    public double getPrice() { return price; }
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

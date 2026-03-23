@@ -1,37 +1,64 @@
 package IPOS_Detailed_Design;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private int orderId;
-    private List<IPOS_Detailed_Design.OrderItem> items;
+    private String orderId;
+    private String merchantId;
+    private LocalDate orderDate;
     private OrderStatus status;
+    private List<OrderItem> items = new ArrayList<>();
 
-    public Order(int orderId) {
+    public Order() {
+    }
+
+    public Order(String orderId, String merchantId, LocalDate orderDate, OrderStatus status, List<OrderItem> items) {
         this.orderId = orderId;
-        this.items = new ArrayList<>();
-        this.status = OrderStatus.PROCESSING;
+        this.merchantId = merchantId;
+        this.orderDate = orderDate;
+        this.status = status;
+        this.items = items;
     }
 
-    public void addItem(OrderItem item) {
-        items.add(item);
+    public String getOrderId() {
+        return orderId;
     }
 
-    public double calculateTotal() {
-        double total = 0;
-        for (OrderItem item : items) {
-            total += item.getTotalPrice();
-        }
-        return total;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
-    public void setStatus(String status) {
-        this.status = OrderStatus.valueOf(status);
+    public String getMerchantId() {
+        return merchantId;
     }
 
-    public int getOrderId() { return orderId; }
-    public List<OrderItem> getItems() { return items; }
-    public OrderStatus getStatus() { return status; }
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
 
+    public LocalDate getOrderDate() {
+        return orderDate;
+    }
 
+    public void setOrderDate(LocalDate orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public List<OrderItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
+    }
 }
