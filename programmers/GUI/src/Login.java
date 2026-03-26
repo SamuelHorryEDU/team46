@@ -26,7 +26,7 @@ public class Login extends JFrame implements ActionListener {
             f.mkdirs();
         }
     }
-    //check file is exist or not
+    //check file is exist or nots
     void readFile() {
         try {
             FileReader fr = new FileReader(f + "\\logins.txt");
