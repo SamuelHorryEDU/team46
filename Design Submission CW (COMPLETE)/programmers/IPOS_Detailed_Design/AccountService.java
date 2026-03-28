@@ -29,13 +29,4 @@ public class AccountService {
         }
         return BigDecimal.ZERO;
     }
-
-    public Merchant getMerchantById(String merchantId) {
-        for (Merchant merchant : merchants) {
-            if (merchant.getMerchantId().equals(merchantId)) {
-                return merchant;
-            }
-        }
-        return null;
-    }
 }

@@ -12,13 +12,6 @@ public class OrderConfirmation {
     public OrderConfirmation() {
     }
 
-    public OrderConfirmation(String orderId, LocalDateTime orderDateTime, BigDecimal totalAmount, OrderStatus status) {
-        this.orderId = orderId;
-        this.orderDateTime = orderDateTime;
-        this.totalAmount = totalAmount;
-        this.status = status;
-    }
-
     public String getOrderId() {
         return orderId;
     }

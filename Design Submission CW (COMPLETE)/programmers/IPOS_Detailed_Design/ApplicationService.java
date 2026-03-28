@@ -2,9 +2,6 @@ package IPOS_Detailed_Design;
 
 public class ApplicationService implements I_ApplicationService {
 
-    public ApplicationService() {
-    }
-
     @Override
     public ApprovalStatus submitCommercialApplication(Application application) {
         if (application == null) {

@@ -14,14 +14,6 @@ public class Order {
     public Order() {
     }
 
-    public Order(String orderId, String merchantId, LocalDate orderDate, OrderStatus status, List<OrderItem> items) {
-        this.orderId = orderId;
-        this.merchantId = merchantId;
-        this.orderDate = orderDate;
-        this.status = status;
-        this.items = items;
-    }
-
     public String getOrderId() {
         return orderId;
     }

@@ -40,14 +40,8 @@ public class OrderService {
     }
 
     public OrderConfirmation placeOrder(String merchantId, List<OrderItem> items) {
-        if (merchantId == null || merchantId.isBlank()) {
-            throw new IllegalArgumentException("merchantId cannot be blank");
-        }
-        if (items == null || items.isEmpty()) {
-            throw new IllegalArgumentException("items cannot be empty");
-        }
-
         BigDecimal total = BigDecimal.ZERO;
+
         for (OrderItem item : items) {
             for (Product product : catalogue) {
                 if (product.getProductId().equals(item.getProductId())) {
