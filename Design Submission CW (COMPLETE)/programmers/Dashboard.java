@@ -7,17 +7,21 @@ import java.math.BigDecimal;
 
 public class Dashboard extends JFrame {
 
-    private JPanel Dashboard;
+    private JPanel dashboardPanel;
     private JButton button1;
 
     public Dashboard() {
-        setContentPane(Dashboard);
+        dashboardPanel = new JPanel();
+        button1 = new JButton("Show Balance");
+
+        dashboardPanel.add(button1);
+
+        setContentPane(dashboardPanel);
         setTitle("Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
         setLocationRelativeTo(null);
-
-        button1.setText("Show Balance");
+        setVisible(true);
 
         button1.addActionListener(new ActionListener() {
             @Override
@@ -27,8 +31,6 @@ public class Dashboard extends JFrame {
                 JOptionPane.showMessageDialog(Dashboard.this, "Outstanding Balance: " + balance);
             }
         });
-
-        setVisible(true);
     }
 
     public static void main(String[] args) {
