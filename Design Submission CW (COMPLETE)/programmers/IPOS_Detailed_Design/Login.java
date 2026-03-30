@@ -66,7 +66,7 @@ public class Login implements ActionListener {
         if (success) {
             JOptionPane.showMessageDialog(null, "Welcome Merchant");
             frame.dispose();
-            new Dashboard();
+            new IPOS_Detailed_Design.Dashboard();
         } else {
             JOptionPane.showMessageDialog(null, "Incorrect credentials.");
         }
