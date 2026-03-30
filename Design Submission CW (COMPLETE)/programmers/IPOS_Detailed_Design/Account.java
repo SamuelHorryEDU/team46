@@ -7,15 +7,17 @@ public class Account {
     private String merchantId;
     private BigDecimal balance;
     private String status;
+    private String role;
 
     public Account() {
     }
 
-    public Account(String accountId, String merchantId, BigDecimal balance, String status) {
+    public Account(String accountId, String merchantId, BigDecimal balance, String status, String role) {
         this.accountId = accountId;
         this.merchantId = merchantId;
         this.balance = balance;
         this.status = status;
+        this.role = role;
     }
 
     public String getAccountId() {
@@ -49,4 +51,8 @@ public class Account {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getRole() {return role;};
+
+    public void setRole(String role) {this.role = role;};
 }
