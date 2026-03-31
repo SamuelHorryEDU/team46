@@ -4,6 +4,9 @@
  */
 package loginGUI;
 
+import com.formdev.flatlaf.*;
+import javax.swing.UIManager;
+
 /**
  *
  * @author Kaitlyn
@@ -94,7 +97,7 @@ public class loginGUI extends javax.swing.JFrame {
 
         page.setBackground(new java.awt.Color(255, 204, 102));
 
-        pc_icon.setIcon(new javax.swing.ImageIcon("C:\\Users\\lapis\\OneDrive - City, University of London\\Documents\\Computer Science Year 2\\netbeans2\\login\\src\\main\\java\\loginGUI\\computer.png")); // NOI18N
+        pc_icon.setIcon(new javax.swing.ImageIcon("Z:\\Github REPOS\\team46\\programmers\\GUI\\src\\loginGUI\\computer.png")); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Colonna MT", 1, 48)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 51, 51));
@@ -150,9 +153,9 @@ public class loginGUI extends javax.swing.JFrame {
         login_button.setText("LOGIN");
         login_button.addActionListener(this::login_buttonActionPerformed);
 
-        icon_user.setIcon(new javax.swing.ImageIcon("C:\\Users\\lapis\\OneDrive - City, University of London\\Documents\\Computer Science Year 2\\netbeans2\\login\\src\\main\\java\\loginGUI\\user.png")); // NOI18N
+        icon_user.setIcon(new javax.swing.ImageIcon("Z:\\Github REPOS\\team46\\programmers\\GUI\\src\\loginGUI\\user.png")); // NOI18N
 
-        icon_pass.setIcon(new javax.swing.ImageIcon("C:\\Users\\lapis\\OneDrive - City, University of London\\Documents\\Computer Science Year 2\\netbeans2\\login\\src\\main\\java\\loginGUI\\padlock.png")); // NOI18N
+        icon_pass.setIcon(new javax.swing.ImageIcon("Z:\\Github REPOS\\team46\\programmers\\GUI\\src\\loginGUI\\padlock.png")); // NOI18N
 
         javax.swing.GroupLayout loginLayout = new javax.swing.GroupLayout(login);
         login.setLayout(loginLayout);
@@ -175,7 +178,7 @@ public class loginGUI extends javax.swing.JFrame {
         loginLayout.setVerticalGroup(
             loginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(120, Short.MAX_VALUE)
                 .addGroup(loginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(usernameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(icon_user, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -271,25 +274,13 @@ public class loginGUI extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new loginGUI().setVisible(true);
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        });
         //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new loginGUI().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
