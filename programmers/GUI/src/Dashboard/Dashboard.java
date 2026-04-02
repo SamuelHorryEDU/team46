@@ -4,6 +4,12 @@
  */
 package Dashboard;
 
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle;
+import javax.swing.table.*;
 import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.UIManager;
 
@@ -29,597 +35,975 @@ public class Dashboard extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // Generated using JFormDesigner Evaluation license - Kaitlyn
     private void initComponents() {
+        TaskBar = new JPanel();
+        jButton2 = new JButton();
+        dashboardTabs = new JTabbedPane();
+        dashboardTab = new JPanel();
+        jLabel1 = new JLabel();
+        jSeparator1 = new JSeparator();
+        jPanel1 = new JPanel();
+        jLabel2 = new JLabel();
+        jLabel3 = new JLabel();
+        jLabel4 = new JLabel();
+        jLabel5 = new JLabel();
+        jPanel2 = new JPanel();
+        jPanel3 = new JPanel();
+        jPanel4 = new JPanel();
+        jPanel5 = new JPanel();
+        jPanel6 = new JPanel();
+        jLabel6 = new JLabel();
+        catManagementTab = new JPanel();
+        jLabel12 = new JLabel();
+        jTextField2 = new JTextField();
+        jTextField5 = new JTextField();
+        jTextField6 = new JTextField();
+        label1 = new Label();
+        jButton10 = new JButton();
+        jButton11 = new JButton();
+        jScrollPane2 = new JScrollPane();
+        CatalogueTable = new JTable();
+        jTextField7 = new JTextField();
+        jTextField8 = new JTextField();
+        jTextField9 = new JTextField();
+        jTextField10 = new JTextField();
+        jSeparator2 = new JSeparator();
+        userTab = new JPanel();
+        jLabel13 = new JLabel();
+        jTabbedPane1 = new JTabbedPane();
+        jPanel7 = new JPanel();
+        jTextField16 = new JTextField();
+        jScrollPane6 = new JScrollPane();
+        jTable3 = new JTable();
+        jLabel16 = new JLabel();
+        jTextField17 = new JTextField();
+        jTextField18 = new JTextField();
+        jButton14 = new JButton();
+        jButton15 = new JButton();
+        jComboBox2 = new JComboBox<>();
+        jPanel8 = new JPanel();
+        jScrollPane3 = new JScrollPane();
+        CatalogueTable1 = new JTable();
+        jButton16 = new JButton();
+        jLabel9 = new JLabel();
+        jButton1 = new JButton();
+        Orders = new JPanel();
+        jLabel14 = new JLabel();
+        jSeparator4 = new JSeparator();
+        userTab1 = new JPanel();
+        jLabel15 = new JLabel();
+        jLabel11 = new JLabel();
+        jTextField12 = new JTextField();
+        jButton12 = new JButton();
+        jTextField13 = new JTextField();
+        jTextField14 = new JTextField();
+        jButton13 = new JButton();
+        jScrollPane4 = new JScrollPane();
+        jScrollPane5 = new JScrollPane();
+        jTable2 = new JTable();
+        jTextField15 = new JTextField();
+        jSeparator5 = new JSeparator();
+        jTabbedPane2 = new JTabbedPane();
+        Dashboard = new JPanel();
+        homeB = new JButton();
+        usersB = new JButton();
+        catB = new JButton();
+        ordersB = new JButton();
+        reportsB = new JButton();
+        appB = new JButton();
+        jSeparator6 = new JSeparator();
+        jLabel8 = new JLabel();
 
-        TaskBar = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        dashboardTabs = new javax.swing.JTabbedPane();
-        dashboardTab = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        catManagementTab = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        label1 = new java.awt.Label();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        CatalogueTable = new javax.swing.JTable();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
-        jSeparator2 = new javax.swing.JSeparator();
-        userTab = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton8 = new javax.swing.JButton();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jButton9 = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jTextField11 = new javax.swing.JTextField();
-        jSeparator3 = new javax.swing.JSeparator();
-        Dashboard = new javax.swing.JPanel();
-        homeB = new javax.swing.JButton();
-        usersB = new javax.swing.JButton();
-        catB = new javax.swing.JButton();
-        ordersB = new javax.swing.JButton();
-        reportsB = new javax.swing.JButton();
-        appB = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(255, 255, 255));
-        setMaximumSize(new java.awt.Dimension(1200, 600));
-        setMinimumSize(new java.awt.Dimension(1200, 600));
+        //======== this ========
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setBackground(Color.white);
+        setMinimumSize(new Dimension(1200, 600));
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1200, 600));
         setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        var contentPane = getContentPane();
 
-        TaskBar.setBackground(new java.awt.Color(0, 0, 0));
-        TaskBar.setMaximumSize(new java.awt.Dimension(1200, 1200));
-        TaskBar.setMinimumSize(new java.awt.Dimension(960, 540));
-        TaskBar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                TaskBarMouseDragged(evt);
-            }
-        });
-        TaskBar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                TaskBarMousePressed(evt);
-            }
-        });
+        //======== TaskBar ========
+        {
+            TaskBar.setBackground(Color.black);
+            TaskBar.setMaximumSize(new Dimension(1200, 1200));
+            TaskBar.setMinimumSize(new Dimension(960, 540));
+            TaskBar.addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    TaskBarMouseDragged(e);
+                }
+            });
+            TaskBar.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    TaskBarMousePressed(e);
+                }
+            });
+            TaskBar.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+            0, 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+            . BOTTOM, new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+            red) ,TaskBar. getBorder( )) ); TaskBar. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+            beans .PropertyChangeEvent e) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
 
-        jButton2.setText("X");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
-            }
-        });
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+            //---- jButton2 ----
+            jButton2.setText("X");
+            jButton2.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    jButton2MouseClicked(e);
+                }
+            });
+            jButton2.addActionListener(e -> jButton2ActionPerformed(e));
 
-        javax.swing.GroupLayout TaskBarLayout = new javax.swing.GroupLayout(TaskBar);
-        TaskBar.setLayout(TaskBarLayout);
-        TaskBarLayout.setHorizontalGroup(
-            TaskBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TaskBarLayout.createSequentialGroup()
-                .addContainerGap(1154, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        TaskBarLayout.setVerticalGroup(
-            TaskBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(TaskBarLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton2)
-                .addGap(0, 511, Short.MAX_VALUE))
-        );
+            GroupLayout TaskBarLayout = new GroupLayout(TaskBar);
+            TaskBar.setLayout(TaskBarLayout);
+            TaskBarLayout.setHorizontalGroup(
+                TaskBarLayout.createParallelGroup()
+                    .addGroup(TaskBarLayout.createSequentialGroup()
+                        .addGap(1154, 1154, 1154)
+                        .addComponent(jButton2, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))
+            );
+            TaskBarLayout.setVerticalGroup(
+                TaskBarLayout.createParallelGroup()
+                    .addGroup(TaskBarLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jButton2))
+            );
+        }
 
-        getContentPane().add(TaskBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 40));
+        //======== dashboardTabs ========
+        {
+            dashboardTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+            dashboardTabs.setMaximumSize(new Dimension(1000, 600));
+            dashboardTabs.setMinimumSize(new Dimension(1000, 600));
+            dashboardTabs.setPreferredSize(new Dimension(1000, 600));
 
-        dashboardTabs.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
-        dashboardTabs.setMaximumSize(new java.awt.Dimension(1000, 600));
-        dashboardTabs.setMinimumSize(new java.awt.Dimension(1000, 600));
-        dashboardTabs.setPreferredSize(new java.awt.Dimension(1000, 600));
+            //======== dashboardTab ========
+            {
+                dashboardTab.setBackground(Color.white);
+                dashboardTab.setMaximumSize(new Dimension(1000, 600));
+                dashboardTab.setMinimumSize(new Dimension(1000, 600));
+                dashboardTab.setPreferredSize(new Dimension(1000, 600));
 
-        dashboardTab.setBackground(new java.awt.Color(255, 255, 255));
-        dashboardTab.setMaximumSize(new java.awt.Dimension(1000, 600));
-        dashboardTab.setMinimumSize(new java.awt.Dimension(1000, 600));
-        dashboardTab.setPreferredSize(new java.awt.Dimension(1000, 600));
+                //---- jLabel1 ----
+                jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 48));
+                jLabel1.setText("DASHBOARD");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
-        jLabel1.setText("DASHBOARD");
+                //======== jPanel1 ========
+                {
 
-        jLabel2.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        jLabel2.setText("ROLE");
+                    //---- jLabel2 ----
+                    jLabel2.setFont(new Font("sansserif", Font.BOLD, 12));
+                    jLabel2.setText("ROLE");
 
-        jLabel3.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        jLabel3.setText("Name");
+                    //---- jLabel3 ----
+                    jLabel3.setFont(new Font("sansserif", Font.BOLD, 12));
+                    jLabel3.setText("Name");
 
-        jLabel4.setText("<ROLE>");
+                    //---- jLabel4 ----
+                    jLabel4.setText("<ROLE>");
 
-        jLabel5.setText("<NAME>");
+                    //---- jLabel5 ----
+                    jLabel5.setText("<NAME>");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5)))
-                .addContainerGap(128, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel5))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 212, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 112, Short.MAX_VALUE)
-        );
-
-        jLabel6.setFont(new java.awt.Font("sansserif", 3, 12)); // NOI18N
-        jLabel6.setText("<INSERT WARNING>");
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6)
-                .addContainerGap(8, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout dashboardTabLayout = new javax.swing.GroupLayout(dashboardTab);
-        dashboardTab.setLayout(dashboardTabLayout);
-        dashboardTabLayout.setHorizontalGroup(
-            dashboardTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dashboardTabLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(dashboardTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(dashboardTabLayout.createSequentialGroup()
-                        .addComponent(jSeparator1)
-                        .addContainerGap())
-                    .addGroup(dashboardTabLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(14, 14, 14))
-                    .addGroup(dashboardTabLayout.createSequentialGroup()
-                        .addGroup(dashboardTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, dashboardTabLayout.createSequentialGroup()
-                                .addGap(88, 88, 88)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(110, Short.MAX_VALUE))))
-        );
-        dashboardTabLayout.setVerticalGroup(
-            dashboardTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dashboardTabLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(dashboardTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
-                .addGroup(dashboardTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(371, Short.MAX_VALUE))
-        );
-
-        dashboardTabs.addTab("dashboard", dashboardTab);
-
-        catManagementTab.setBackground(new java.awt.Color(255, 255, 255));
-        catManagementTab.setMaximumSize(new java.awt.Dimension(1000, 600));
-        catManagementTab.setMinimumSize(new java.awt.Dimension(1000, 600));
-        catManagementTab.setPreferredSize(new java.awt.Dimension(1000, 600));
-
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
-        jLabel12.setText("CATALOGUE MANAGEMENT");
-
-        jTextField2.setText("Description");
-
-        jTextField5.setText("Unit");
-        jTextField5.addActionListener(this::jTextField5ActionPerformed);
-
-        jTextField6.setText("Package Type");
-
-        label1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        label1.setText("Add Item");
-
-        jButton10.setText("Remove Selected Item");
-
-        jButton11.setText("Add Item");
-
-        CatalogueTable.setAutoCreateRowSorter(true);
-        CatalogueTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Item ID", "Description", "Package Type", "Unit", "Units In Pack", "Package Cost,  £", "Availability, packs", "Stock Limit, packs"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Boolean.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(CatalogueTable);
-
-        jTextField7.setText("Search..");
-
-        jTextField8.setText("Units in Pack");
-        jTextField8.addActionListener(this::jTextField8ActionPerformed);
-
-        jTextField9.setText("Cost");
-        jTextField9.addActionListener(this::jTextField9ActionPerformed);
-
-        jTextField10.setText("Availability");
-        jTextField10.addActionListener(this::jTextField10ActionPerformed);
-
-        javax.swing.GroupLayout catManagementTabLayout = new javax.swing.GroupLayout(catManagementTab);
-        catManagementTab.setLayout(catManagementTabLayout);
-        catManagementTabLayout.setHorizontalGroup(
-            catManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(catManagementTabLayout.createSequentialGroup()
-                .addGroup(catManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(catManagementTabLayout.createSequentialGroup()
-                        .addGroup(catManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(catManagementTabLayout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addGroup(catManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, catManagementTabLayout.createSequentialGroup()
-                                        .addComponent(jTextField7)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(catManagementTabLayout.createSequentialGroup()
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1036, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(catManagementTabLayout.createSequentialGroup()
+                    GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
+                    jPanel1.setLayout(jPanel1Layout);
+                    jPanel1Layout.setHorizontalGroup(
+                        jPanel1Layout.createParallelGroup()
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel12)))
-                        .addGap(0, 14, Short.MAX_VALUE))
-                    .addGroup(catManagementTabLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator2)))
-                .addContainerGap())
-        );
-        catManagementTabLayout.setVerticalGroup(
-            catManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(catManagementTabLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel12)
-                .addGap(14, 14, 14)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(catManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton10)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addGroup(catManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton11))
-                .addContainerGap())
-        );
-
-        dashboardTabs.addTab("catalogue", catManagementTab);
-
-        userTab.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
-        jLabel13.setText("USER MANAGEMENT");
-
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel10.setText("Add User");
-
-        jTextField1.setText("Username");
-
-        jButton8.setText("Remove Selected User");
-        jButton8.addActionListener(this::jButton8ActionPerformed);
-
-        jTextField3.setText("Password");
-
-        jTextField4.setText("Role");
-
-        jButton9.setText("Add User");
-
-        jScrollPane3.setPreferredSize(new java.awt.Dimension(450, 450));
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Username", "Password", "Role"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        jScrollPane3.setViewportView(jScrollPane1);
-
-        jTextField11.setText("Search..");
-
-        javax.swing.GroupLayout userTabLayout = new javax.swing.GroupLayout(userTab);
-        userTab.setLayout(userTabLayout);
-        userTabLayout.setHorizontalGroup(
-            userTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(userTabLayout.createSequentialGroup()
-                .addGroup(userTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(userTabLayout.createSequentialGroup()
-                        .addGroup(userTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(userTabLayout.createSequentialGroup()
-                                .addGap(205, 205, 205)
-                                .addGroup(userTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(userTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton9)
-                                    .addComponent(jTextField3)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(userTabLayout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup()
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel4))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel5)))
+                                .addContainerGap(128, Short.MAX_VALUE))
+                    );
+                    jPanel1Layout.setVerticalGroup(
+                        jPanel1Layout.createParallelGroup()
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel13)))
-                        .addGap(0, 163, Short.MAX_VALUE))
-                    .addGroup(userTabLayout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5))
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    );
+                }
+
+                //======== jPanel2 ========
+                {
+
+                    GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
+                    jPanel2.setLayout(jPanel2Layout);
+                    jPanel2Layout.setHorizontalGroup(
+                        jPanel2Layout.createParallelGroup()
+                            .addGap(0, 212, Short.MAX_VALUE)
+                    );
+                    jPanel2Layout.setVerticalGroup(
+                        jPanel2Layout.createParallelGroup()
+                            .addGap(0, 0, Short.MAX_VALUE)
+                    );
+                }
+
+                //======== jPanel3 ========
+                {
+
+                    GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
+                    jPanel3.setLayout(jPanel3Layout);
+                    jPanel3Layout.setHorizontalGroup(
+                        jPanel3Layout.createParallelGroup()
+                            .addGap(0, 200, Short.MAX_VALUE)
+                    );
+                    jPanel3Layout.setVerticalGroup(
+                        jPanel3Layout.createParallelGroup()
+                            .addGap(0, 0, Short.MAX_VALUE)
+                    );
+                }
+
+                //======== jPanel4 ========
+                {
+
+                    GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
+                    jPanel4.setLayout(jPanel4Layout);
+                    jPanel4Layout.setHorizontalGroup(
+                        jPanel4Layout.createParallelGroup()
+                            .addGap(0, 200, Short.MAX_VALUE)
+                    );
+                    jPanel4Layout.setVerticalGroup(
+                        jPanel4Layout.createParallelGroup()
+                            .addGap(0, 0, Short.MAX_VALUE)
+                    );
+                }
+
+                //======== jPanel5 ========
+                {
+
+                    GroupLayout jPanel5Layout = new GroupLayout(jPanel5);
+                    jPanel5.setLayout(jPanel5Layout);
+                    jPanel5Layout.setHorizontalGroup(
+                        jPanel5Layout.createParallelGroup()
+                            .addGap(0, 200, Short.MAX_VALUE)
+                    );
+                    jPanel5Layout.setVerticalGroup(
+                        jPanel5Layout.createParallelGroup()
+                            .addGap(0, 112, Short.MAX_VALUE)
+                    );
+                }
+
+                //======== jPanel6 ========
+                {
+
+                    //---- jLabel6 ----
+                    jLabel6.setFont(new Font("sansserif", Font.BOLD | Font.ITALIC, 12));
+                    jLabel6.setText("<INSERT WARNING>");
+
+                    GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
+                    jPanel6.setLayout(jPanel6Layout);
+                    jPanel6Layout.setHorizontalGroup(
+                        jPanel6Layout.createParallelGroup()
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel6)
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    );
+                    jPanel6Layout.setVerticalGroup(
+                        jPanel6Layout.createParallelGroup()
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel6)
+                                .addContainerGap(8, Short.MAX_VALUE))
+                    );
+                }
+
+                GroupLayout dashboardTabLayout = new GroupLayout(dashboardTab);
+                dashboardTab.setLayout(dashboardTabLayout);
+                dashboardTabLayout.setHorizontalGroup(
+                    dashboardTabLayout.createParallelGroup()
+                        .addGroup(dashboardTabLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(dashboardTabLayout.createParallelGroup()
+                                .addGroup(dashboardTabLayout.createSequentialGroup()
+                                    .addComponent(jSeparator1)
+                                    .addContainerGap())
+                                .addGroup(dashboardTabLayout.createSequentialGroup()
+                                    .addComponent(jLabel1)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(14, 14, 14))
+                                .addGroup(dashboardTabLayout.createSequentialGroup()
+                                    .addGroup(dashboardTabLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jPanel6, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(GroupLayout.Alignment.LEADING, dashboardTabLayout.createSequentialGroup()
+                                            .addGap(88, 88, 88)
+                                            .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addContainerGap(110, Short.MAX_VALUE))))
+                );
+                dashboardTabLayout.setVerticalGroup(
+                    dashboardTabLayout.createParallelGroup()
+                        .addGroup(dashboardTabLayout.createSequentialGroup()
+                            .addGap(10, 10, 10)
+                            .addGroup(dashboardTabLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel1)
+                                .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jSeparator1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jPanel6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addGap(51, 51, 51)
+                            .addGroup(dashboardTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                            .addContainerGap(359, Short.MAX_VALUE))
+                );
+            }
+            dashboardTabs.addTab("dashboard", dashboardTab);
+
+            //======== catManagementTab ========
+            {
+                catManagementTab.setBackground(Color.white);
+                catManagementTab.setMaximumSize(new Dimension(1000, 600));
+                catManagementTab.setMinimumSize(new Dimension(1000, 600));
+                catManagementTab.setPreferredSize(new Dimension(1000, 600));
+
+                //---- jLabel12 ----
+                jLabel12.setFont(new Font("Segoe UI", Font.BOLD, 48));
+                jLabel12.setText("CATALOGUE MANAGEMENT");
+
+                //---- jTextField2 ----
+                jTextField2.setText("Description");
+
+                //---- jTextField5 ----
+                jTextField5.setText("Unit");
+                jTextField5.addActionListener(e -> jTextField5ActionPerformed(e));
+
+                //---- jTextField6 ----
+                jTextField6.setText("Package Type");
+
+                //---- label1 ----
+                label1.setFont(new Font(Font.DIALOG, Font.BOLD, 12));
+                label1.setText("Add Item");
+
+                //---- jButton10 ----
+                jButton10.setText("Remove Selected Item");
+
+                //---- jButton11 ----
+                jButton11.setText("Add Item");
+
+                //======== jScrollPane2 ========
+                {
+
+                    //---- CatalogueTable ----
+                    CatalogueTable.setAutoCreateRowSorter(true);
+                    CatalogueTable.setModel(new DefaultTableModel(
+                        new Object[][] {
+                            {null, null, null, null, null, null, null, null},
+                            {null, null, null, null, null, null, null, null},
+                            {null, null, null, null, null, null, null, null},
+                            {null, null, null, null, null, null, null, null},
+                        },
+                        new String[] {
+                            "Item ID", "Description", "Package Type", "Unit", "Units In Pack", "Package Cost,  \u00a3", "Availability, packs", "Stock Limit, packs"
+                        }
+                    ) {
+                        Class<?>[] columnTypes = {
+                            Integer.class, String.class, Integer.class, Boolean.class, Integer.class, String.class, Integer.class, Integer.class
+                        };
+                        @Override
+                        public Class<?> getColumnClass(int columnIndex) {
+                            return columnTypes[columnIndex];
+                        }
+                    });
+                    jScrollPane2.setViewportView(CatalogueTable);
+                }
+
+                //---- jTextField7 ----
+                jTextField7.setText("Search..");
+
+                //---- jTextField8 ----
+                jTextField8.setText("Units in Pack");
+                jTextField8.addActionListener(e -> jTextField8ActionPerformed(e));
+
+                //---- jTextField9 ----
+                jTextField9.setText("Cost");
+                jTextField9.addActionListener(e -> jTextField9ActionPerformed(e));
+
+                //---- jTextField10 ----
+                jTextField10.setText("Availability");
+                jTextField10.addActionListener(e -> jTextField10ActionPerformed(e));
+
+                GroupLayout catManagementTabLayout = new GroupLayout(catManagementTab);
+                catManagementTab.setLayout(catManagementTabLayout);
+                catManagementTabLayout.setHorizontalGroup(
+                    catManagementTabLayout.createParallelGroup()
+                        .addGroup(catManagementTabLayout.createSequentialGroup()
+                            .addGroup(catManagementTabLayout.createParallelGroup()
+                                .addGroup(catManagementTabLayout.createSequentialGroup()
+                                    .addGroup(catManagementTabLayout.createParallelGroup()
+                                        .addGroup(catManagementTabLayout.createSequentialGroup()
+                                            .addGap(14, 14, 14)
+                                            .addGroup(catManagementTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                .addGroup(GroupLayout.Alignment.TRAILING, catManagementTabLayout.createSequentialGroup()
+                                                    .addComponent(jTextField7)
+                                                    .addGap(18, 18, 18)
+                                                    .addComponent(jButton10, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(label1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(catManagementTabLayout.createSequentialGroup()
+                                                    .addComponent(jTextField2, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(jTextField6, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(jTextField5, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(jTextField8, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(jTextField9, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(jTextField10, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(jButton11, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 1036, GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(catManagementTabLayout.createSequentialGroup()
+                                            .addContainerGap()
+                                            .addComponent(jLabel12)))
+                                    .addGap(0, 14, Short.MAX_VALUE))
+                                .addGroup(catManagementTabLayout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(jSeparator2)))
+                            .addContainerGap())
+                );
+                catManagementTabLayout.setVerticalGroup(
+                    catManagementTabLayout.createParallelGroup()
+                        .addGroup(catManagementTabLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel12)
+                            .addGap(14, 14, 14)
+                            .addComponent(jSeparator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(catManagementTabLayout.createParallelGroup()
+                                .addComponent(jButton10)
+                                .addComponent(jTextField7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+                            .addGap(2, 2, 2)
+                            .addComponent(label1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 0, 0)
+                            .addGroup(catManagementTabLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(jTextField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton11))
+                            .addContainerGap())
+                );
+            }
+            dashboardTabs.addTab("catalogue", catManagementTab);
+
+            //======== userTab ========
+            {
+                userTab.setBackground(Color.white);
+
+                //---- jLabel13 ----
+                jLabel13.setFont(new Font("Segoe UI", Font.BOLD, 48));
+                jLabel13.setText("USER MANAGEMENT");
+
+                //======== jTabbedPane1 ========
+                {
+                    jTabbedPane1.setBackground(Color.white);
+
+                    //======== jPanel7 ========
+                    {
+                        jPanel7.setBackground(Color.white);
+
+                        //---- jTextField16 ----
+                        jTextField16.setText("Search..");
+
+                        //======== jScrollPane6 ========
+                        {
+
+                            //---- jTable3 ----
+                            jTable3.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                    {null, null, null, null},
+                                    {null, null, null, null},
+                                    {null, null, null, null},
+                                    {null, null, null, null},
+                                },
+                                new String[] {
+                                    "AccountNo", "Username", "Password", "Role"
+                                }
+                            ));
+                            jScrollPane6.setViewportView(jTable3);
+                        }
+
+                        //---- jLabel16 ----
+                        jLabel16.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                        jLabel16.setText("Add User");
+
+                        //---- jTextField17 ----
+                        jTextField17.setText("Username");
+
+                        //---- jTextField18 ----
+                        jTextField18.setText("Password");
+
+                        //---- jButton14 ----
+                        jButton14.setText("Add User");
+
+                        //---- jButton15 ----
+                        jButton15.setText("Remove Selected User");
+                        jButton15.addActionListener(e -> jButton15ActionPerformed(e));
+
+                        //---- jComboBox2 ----
+                        jComboBox2.setModel(new DefaultComboBoxModel<>(new String[] {
+                            "role..."
+                        }));
+                        jComboBox2.setToolTipText("Role");
+
+                        GroupLayout jPanel7Layout = new GroupLayout(jPanel7);
+                        jPanel7.setLayout(jPanel7Layout);
+                        jPanel7Layout.setHorizontalGroup(
+                            jPanel7Layout.createParallelGroup()
+                                .addGroup(GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                    .addContainerGap(265, Short.MAX_VALUE)
+                                    .addGroup(jPanel7Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane6)
+                                        .addComponent(jTextField16, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel7Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel16, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextField17)
+                                        .addComponent(jTextField18)
+                                        .addComponent(jButton14)
+                                        .addComponent(jButton15, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jComboBox2, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
+                                    .addGap(135, 135, 135))
+                        );
+                        jPanel7Layout.setVerticalGroup(
+                            jPanel7Layout.createParallelGroup()
+                                .addGroup(jPanel7Layout.createSequentialGroup()
+                                    .addGap(32, 32, 32)
+                                    .addComponent(jTextField16, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addGroup(jPanel7Layout.createParallelGroup()
+                                        .addComponent(jScrollPane6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel7Layout.createSequentialGroup()
+                                            .addComponent(jLabel16)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jTextField17, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jTextField18, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jComboBox2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jButton14)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jButton15)))
+                                    .addContainerGap(43, Short.MAX_VALUE))
+                        );
+                    }
+                    jTabbedPane1.addTab("Users", jPanel7);
+
+                    //======== jPanel8 ========
+                    {
+                        jPanel8.setBackground(Color.white);
+
+                        //======== jScrollPane3 ========
+                        {
+
+                            //---- CatalogueTable1 ----
+                            CatalogueTable1.setAutoCreateRowSorter(true);
+                            CatalogueTable1.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                    {null, null, null, null, null, null, null, null},
+                                    {null, null, null, null, null, null, null, null},
+                                    {null, null, null, null, null, null, null, null},
+                                    {null, null, null, null, null, null, null, null},
+                                },
+                                new String[] {
+                                    "AccountNo", "AccountName", "ContactName", "Address", "Phone", "Credit Limit", "Agreed Discount", "Discount Rate"
+                                }
+                            ) {
+                                Class<?>[] columnTypes = {
+                                    Integer.class, String.class, String.class, String.class, Integer.class, String.class, String.class, String.class
+                                };
+                                @Override
+                                public Class<?> getColumnClass(int columnIndex) {
+                                    return columnTypes[columnIndex];
+                                }
+                            });
+                            jScrollPane3.setViewportView(CatalogueTable1);
+                        }
+
+                        //---- jButton16 ----
+                        jButton16.setText("Remove Selected Row");
+                        jButton16.addActionListener(e -> jButton16ActionPerformed(e));
+
+                        //---- jLabel9 ----
+                        jLabel9.setFont(new Font("Segoe UI", Font.BOLD, 48));
+                        jLabel9.setText("Merchants");
+
+                        //---- jButton1 ----
+                        jButton1.setText("Add Merchant");
+
+                        GroupLayout jPanel8Layout = new GroupLayout(jPanel8);
+                        jPanel8.setLayout(jPanel8Layout);
+                        jPanel8Layout.setHorizontalGroup(
+                            jPanel8Layout.createParallelGroup()
+                                .addGroup(jPanel8Layout.createParallelGroup()
+                                    .addGroup(jPanel8Layout.createSequentialGroup()
+                                        .addGap(11, 11, 11)
+                                        .addComponent(jScrollPane3, GroupLayout.PREFERRED_SIZE, 1036, GroupLayout.PREFERRED_SIZE)
+                                        .addContainerGap(11, Short.MAX_VALUE)))
+                                .addGroup(GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                    .addContainerGap(733, Short.MAX_VALUE)
+                                    .addComponent(jButton1)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jButton16, GroupLayout.PREFERRED_SIZE, 190, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(17, 17, 17))
+                                .addGroup(jPanel8Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(jLabel9)
+                                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        );
+                        jPanel8Layout.setVerticalGroup(
+                            jPanel8Layout.createParallelGroup()
+                                .addGroup(jPanel8Layout.createParallelGroup()
+                                    .addGroup(jPanel8Layout.createSequentialGroup()
+                                        .addGap(88, 88, 88)
+                                        .addComponent(jScrollPane3, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+                                        .addContainerGap(88, Short.MAX_VALUE)))
+                                .addGroup(GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(jLabel9)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 390, Short.MAX_VALUE)
+                                    .addGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jButton16)
+                                        .addComponent(jButton1))
+                                    .addGap(53, 53, 53))
+                        );
+                    }
+                    jTabbedPane1.addTab("Merchants", jPanel8);
+                }
+
+                GroupLayout userTabLayout = new GroupLayout(userTab);
+                userTab.setLayout(userTabLayout);
+                userTabLayout.setHorizontalGroup(
+                    userTabLayout.createParallelGroup()
+                        .addGroup(userTabLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(userTabLayout.createParallelGroup()
+                                .addComponent(jTabbedPane1)
+                                .addGroup(userTabLayout.createSequentialGroup()
+                                    .addComponent(jLabel13)
+                                    .addGap(0, 0, Short.MAX_VALUE)))
+                            .addContainerGap())
+                );
+                userTabLayout.setVerticalGroup(
+                    userTabLayout.createParallelGroup()
+                        .addGroup(userTabLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel13)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jTabbedPane1)
+                            .addContainerGap())
+                );
+            }
+            dashboardTabs.addTab("users", userTab);
+
+            //======== Orders ========
+            {
+                Orders.setBackground(Color.white);
+
+                //---- jLabel14 ----
+                jLabel14.setFont(new Font("Segoe UI", Font.BOLD, 48));
+                jLabel14.setText("ORDERS");
+
+                GroupLayout OrdersLayout = new GroupLayout(Orders);
+                Orders.setLayout(OrdersLayout);
+                OrdersLayout.setHorizontalGroup(
+                    OrdersLayout.createParallelGroup()
+                        .addGroup(OrdersLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(OrdersLayout.createParallelGroup()
+                                .addGroup(OrdersLayout.createSequentialGroup()
+                                    .addComponent(jLabel14)
+                                    .addGap(0, 872, Short.MAX_VALUE))
+                                .addComponent(jSeparator4))
+                            .addContainerGap())
+                );
+                OrdersLayout.setVerticalGroup(
+                    OrdersLayout.createParallelGroup()
+                        .addGroup(OrdersLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel14)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jSeparator4, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap(567, Short.MAX_VALUE))
+                );
+            }
+            dashboardTabs.addTab("orders", Orders);
+
+            //======== userTab1 ========
+            {
+                userTab1.setBackground(Color.white);
+
+                //---- jLabel15 ----
+                jLabel15.setFont(new Font("Segoe UI", Font.BOLD, 48));
+                jLabel15.setText("USER MANAGEMENT");
+
+                //---- jLabel11 ----
+                jLabel11.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                jLabel11.setText("Add User");
+
+                //---- jTextField12 ----
+                jTextField12.setText("Username");
+
+                //---- jButton12 ----
+                jButton12.setText("Remove Selected User");
+                jButton12.addActionListener(e -> jButton12ActionPerformed(e));
+
+                //---- jTextField13 ----
+                jTextField13.setText("Password");
+
+                //---- jTextField14 ----
+                jTextField14.setText("Role");
+
+                //---- jButton13 ----
+                jButton13.setText("Add User");
+
+                //======== jScrollPane4 ========
+                {
+                    jScrollPane4.setPreferredSize(new Dimension(450, 450));
+
+                    //======== jScrollPane5 ========
+                    {
+
+                        //---- jTable2 ----
+                        jTable2.setModel(new DefaultTableModel(
+                            new Object[][] {
+                                {null, null, null},
+                                {null, null, null},
+                                {null, null, null},
+                                {null, null, null},
+                            },
+                            new String[] {
+                                "Username", "Password", "Role"
+                            }
+                        ));
+                        jScrollPane5.setViewportView(jTable2);
+                    }
+                    jScrollPane4.setViewportView(jScrollPane5);
+                }
+
+                //---- jTextField15 ----
+                jTextField15.setText("Search..");
+
+                GroupLayout userTab1Layout = new GroupLayout(userTab1);
+                userTab1.setLayout(userTab1Layout);
+                userTab1Layout.setHorizontalGroup(
+                    userTab1Layout.createParallelGroup()
+                        .addGroup(userTab1Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(userTab1Layout.createParallelGroup()
+                                .addGroup(userTab1Layout.createSequentialGroup()
+                                    .addGroup(userTab1Layout.createParallelGroup()
+                                        .addGroup(userTab1Layout.createSequentialGroup()
+                                            .addComponent(jTabbedPane2, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                            .addGap(99, 99, 99)
+                                            .addGroup(userTab1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jScrollPane4, GroupLayout.PREFERRED_SIZE, 500, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jTextField15, GroupLayout.PREFERRED_SIZE, 500, GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(userTab1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jLabel11, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jButton13)
+                                                .addComponent(jTextField13)
+                                                .addComponent(jTextField12)
+                                                .addComponent(jTextField14, GroupLayout.PREFERRED_SIZE, 190, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jButton12, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jLabel15))
+                                    .addGap(0, 163, Short.MAX_VALUE))
+                                .addComponent(jSeparator5))
+                            .addContainerGap())
+                );
+                userTab1Layout.setVerticalGroup(
+                    userTab1Layout.createParallelGroup()
+                        .addGroup(userTab1Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel15)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(userTab1Layout.createParallelGroup()
+                                .addGroup(userTab1Layout.createSequentialGroup()
+                                    .addComponent(jSeparator5, GroupLayout.PREFERRED_SIZE, 4, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jTextField15, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(userTab1Layout.createParallelGroup()
+                                        .addGroup(userTab1Layout.createSequentialGroup()
+                                            .addGap(30, 30, 30)
+                                            .addComponent(jLabel11)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jTextField12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jTextField13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jTextField14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(jButton13)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jButton12))
+                                        .addGroup(userTab1Layout.createSequentialGroup()
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jScrollPane4, GroupLayout.PREFERRED_SIZE, 403, GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jTabbedPane2, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
+                            .addContainerGap(118, Short.MAX_VALUE))
+                );
+            }
+            dashboardTabs.addTab("users", userTab1);
+        }
+
+        //======== Dashboard ========
+        {
+            Dashboard.setBackground(new Color(0x333333));
+            Dashboard.setPreferredSize(new Dimension(1200, 600));
+
+            //---- homeB ----
+            homeB.setBackground(new Color(0x333333));
+            homeB.setFont(new Font("Segoe UI Light", Font.PLAIN, 18));
+            homeB.setForeground(Color.white);
+            homeB.setText("HOME");
+            homeB.setToolTipText("");
+            homeB.setBorder(null);
+            homeB.addActionListener(e -> homeBActionPerformed(e));
+
+            //---- usersB ----
+            usersB.setBackground(new Color(0x333333));
+            usersB.setFont(new Font("Segoe UI Light", Font.PLAIN, 18));
+            usersB.setForeground(Color.white);
+            usersB.setText("ORDERS");
+            usersB.setToolTipText("");
+            usersB.setBorder(null);
+            usersB.addActionListener(e -> usersBActionPerformed(e));
+
+            //---- catB ----
+            catB.setBackground(new Color(0x333333));
+            catB.setFont(new Font("Segoe UI Light", Font.PLAIN, 18));
+            catB.setForeground(Color.white);
+            catB.setText("USERS");
+            catB.setToolTipText("");
+            catB.setBorder(null);
+            catB.addActionListener(e -> catBActionPerformed(e));
+
+            //---- ordersB ----
+            ordersB.setBackground(new Color(0x333333));
+            ordersB.setFont(new Font("Segoe UI Light", Font.PLAIN, 18));
+            ordersB.setForeground(Color.white);
+            ordersB.setText("CATALOGUE");
+            ordersB.setToolTipText("");
+            ordersB.setBorder(null);
+            ordersB.addActionListener(e -> ordersBActionPerformed(e));
+
+            //---- reportsB ----
+            reportsB.setBackground(new Color(0x333333));
+            reportsB.setFont(new Font("Segoe UI Light", Font.PLAIN, 18));
+            reportsB.setForeground(Color.white);
+            reportsB.setText("REPORTS");
+            reportsB.setToolTipText("");
+            reportsB.setBorder(null);
+            reportsB.addActionListener(e -> reportsBActionPerformed(e));
+
+            //---- appB ----
+            appB.setBackground(new Color(0x333333));
+            appB.setFont(new Font("Segoe UI Light", Font.PLAIN, 18));
+            appB.setForeground(Color.white);
+            appB.setText("APPLICATIONS");
+            appB.setToolTipText("");
+            appB.setBorder(null);
+            appB.addActionListener(e -> appBActionPerformed(e));
+
+            GroupLayout DashboardLayout = new GroupLayout(Dashboard);
+            Dashboard.setLayout(DashboardLayout);
+            DashboardLayout.setHorizontalGroup(
+                DashboardLayout.createParallelGroup()
+                    .addGroup(DashboardLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jSeparator3)))
-                .addContainerGap())
+                        .addGroup(DashboardLayout.createParallelGroup()
+                            .addComponent(homeB)
+                            .addComponent(catB)
+                            .addComponent(ordersB)
+                            .addComponent(usersB)
+                            .addComponent(reportsB)
+                            .addComponent(appB))
+                        .addContainerGap(10, Short.MAX_VALUE))
+            );
+            DashboardLayout.setVerticalGroup(
+                DashboardLayout.createParallelGroup()
+                    .addGroup(DashboardLayout.createSequentialGroup()
+                        .addGap(98, 98, 98)
+                        .addComponent(homeB)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(catB)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ordersB)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(usersB)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(reportsB)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(appB)
+                        .addContainerGap(383, Short.MAX_VALUE))
+            );
+        }
+
+        GroupLayout contentPaneLayout = new GroupLayout(contentPane);
+        contentPane.setLayout(contentPaneLayout);
+        contentPaneLayout.setHorizontalGroup(
+            contentPaneLayout.createParallelGroup()
+                .addComponent(Dashboard, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+                .addComponent(TaskBar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(contentPaneLayout.createSequentialGroup()
+                    .addGap(130, 130, 130)
+                    .addComponent(dashboardTabs, GroupLayout.PREFERRED_SIZE, 1070, GroupLayout.PREFERRED_SIZE))
         );
-        userTabLayout.setVerticalGroup(
-            userTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(userTabLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(userTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(userTabLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton8))
-                    .addGroup(userTabLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(130, Short.MAX_VALUE))
+        contentPaneLayout.setVerticalGroup(
+            contentPaneLayout.createParallelGroup()
+                .addGroup(contentPaneLayout.createSequentialGroup()
+                    .addGroup(contentPaneLayout.createParallelGroup()
+                        .addComponent(TaskBar, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                            .addGap(6, 6, 6)
+                            .addComponent(dashboardTabs, GroupLayout.PREFERRED_SIZE, 688, GroupLayout.PREFERRED_SIZE))
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                            .addGap(39, 39, 39)
+                            .addComponent(Dashboard, GroupLayout.PREFERRED_SIZE, 661, GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap())
         );
-
-        dashboardTabs.addTab("users", userTab);
-
-        getContentPane().add(dashboardTabs, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 1070, 700));
-
-        Dashboard.setBackground(new java.awt.Color(51, 51, 51));
-        Dashboard.setPreferredSize(new java.awt.Dimension(1200, 600));
-
-        homeB.setBackground(new java.awt.Color(51, 51, 51));
-        homeB.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
-        homeB.setForeground(new java.awt.Color(255, 255, 255));
-        homeB.setText("HOME");
-        homeB.setToolTipText("");
-        homeB.setBorder(null);
-        homeB.addActionListener(this::homeBActionPerformed);
-
-        usersB.setBackground(new java.awt.Color(51, 51, 51));
-        usersB.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
-        usersB.setForeground(new java.awt.Color(255, 255, 255));
-        usersB.setText("ORDERS");
-        usersB.setToolTipText("");
-        usersB.setBorder(null);
-        usersB.addActionListener(this::usersBActionPerformed);
-
-        catB.setBackground(new java.awt.Color(51, 51, 51));
-        catB.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
-        catB.setForeground(new java.awt.Color(255, 255, 255));
-        catB.setText("USERS");
-        catB.setToolTipText("");
-        catB.setBorder(null);
-        catB.addActionListener(this::catBActionPerformed);
-
-        ordersB.setBackground(new java.awt.Color(51, 51, 51));
-        ordersB.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
-        ordersB.setForeground(new java.awt.Color(255, 255, 255));
-        ordersB.setText("CATALOGUE");
-        ordersB.setToolTipText("");
-        ordersB.setBorder(null);
-        ordersB.addActionListener(this::ordersBActionPerformed);
-
-        reportsB.setBackground(new java.awt.Color(51, 51, 51));
-        reportsB.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
-        reportsB.setForeground(new java.awt.Color(255, 255, 255));
-        reportsB.setText("REPORTS");
-        reportsB.setToolTipText("");
-        reportsB.setBorder(null);
-        reportsB.addActionListener(this::reportsBActionPerformed);
-
-        appB.setBackground(new java.awt.Color(51, 51, 51));
-        appB.setFont(new java.awt.Font("Segoe UI Light", 0, 18)); // NOI18N
-        appB.setForeground(new java.awt.Color(255, 255, 255));
-        appB.setText("APPLICATIONS");
-        appB.setToolTipText("");
-        appB.setBorder(null);
-        appB.addActionListener(this::appBActionPerformed);
-
-        javax.swing.GroupLayout DashboardLayout = new javax.swing.GroupLayout(Dashboard);
-        Dashboard.setLayout(DashboardLayout);
-        DashboardLayout.setHorizontalGroup(
-            DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DashboardLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(homeB)
-                    .addComponent(catB)
-                    .addComponent(ordersB)
-                    .addComponent(usersB)
-                    .addComponent(reportsB)
-                    .addComponent(appB))
-                .addContainerGap(10, Short.MAX_VALUE))
-        );
-        DashboardLayout.setVerticalGroup(
-            DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DashboardLayout.createSequentialGroup()
-                .addGap(98, 98, 98)
-                .addComponent(homeB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(catB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ordersB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(usersB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(reportsB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(appB)
-                .addContainerGap(402, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(Dashboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 130, 680));
-
         pack();
         setLocationRelativeTo(null);
+
+        //---- jLabel8 ----
+        jLabel8.setText("jLabel8");
     }// </editor-fold>//GEN-END:initComponents
 
     private void homeBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeBActionPerformed
-        // TODO add your handling code here:
+
         dashboardTabs.setSelectedIndex(0);
     }//GEN-LAST:event_homeBActionPerformed
 
@@ -680,9 +1064,17 @@ public class Dashboard extends javax.swing.JFrame {
         mousepY = evt.getY();
     }//GEN-LAST:event_TaskBarMousePressed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton8ActionPerformed
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton16ActionPerformed
+
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton15ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -700,57 +1092,83 @@ public class Dashboard extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new Dashboard().setVisible(true));
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable CatalogueTable;
-    private javax.swing.JPanel Dashboard;
-    private javax.swing.JPanel TaskBar;
-    private javax.swing.JButton appB;
-    private javax.swing.JButton catB;
-    private javax.swing.JPanel catManagementTab;
-    private javax.swing.JPanel dashboardTab;
-    private javax.swing.JTabbedPane dashboardTabs;
-    private javax.swing.JButton homeB;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
-    private java.awt.Label label1;
-    private javax.swing.JButton ordersB;
-    private javax.swing.JButton reportsB;
-    private javax.swing.JPanel userTab;
-    private javax.swing.JButton usersB;
+    // Generated using JFormDesigner Evaluation license - Kaitlyn
+    private JPanel TaskBar;
+    private JButton jButton2;
+    private JTabbedPane dashboardTabs;
+    private JPanel dashboardTab;
+    private JLabel jLabel1;
+    private JSeparator jSeparator1;
+    private JPanel jPanel1;
+    private JLabel jLabel2;
+    private JLabel jLabel3;
+    private JLabel jLabel4;
+    private JLabel jLabel5;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JPanel jPanel4;
+    private JPanel jPanel5;
+    private JPanel jPanel6;
+    private JLabel jLabel6;
+    private JPanel catManagementTab;
+    private JLabel jLabel12;
+    private JTextField jTextField2;
+    private JTextField jTextField5;
+    private JTextField jTextField6;
+    private Label label1;
+    private JButton jButton10;
+    private JButton jButton11;
+    private JScrollPane jScrollPane2;
+    private JTable CatalogueTable;
+    private JTextField jTextField7;
+    private JTextField jTextField8;
+    private JTextField jTextField9;
+    private JTextField jTextField10;
+    private JSeparator jSeparator2;
+    private JPanel userTab;
+    private JLabel jLabel13;
+    private JTabbedPane jTabbedPane1;
+    private JPanel jPanel7;
+    private JTextField jTextField16;
+    private JScrollPane jScrollPane6;
+    private JTable jTable3;
+    private JLabel jLabel16;
+    private JTextField jTextField17;
+    private JTextField jTextField18;
+    private JButton jButton14;
+    private JButton jButton15;
+    private JComboBox<String> jComboBox2;
+    private JPanel jPanel8;
+    private JScrollPane jScrollPane3;
+    private JTable CatalogueTable1;
+    private JButton jButton16;
+    private JLabel jLabel9;
+    private JButton jButton1;
+    private JPanel Orders;
+    private JLabel jLabel14;
+    private JSeparator jSeparator4;
+    private JPanel userTab1;
+    private JLabel jLabel15;
+    private JLabel jLabel11;
+    private JTextField jTextField12;
+    private JButton jButton12;
+    private JTextField jTextField13;
+    private JTextField jTextField14;
+    private JButton jButton13;
+    private JScrollPane jScrollPane4;
+    private JScrollPane jScrollPane5;
+    private JTable jTable2;
+    private JTextField jTextField15;
+    private JSeparator jSeparator5;
+    private JTabbedPane jTabbedPane2;
+    private JPanel Dashboard;
+    private JButton homeB;
+    private JButton usersB;
+    private JButton catB;
+    private JButton ordersB;
+    private JButton reportsB;
+    private JButton appB;
+    private JSeparator jSeparator6;
+    private JLabel jLabel8;
     // End of variables declaration//GEN-END:variables
 }
