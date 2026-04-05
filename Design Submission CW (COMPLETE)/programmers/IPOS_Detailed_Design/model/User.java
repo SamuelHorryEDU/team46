@@ -1,6 +1,10 @@
-package IPOS_Detailed_Design;
+package IPOS_Detailed_Design.model;
 
 import java.math.BigDecimal;
+
+import IPOS_Detailed_Design.model.enums.UserRole;
+import IPOS_Detailed_Design.model.enums.DiscountPlanType;
+import IPOS_Detailed_Design.model.enums.AccountStatus;
 
 public class User {
     private int userId;

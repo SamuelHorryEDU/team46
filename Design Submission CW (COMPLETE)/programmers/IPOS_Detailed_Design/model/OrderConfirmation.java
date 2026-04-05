@@ -1,4 +1,8 @@
-package IPOS_Detailed_Design;
+package IPOS_Detailed_Design.model;
+
+import IPOS_Detailed_Design.model.enums.OrderStatus;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -1,4 +1,7 @@
-package IPOS_Detailed_Design;
+package IPOS_Detailed_Design.model.users;
+
+import IPOS_Detailed_Design.model.User;
+import IPOS_Detailed_Design.model.enums.UserRole;
 
 public class DirectorOfOperations extends User {
 

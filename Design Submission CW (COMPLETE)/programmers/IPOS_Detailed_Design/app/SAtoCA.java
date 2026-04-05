@@ -1,4 +1,13 @@
-package IPOS_Detailed_Design;
+package IPOS_Detailed_Design.app;
+
+import IPOS_Detailed_Design.api.I_SAtoCA;
+import IPOS_Detailed_Design.model.Order;
+import IPOS_Detailed_Design.model.OrderConfirmation;
+import IPOS_Detailed_Design.model.OrderItem;
+import IPOS_Detailed_Design.model.Product;
+import IPOS_Detailed_Design.model.enums.OrderStatus;
+import IPOS_Detailed_Design.service.AccountService;
+import IPOS_Detailed_Design.service.OrderService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

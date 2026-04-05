@@ -1,4 +1,16 @@
-package IPOS_Detailed_Design;
+package IPOS_Detailed_Design.service;
+
+import IPOS_Detailed_Design.model.User;
+import IPOS_Detailed_Design.model.enums.AccountStatus;
+import IPOS_Detailed_Design.model.enums.DiscountPlanType;
+import IPOS_Detailed_Design.model.enums.UserRole;
+import IPOS_Detailed_Design.model.users.Accountant;
+import IPOS_Detailed_Design.model.users.Admin;
+import IPOS_Detailed_Design.model.users.DeliveryDepartmentEmployee;
+import IPOS_Detailed_Design.model.users.DirectorOfOperations;
+import IPOS_Detailed_Design.model.users.Merchant;
+import IPOS_Detailed_Design.model.users.SeniorAccountant;
+import IPOS_Detailed_Design.model.users.WarehouseEmployee;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

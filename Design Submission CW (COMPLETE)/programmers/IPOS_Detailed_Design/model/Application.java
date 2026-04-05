@@ -1,4 +1,4 @@
-package IPOS_Detailed_Design;
+package IPOS_Detailed_Design.model;
 
 public class Application {
     private String companyName;

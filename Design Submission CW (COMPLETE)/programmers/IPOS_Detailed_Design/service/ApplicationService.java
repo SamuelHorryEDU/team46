@@ -1,4 +1,7 @@
-package IPOS_Detailed_Design;
+package IPOS_Detailed_Design.api;
+
+import IPOS_Detailed_Design.model.Application;
+import IPOS_Detailed_Design.model.enums.ApprovalStatus;
 
 public class ApplicationService implements I_ApplicationService {
 

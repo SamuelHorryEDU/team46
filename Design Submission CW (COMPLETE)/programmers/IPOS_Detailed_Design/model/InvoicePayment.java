@@ -1,5 +1,6 @@
-package IPOS_Detailed_Design;
+package IPOS_Detailed_Design.model;
 
+import IPOS_Detailed_Design.model.enums.PaymentStatus;
 import java.time.LocalDate;
 
 public class InvoicePayment {
