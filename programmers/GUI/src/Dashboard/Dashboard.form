@@ -612,7 +612,7 @@
                                 <Column editable="true" title="Item ID" type="java.lang.Integer"/>
                                 <Column editable="true" title="Description" type="java.lang.String"/>
                                 <Column editable="true" title="Package Type" type="java.lang.Integer"/>
-                                <Column editable="true" title="Unit" type="java.lang.Boolean"/>
+                                <Column editable="true" title="Unit" type="java.lang.Integer"/>
                                 <Column editable="true" title="Units In Pack" type="java.lang.Integer"/>
                                 <Column editable="true" title="Package Cost,  &#xa3;" type="java.lang.String"/>
                                 <Column editable="true" title="Availability, packs" type="java.lang.Integer"/>
