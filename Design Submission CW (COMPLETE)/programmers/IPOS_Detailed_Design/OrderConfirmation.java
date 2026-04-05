@@ -7,6 +7,7 @@ public class OrderConfirmation {
     private String orderId;
     private LocalDateTime orderDateTime;
     private BigDecimal totalAmount;
+    private LocalDateTime estimatedDelivery;
     private OrderStatus status;
 
     public OrderConfirmation() {
@@ -34,6 +35,14 @@ public class OrderConfirmation {
 
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public LocalDateTime getEstimatedDelivery() {
+        return estimatedDelivery;
+    }
+
+    public void setEstimatedDelivery(LocalDateTime estimatedDelivery) {
+        this.estimatedDelivery = estimatedDelivery;
     }
 
     public OrderStatus getStatus() {

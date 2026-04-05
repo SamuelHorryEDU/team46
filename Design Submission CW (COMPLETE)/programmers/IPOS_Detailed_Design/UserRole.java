@@ -1,0 +1,11 @@
+package IPOS_Detailed_Design;
+
+public enum UserRole {
+    ADMIN,
+    DIRECTOR_OF_OPERATIONS,
+    MERCHANT,
+    SENIOR_ACCOUNTANT,
+    ACCOUNTANT,
+    WAREHOUSE_EMPLOYEE,
+    DELIVERY_DEPARTMENT_EMPLOYEE
+}

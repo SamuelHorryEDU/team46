@@ -1,8 +1,11 @@
 package IPOS_Detailed_Design;
 
+import java.math.BigDecimal;
+
 public class OrderItem {
     private String productId;
     private int quantity;
+    private BigDecimal unitCost;
 
     public OrderItem() {
     }
@@ -26,5 +29,13 @@ public class OrderItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public BigDecimal getUnitCost() {
+        return unitCost;
+    }
+
+    public void setUnitCost(BigDecimal unitCost) {
+        this.unitCost = unitCost;
     }
 }

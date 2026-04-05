@@ -13,8 +13,26 @@ public class OrderService {
     private final List<Order> orders = new ArrayList<>();
 
     public OrderService() {
-        catalogue.add(new Product("P001", "Paracetamol", new BigDecimal("4.99"), 120));
-        catalogue.add(new Product("P002", "Ibuprofen", new BigDecimal("6.49"), 80));
+        Product p1 = new Product("P001", "Paracetamol", new BigDecimal("4.99"), 120);
+        p1.setDescription("Pain relief tablets");
+        p1.setCategory("Medicine");
+        p1.setPackageType("Box");
+        p1.setUnit("Tablet");
+        p1.setUnitsInPack(16);
+        p1.setStockLimit(10);
+        p1.setActive(true);
+
+        Product p2 = new Product("P002", "Ibuprofen", new BigDecimal("6.49"), 80);
+        p2.setDescription("Anti-inflammatory tablets");
+        p2.setCategory("Medicine");
+        p2.setPackageType("Box");
+        p2.setUnit("Tablet");
+        p2.setUnitsInPack(24);
+        p2.setStockLimit(10);
+        p2.setActive(true);
+
+        catalogue.add(p1);
+        catalogue.add(p2);
     }
 
     public List<Product> getCatalogue() {
@@ -24,7 +42,7 @@ public class OrderService {
     public int checkStock(String itemId) {
         for (Product product : catalogue) {
             if (product.getProductId().equals(itemId)) {
-                return product.getStock();
+                return product.getAvailability();
             }
         }
         return 0;
@@ -40,12 +58,21 @@ public class OrderService {
     }
 
     public OrderConfirmation placeOrder(String merchantId, List<OrderItem> items) {
+        if (merchantId == null || merchantId.isBlank()) {
+            throw new IllegalArgumentException("merchantId cannot be blank");
+        }
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("items cannot be empty");
+        }
+
         BigDecimal total = BigDecimal.ZERO;
 
         for (OrderItem item : items) {
             for (Product product : catalogue) {
                 if (product.getProductId().equals(item.getProductId())) {
-                    total = total.add(product.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                    BigDecimal unitCost = product.getPackageCost();
+                    item.setUnitCost(unitCost);
+                    total = total.add(unitCost.multiply(BigDecimal.valueOf(item.getQuantity())));
                 }
             }
         }
@@ -54,17 +81,22 @@ public class OrderService {
 
         Order order = new Order();
         order.setOrderId(orderId);
-        order.setMerchantId(merchantId);
-        order.setOrderDate(LocalDate.now());
+        order.setMerchantId(Integer.parseInt(merchantId));
+        order.setOrderDate(LocalDateTime.now());
         order.setStatus(OrderStatus.ACCEPTED);
+        order.setTotalAmount(total);
+        order.setEstimatedDelivery(LocalDateTime.now().plusDays(2));
+        order.setDispatchDetails("Pending dispatch");
         order.setItems(items);
+
         orders.add(order);
 
         OrderConfirmation confirmation = new OrderConfirmation();
         confirmation.setOrderId(orderId);
-        confirmation.setOrderDateTime(LocalDateTime.now());
-        confirmation.setStatus(OrderStatus.ACCEPTED);
+        confirmation.setOrderDateTime(order.getOrderDate());
         confirmation.setTotalAmount(total);
+        confirmation.setEstimatedDelivery(order.getEstimatedDelivery());
+        confirmation.setStatus(order.getStatus());
 
         return confirmation;
     }
@@ -80,12 +112,16 @@ public class OrderService {
 
     public List<Order> getOrderHistory(LocalDate fromDate, LocalDate toDate) {
         List<Order> result = new ArrayList<>();
+
         for (Order order : orders) {
-            if ((order.getOrderDate().isEqual(fromDate) || order.getOrderDate().isAfter(fromDate)) &&
-                    (order.getOrderDate().isEqual(toDate) || order.getOrderDate().isBefore(toDate))) {
+            LocalDate orderLocalDate = order.getOrderDate().toLocalDate();
+
+            if ((orderLocalDate.isEqual(fromDate) || orderLocalDate.isAfter(fromDate)) &&
+                    (orderLocalDate.isEqual(toDate) || orderLocalDate.isBefore(toDate))) {
                 result.add(order);
             }
         }
+
         return result;
     }
 }

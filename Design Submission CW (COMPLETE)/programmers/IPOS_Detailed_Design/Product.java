@@ -5,17 +5,25 @@ import java.math.BigDecimal;
 public class Product {
     private String productId;
     private String name;
-    private BigDecimal price;
-    private int stock;
+    private String description;
+    private String category;
+    private String packageType;
+    private String unit;
+    private int unitsInPack;
+    private BigDecimal packageCost;
+    private int availability;
+    private int stockLimit;
+    private boolean active;
 
     public Product() {
     }
 
-    public Product(String productId, String name, BigDecimal price, int stock) {
+    public Product(String productId, String name, BigDecimal packageCost, int availability) {
         this.productId = productId;
         this.name = name;
-        this.price = price;
-        this.stock = stock;
+        this.packageCost = packageCost;
+        this.availability = availability;
+        this.active = true;
     }
 
     public String getProductId() {
@@ -34,19 +42,75 @@ public class Product {
         this.name = name;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public int getStock() {
-        return stock;
+    public String getCategory() {
+        return category;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getPackageType() {
+        return packageType;
+    }
+
+    public void setPackageType(String packageType) {
+        this.packageType = packageType;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public int getUnitsInPack() {
+        return unitsInPack;
+    }
+
+    public void setUnitsInPack(int unitsInPack) {
+        this.unitsInPack = unitsInPack;
+    }
+
+    public BigDecimal getPackageCost() {
+        return packageCost;
+    }
+
+    public void setPackageCost(BigDecimal packageCost) {
+        this.packageCost = packageCost;
+    }
+
+    public int getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(int availability) {
+        this.availability = availability;
+    }
+
+    public int getStockLimit() {
+        return stockLimit;
+    }
+
+    public void setStockLimit(int stockLimit) {
+        this.stockLimit = stockLimit;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

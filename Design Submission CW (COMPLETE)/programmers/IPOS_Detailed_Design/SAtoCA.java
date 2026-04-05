@@ -32,7 +32,7 @@ public class SAtoCA implements I_SAtoCA {
 
 	@Override
 	public BigDecimal getOutstandingBalance() {
-		return accountService.getOutstandingBalance("M001");
+		return accountService.getOutstandingBalance(1);
 	}
 
 	@Override
