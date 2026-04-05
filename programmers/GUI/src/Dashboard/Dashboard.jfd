@@ -15,8 +15,8 @@ new FormModel {
 			"resizable": false
 			"$locationPolicy": 1
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq {space :1154:1154:p, comp jButton2:::p:40:p}}"
-				"$verticalGroup": "par l {seq {space :6:6:p, comp jButton2:::p::p}}"
+				"$horizontalGroup": "par l {seq {space :1154:1154:p, comp exitButton:::p:40:p}}"
+				"$verticalGroup": "par l {seq {space :6:6:p, comp exitButton:::p::p}}"
 			} ) {
 				name: "TaskBar"
 				"background": new java.awt.Color( 0, 0, 0, 255 )
@@ -25,7 +25,7 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.MouseMotionListener", "mouseDragged", "TaskBarMouseDragged", true ) )
 				addEvent( new FormEvent( "java.awt.event.MouseListener", "mousePressed", "TaskBarMousePressed", true ) )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "jButton2"
+					name: "exitButton"
 					"text": "X"
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "jButton2MouseClicked", true ) )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "jButton2ActionPerformed", true ) )
@@ -39,7 +39,7 @@ new FormModel {
 				"preferredSize": new java.awt.Dimension( 1000, 600 )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 					"$horizontalGroup": "par l {seq {space :::p, par l {seq l {comp jSeparator1:::::x, space :::p}, seq l {comp jLabel1:::p::p, space :::x, comp jPanel1:::p::p, space :p:14:p}, seq l {par t:::p {comp jPanel6::l:::x, seq l {space :p:88:p, comp jPanel2:::p::p}}, space s:::p, comp jPanel5:::p::p, space :p:18:p, comp jPanel3:::p::p, space s:::p, comp jPanel4:::p::p, space ::110:x}}}}"
-					"$verticalGroup": "par l {seq l {space :p:10:p, par t {comp jLabel1:::p::p, comp jPanel1:::p::p}, space u:::p, comp jSeparator1:::p::p, space u:::p, comp jPanel6:::p::p, space :p:51:p, par l:::p {comp jPanel2:::::x, comp jPanel3:::::x, comp jPanel4::l:::x, comp jPanel5::l:p::p}, space ::359:x}}"
+					"$verticalGroup": "par l {seq l {space :p:10:p, par t {comp jLabel1:::p::p, comp jPanel1:::p::p}, space u:::p, comp jSeparator1:::p::p, space u:::p, comp jPanel6:::p::p, space :p:51:p, par l:::p {comp jPanel2:::::x, comp jPanel3:::::x, comp jPanel4::l:::x, comp jPanel5::l:p::p}, space ::361:x}}"
 				} ) {
 					name: "dashboardTab"
 					"background": new java.awt.Color( 255, 255, 255, 255 )
@@ -282,7 +282,7 @@ new FormModel {
 						"background": new java.awt.Color( 255, 255, 255, 255 )
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 							"$horizontalGroup": "par l {seq t {space ::265:x, par l:::p {comp jScrollPane6:::::x, comp jTextField16:::p:452:p}, space :::p, par l:::p {comp jLabel16:::p:102:p, comp jTextField17:::::x, comp jTextField18:::::x, comp jButton14:::p::p, comp jButton15::l:p:180:p, comp jComboBox2::l::200:x}, space :p:135:p}}"
-							"$verticalGroup": "par l {seq l {space :p:32:p, comp jTextField16:::p::p, space u:::p, par l {comp jScrollPane6:::p::p, seq l {comp jLabel16:::p::p, space :::p, comp jTextField17:::p::p, space :::p, comp jTextField18:::p::p, space :::p, comp jComboBox2:::p::p, space :::p, comp jButton14:::p::p, space :::p, comp jButton15:::p::p}}, space ::43:x}}"
+							"$verticalGroup": "par l {seq l {space :p:32:p, comp jTextField16:::p::p, space u:::p, par l {comp jScrollPane6:::p::p, seq l {comp jLabel16:::p::p, space :::p, comp jTextField17:::p::p, space :::p, comp jTextField18:::p::p, space :::p, comp jComboBox2:::p::p, space :::p, comp jButton14:::p::p, space :::p, comp jButton15:::p::p}}, space ::47:x}}"
 						} ) {
 							name: "jPanel7"
 							"background": new java.awt.Color( 255, 255, 255, 255 )
@@ -379,8 +379,8 @@ new FormModel {
 							"title": "Users"
 						} )
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-							"$horizontalGroup": "par l {seq t {space ::733:x, comp jButton1:::p::p, space u:::p, comp jButton16:::p:190:p, space :p:17:p}, seq l {space :::p, comp jLabel9:::p::p, space :::x}};par l {seq l {space :p:11:p, comp jScrollPane3:::p:1036:p, space ::11:x}}"
-							"$verticalGroup": "par l {seq t {space :::p, comp jLabel9:::p::p, space ::390:x, par b {comp jButton16::b:p::p, comp jButton1::b:p::p}, space :p:53:p}};par l {seq l {space :p:88:p, comp jScrollPane3:::p:360:p, space ::88:x}}"
+							"$horizontalGroup": "par l {seq t {space ::734:x, comp jButton1:::p::p, space u:::p, comp jButton16:::p:190:p, space :p:17:p}, seq l {space :::p, comp jLabel9:::p::p, space :::x}};par l {seq l {space :p:11:p, comp jScrollPane3:::p:1036:p, space ::11:x}}"
+							"$verticalGroup": "par l {seq t {space :::p, comp jLabel9:::p::p, space ::395:x, par b {comp jButton16::b:p::p, comp jButton1::b:p::p}, space :p:53:p}};par l {seq l {space :p:88:p, comp jScrollPane3:::p:360:p, space ::92:x}}"
 						} ) {
 							name: "jPanel8"
 							"background": new java.awt.Color( 255, 255, 255, 255 )
@@ -491,8 +491,8 @@ new FormModel {
 					"title": "users"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp jLabel14:::p::p, space :0:872:x}, comp jSeparator4:::::x}, space :::p}}"
-					"$verticalGroup": "par l {seq l {space :::p, comp jLabel14:::p::p, space :::p, comp jSeparator4:::p:10:p, space ::567:x}}"
+					"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp jLabel14:::p::p, space :0:871:x}, comp jSeparator4:::::x}, space :::p}}"
+					"$verticalGroup": "par l {seq l {space :::p, comp jLabel14:::p::p, space :::p, comp jSeparator4:::p:10:p, space ::569:x}}"
 				} ) {
 					name: "Orders"
 					"background": new java.awt.Color( 255, 255, 255, 255 )
@@ -509,7 +509,7 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 					"$horizontalGroup": "par l {seq l {space :::p, par l {seq l {par l {seq l {comp jTabbedPane2:::p:100:p, space :p:99:p, par t {comp jScrollPane4::t:p:500:p, comp jTextField15::t:p:500:p}, space :::p, par l:::p {comp jLabel11::l:p:102:p, comp jButton13::l:p::p, comp jTextField13::l:::x, comp jTextField12::l:::x, comp jTextField14::l:p:190:p, comp jButton12::l:p:180:p}}, comp jLabel15::l:p::p}, space :0:163:x}, comp jSeparator5::l:::x}, space :::p}}"
-					"$verticalGroup": "par l {seq l {space :::p, comp jLabel15:::p::p, space u:::p, par l {seq l {comp jSeparator5:::p:4:p, space s:::p, comp jTextField15:::p::p, par l {seq l {space :p:30:p, comp jLabel11:::p::p, space :::p, comp jTextField12:::p::p, space :::p, comp jTextField13:::p::p, space :::p, comp jTextField14:::p::p, space u:::p, comp jButton13:::p::p, space :::p, comp jButton12:::p::p}, seq l {space :::p, comp jScrollPane4:::p:403:p}}}, comp jTabbedPane2::l:p:100:p}, space ::118:x}}"
+					"$verticalGroup": "par l {seq l {space :::p, comp jLabel15:::p::p, space u:::p, par l {seq l {comp jSeparator5:::p:4:p, space s:::p, comp jTextField15:::p::p, par l {seq l {space :p:30:p, comp jLabel11:::p::p, space :::p, comp jTextField12:::p::p, space :::p, comp jTextField13:::p::p, space :::p, comp jTextField14:::p::p, space u:::p, comp jButton13:::p::p, space :::p, comp jButton12:::p::p}, seq l {space :::p, comp jScrollPane4:::p:403:p}}}, comp jTabbedPane2::l:p:100:p}, space ::120:x}}"
 				} ) {
 					name: "userTab1"
 					"background": new java.awt.Color( 255, 255, 255, 255 )
@@ -607,7 +607,7 @@ new FormModel {
 				} )
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq {space :::p, par l {comp homeB::l:p::p, comp catB::l:p::p, comp ordersB::l:p::p, comp usersB::l:p::p, comp reportsB::l:p::p, comp appB::l:p::p}, space ::10:x}}"
+				"$horizontalGroup": "par l {seq {space :::p, par l {comp homeB::l:p::p, comp catB::l:p::p, comp ordersB::l:p::p, comp usersB::l:p::p, comp reportsB::l:p::p, comp appB::l:p::p}, space ::9:x}}"
 				"$verticalGroup": "par l {seq l {space :p:98:p, comp homeB:::p::p, space :::p, comp catB:::p::p, space :p::p, comp ordersB:::p::p, space :p::p, comp usersB:::p::p, space :p::p, comp reportsB:::p::p, space :p::p, comp appB:::p::p, space ::383:x}}"
 			} ) {
 				name: "Dashboard"
@@ -674,13 +674,19 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "appBActionPerformed", true ) )
 				} )
 			} )
-		}, new FormLayoutConstraints( null ) )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+		} )
 		add( new FormComponent( "javax.swing.JSeparator" ) {
 			name: "jSeparator6"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 753 )
 		} )
 		add( new FormComponent( "javax.swing.JLabel" ) {
 			name: "jLabel8"
 			"text": "jLabel8"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 789 )
 		} )
 	}
 }
