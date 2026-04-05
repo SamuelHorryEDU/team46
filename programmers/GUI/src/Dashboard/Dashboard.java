@@ -76,6 +76,8 @@ public class Dashboard extends javax.swing.JFrame {
         packageField = new javax.swing.JTextField();
         addItemButton = new javax.swing.JButton();
         addItemLabel = new java.awt.Label();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
         catLabel = new javax.swing.JLabel();
         Orders = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
@@ -485,6 +487,12 @@ public class Dashboard extends javax.swing.JFrame {
         addItemLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         addItemLabel.setText("Add Item");
 
+        jTextField1.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        jTextField1.setText("Description");
+
+        jTextField2.setText("Stock Limit, pack");
+        jTextField2.addActionListener(this::jTextField2ActionPerformed);
+
         javax.swing.GroupLayout addItemLayout = new javax.swing.GroupLayout(addItem);
         addItem.setLayout(addItemLayout);
         addItemLayout.setHorizontalGroup(
@@ -492,20 +500,24 @@ public class Dashboard extends javax.swing.JFrame {
             .addGroup(addItemLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(addItemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextField1)
                     .addComponent(addItemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addItemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(packageField, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                     .addComponent(unitField)
                     .addComponent(packageTypeField)
                     .addComponent(costField)
-                    .addComponent(availabilityField))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(availabilityField)
+                    .addComponent(jTextField2))
+                .addContainerGap(620, Short.MAX_VALUE))
         );
         addItemLayout.setVerticalGroup(
             addItemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addItemLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(addItemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(packageField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -516,9 +528,11 @@ public class Dashboard extends javax.swing.JFrame {
                 .addComponent(costField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
                 .addComponent(availabilityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
                 .addComponent(addItemButton)
-                .addContainerGap(305, Short.MAX_VALUE))
+                .addContainerGap(246, Short.MAX_VALUE))
         );
 
         addItemTab.addTab("Add Item", addItem);
@@ -1178,6 +1192,10 @@ public class Dashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_searchFieldActionPerformed
 
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1260,9 +1278,11 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField16;
     private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField18;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JToggleButton jToggleButton5;
     private javax.swing.JToggleButton jToggleButton6;
     private javax.swing.JToggleButton merchantOrdersSummary;
