@@ -40,7 +40,7 @@ public class loginGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        loginBar = new javax.swing.JPanel();
         exitButt = new javax.swing.JButton();
         page = new javax.swing.JPanel();
         pc_icon = new javax.swing.JLabel();
@@ -64,16 +64,16 @@ public class loginGUI extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel1.setToolTipText("");
-        jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        loginBar.setBackground(new java.awt.Color(51, 51, 51));
+        loginBar.setToolTipText("");
+        loginBar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jPanel1MouseDragged(evt);
+                loginBarMouseDragged(evt);
             }
         });
-        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        loginBar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jPanel1MousePressed(evt);
+                loginBarMousePressed(evt);
             }
         });
 
@@ -85,22 +85,24 @@ public class loginGUI extends javax.swing.JFrame {
         });
         exitButt.addActionListener(this::exitButtActionPerformed);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout loginBarLayout = new javax.swing.GroupLayout(loginBar);
+        loginBar.setLayout(loginBarLayout);
+        loginBarLayout.setHorizontalGroup(
+            loginBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginBarLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(exitButt))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        loginBarLayout.setVerticalGroup(
+            loginBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(loginBarLayout.createSequentialGroup()
                 .addComponent(exitButt)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
         page.setBackground(new java.awt.Color(255, 204, 102));
+
+        pc_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loginGUI/computer.png"))); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Colonna MT", 1, 48)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 51, 51));
@@ -156,6 +158,11 @@ public class loginGUI extends javax.swing.JFrame {
         login_button.setText("LOGIN");
         login_button.addActionListener(this::login_buttonActionPerformed);
 
+        icon_user.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loginGUI/user.png"))); // NOI18N
+        icon_user.setLabelFor(usernameField);
+
+        icon_pass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loginGUI/padlock.png"))); // NOI18N
+
         javax.swing.GroupLayout loginLayout = new javax.swing.GroupLayout(login);
         login.setLayout(loginLayout);
         loginLayout.setHorizontalGroup(
@@ -177,7 +184,7 @@ public class loginGUI extends javax.swing.JFrame {
         loginLayout.setVerticalGroup(
             loginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginLayout.createSequentialGroup()
-                .addContainerGap(136, Short.MAX_VALUE)
+                .addContainerGap(120, Short.MAX_VALUE)
                 .addGroup(loginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(usernameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(icon_user, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -202,12 +209,12 @@ public class loginGUI extends javax.swing.JFrame {
                 .addComponent(page, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(login, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(loginBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(loginBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(login, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
@@ -255,19 +262,19 @@ public class loginGUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_formMouseClicked
 
-    private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
+    private void loginBarMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBarMouseDragged
         // TODO add your handling code here:
         int cordX = evt.getXOnScreen();
         int cordY = evt.getYOnScreen();
         this.setLocation(cordX-mousepX, cordY-mousepY);
         
-    }//GEN-LAST:event_jPanel1MouseDragged
+    }//GEN-LAST:event_loginBarMouseDragged
 
-    private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
+    private void loginBarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBarMousePressed
         mousepX = evt.getX();
         mousepY = evt.getY();
         
-    }//GEN-LAST:event_jPanel1MousePressed
+    }//GEN-LAST:event_loginBarMousePressed
 
     /**
      * @param args the command line arguments
@@ -287,8 +294,8 @@ public class loginGUI extends javax.swing.JFrame {
     private javax.swing.JLabel icon_pass;
     private javax.swing.JLabel icon_user;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel login;
+    private javax.swing.JPanel loginBar;
     private javax.swing.JButton login_button;
     private javax.swing.JPanel page;
     private javax.swing.JPasswordField passwordField;
