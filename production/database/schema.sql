@@ -52,7 +52,7 @@ CREATE TABLE Orders (
     MerchantID INT,
     OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     TotalAmount DECIMAL(10,2),
-    OrderStatus ENUM('ACCEPTED', 'PROCESSING', 'READY_TO_DISPATCH', 'DISPATCHED', 'DELIVERED', 'CANCELLED') DEFAULT 'ACCEPTED', -- Added CANCELLED
+    OrderStatus ENUM('ACCEPTED', 'PROCESSING', 'PACKED', 'DISPATCHED', 'DELIVERED', 'CANCELLED') DEFAULT 'ACCEPTED', -- Added CANCELLED
     EstimatedDelivery DATETIME, -- New: Separated for OrderConfirmation DTO
     DispatchDetails VARCHAR(255),
     FOREIGN KEY (MerchantID) REFERENCES Users(UserID)
@@ -77,4 +77,28 @@ CREATE TABLE Invoices_Payments (
     DueDate DATE,
     PaymentStatus ENUM('Pending', 'Paid', 'Overdue') DEFAULT 'Pending',
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+
+-- 6. Payments Ledger (Handles IPOS-SA-ORD payment recording)
+CREATE TABLE Payments (
+    PaymentID INT AUTO_INCREMENT PRIMARY KEY,
+    MerchantID INT NOT NULL,
+    PaymentDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    AmountPaid DECIMAL(10,2) NOT NULL,
+    PaymentMethod ENUM('Bank Transfer', 'Credit Card', 'Cash', 'Cheque') NOT NULL,
+    ReferenceNumber VARCHAR(100), -- E.g., the bank transaction ID
+    FOREIGN KEY (MerchantID) REFERENCES Users(UserID)
+);
+
+-- 7. PU Applications Inbox (Handles IPOS-PU integration)
+CREATE TABLE PU_Applications (
+    ApplicationID VARCHAR(20) PRIMARY KEY, -- e.g., 'PU0001', 'PU0003'
+    ApplicationType ENUM('Commercial', 'Non-Commercial') NOT NULL,
+    ApplicationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CompanyName VARCHAR(100), -- NULL if Non-Commercial
+    ApplicantName VARCHAR(100),
+    CompanyHouseReg VARCHAR(50), -- NULL if Non-Commercial
+    Address VARCHAR(255),
+    EmailAddress VARCHAR(100) NOT NULL,
+    ApplicationStatus ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending'
 );
