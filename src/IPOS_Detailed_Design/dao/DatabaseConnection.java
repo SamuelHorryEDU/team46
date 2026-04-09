@@ -14,7 +14,7 @@ public class DatabaseConnection {
 
     private static final String URL      = "jdbc:mysql://localhost:3306/ipos_sa_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String USER     = "root";   // your MySQL username
-    private static final String PASSWORD = "T34m46My5ql!";       // your MySQL password
+    private static final String PASSWORD = "";       // your MySQL password
 
     private static Connection connection = null;
 
