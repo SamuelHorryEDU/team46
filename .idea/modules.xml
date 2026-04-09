@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Design Submission CW (COMPLETE)/Design Submission CW (COMPLETE).iml" filepath="$PROJECT_DIR$/Design Submission CW (COMPLETE)/Design Submission CW (COMPLETE).iml" />
-      <module fileurl="file://$PROJECT_DIR$/demo-code-submission/demo-code-submission.iml" filepath="$PROJECT_DIR$/demo-code-submission/demo-code-submission.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/team46.iml" filepath="$PROJECT_DIR$/.idea/team46.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/team46.iml"
+              filepath="$PROJECT_DIR$/.idea/team46.iml" />
     </modules>
   </component>
 </project>

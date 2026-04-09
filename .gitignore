@@ -1,2 +1,21 @@
-/designers/.Design Model.vpp.lck
-/systemsAnalysts/usecase/IPOS-SA-draft.vpp.bak*
+# IntelliJ compiler output
+/out/
+
+# Archived stale project build artifacts
+/archive/GUI_prototype/build/
+/archive/Source_Code_Demo/out/
+
+# IntelliJ per-developer state (do not share)
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/shelf/
+.idea/dataSources.local.xml
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# VP Modeler lock and backup files
+*.vpp.lck
+*.vpp.bak
+*.vpp.bak_*
