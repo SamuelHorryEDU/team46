@@ -7,11 +7,20 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="demo-code-submission" />
+    <orderEntry type="module" module-name="demo-code-submission" exported="" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../programmers/GUI/libraries-files/flatlaf-3.7.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/mysql-connector-j-9.5.0/mysql-connector-j-9.5.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

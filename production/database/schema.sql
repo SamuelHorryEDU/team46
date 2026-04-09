@@ -1,7 +1,10 @@
 -- Create the database
 -- Version 3
+DROP DATABASE ipos_sa_db;
 CREATE DATABASE IF NOT EXISTS ipos_sa_db;
 USE ipos_sa_db;
+
+
 
 -- 1. Users Table (Handles IPOS-SA-ACC)
 CREATE TABLE Users (
@@ -52,10 +55,12 @@ CREATE TABLE Orders (
     MerchantID INT,
     OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     TotalAmount DECIMAL(10,2),
-    OrderStatus ENUM('ACCEPTED', 'PROCESSING', 'PACKED', 'DISPATCHED', 'DELIVERED', 'CANCELLED') DEFAULT 'ACCEPTED', -- Added CANCELLED
+    OrderStatus ENUM('ACCEPTED', 'PROCESSING', 'READY_TO_DISPATCH', 'PACKED', 'DISPATCHED', 'DELIVERED', 'CANCELLED') DEFAULT 'ACCEPTED', -- Added CANCELLED
     EstimatedDelivery DATETIME, -- New: Separated for OrderConfirmation DTO
     DispatchDetails VARCHAR(255),
-    FOREIGN KEY (MerchantID) REFERENCES Users(UserID)
+    FOREIGN KEY (MerchantID) REFERENCES Users(UserID),
+    FOREIGN KEY (MerchantID) REFERENCES Users(UserID) ON DELETE CASCADE
+    
 );
 
 -- 4. OrderItems Table (Line items for each order)
@@ -66,7 +71,9 @@ CREATE TABLE OrderItems (
     Quantity INT,
     UnitCost DECIMAL(10,2),
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
-    FOREIGN KEY (ProductID) REFERENCES Catalogue(ProductID)
+    FOREIGN KEY (ProductID) REFERENCES Catalogue(ProductID),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID) ON DELETE CASCADE,
+	FOREIGN KEY (ProductID) REFERENCES Catalogue(ProductID) ON DELETE CASCADE
 );
 
 -- 5. Invoices_Payments Table (Handles billing)
@@ -76,7 +83,8 @@ CREATE TABLE Invoices_Payments (
     IssueDate DATE,
     DueDate DATE,
     PaymentStatus ENUM('Pending', 'Paid', 'Overdue') DEFAULT 'Pending',
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID) ON DELETE CASCADE
 );
 
 -- 6. Payments Ledger (Handles IPOS-SA-ORD payment recording)
@@ -87,7 +95,8 @@ CREATE TABLE Payments (
     AmountPaid DECIMAL(10,2) NOT NULL,
     PaymentMethod ENUM('Bank Transfer', 'Credit Card', 'Cash', 'Cheque') NOT NULL,
     ReferenceNumber VARCHAR(100), -- E.g., the bank transaction ID
-    FOREIGN KEY (MerchantID) REFERENCES Users(UserID)
+    FOREIGN KEY (MerchantID) REFERENCES Users(UserID),
+    FOREIGN KEY (MerchantID) REFERENCES Users(UserID) ON DELETE CASCADE
 );
 
 -- 7. PU Applications Inbox (Handles IPOS-PU integration)
@@ -102,3 +111,6 @@ CREATE TABLE PU_Applications (
     EmailAddress VARCHAR(100) NOT NULL,
     ApplicationStatus ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending'
 );
+SELECT * FROM Users;
+SELECT * FROM Catalogue;
+SELECT * FROM Orders;

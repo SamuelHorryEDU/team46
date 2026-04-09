@@ -15,4 +15,5 @@ public class Main {
 
         SwingUtilities.invokeLater(() -> new loginGUI().setVisible(true));
     }
+
 }

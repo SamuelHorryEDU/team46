@@ -11,6 +11,8 @@ import IPOS_Detailed_Design.model.users.DirectorOfOperations;
 import IPOS_Detailed_Design.model.users.Merchant;
 import IPOS_Detailed_Design.model.users.SeniorAccountant;
 import IPOS_Detailed_Design.model.users.WarehouseEmployee;
+import IPOS_Detailed_Design.dao.UserDAO;
+
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,6 +21,9 @@ import java.util.List;
 public class AccountService {
 
     private final List<User> users = new ArrayList<>();
+    private final UserDAO userDAO = new UserDAO();
+
+
 
     public AccountService() {
         Merchant merchant = new Merchant(1, "merchant1", "correctPass");
@@ -33,6 +38,7 @@ public class AccountService {
         merchant.setAccountStatus(AccountStatus.NORMAL);
         merchant.setOutstandingBalance(new BigDecimal("250.00"));
         users.add(merchant);
+
 
         Admin admin = new Admin(2, "admin1", "adminPass");
         admin.setContactName("Admin User");
@@ -166,4 +172,6 @@ public class AccountService {
         }
         return false;
     }
+
+
 }

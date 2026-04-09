@@ -1,66 +1,191 @@
--- =========================================================================
--- IPOS-SA MOCK DATA SEED SCRIPT (UPDATED FOR V3 SCHEMA)
--- =========================================================================
+-- ================================================
+-- IPOS-SA Test Data
+-- Run this in MySQL Workbench after creating the schema
+-- ================================================
 
--- 1. WIPE THE DATABASE CLEAN (Order matters due to Foreign Keys!)
-DELETE FROM OrderItems;
-DELETE FROM Invoices_Payments;
-DELETE FROM Payments;
-DELETE FROM Orders;
-DELETE FROM PU_Applications;
-DELETE FROM Catalogue;
-DELETE FROM Users;
+USE ipos_sa_db;
 
--- 2. INSERT STAFF ACCOUNTS
--- Note: Using the exact ENUM strings from your pasted schema ('Admin', 'Director of Operations', etc.)
-INSERT INTO Users (Username, Password, Role) VALUES
-('Sysdba', 'London_weighting', 'Admin'),
-('manager', 'Get_it_done', 'Director of Operations'),
-('accountant', 'Count_money', 'Accountant'),
-('clerk', 'Paperwork', 'Accountant'),
-('warehouse1', 'Get_a_beer', 'Warehouse employee'),
-('warehouse2', 'Lot_smell', 'Warehouse employee'),
-('delivery', 'Too_dark', 'Delivery department employee');
+-- ------------------------------------------------
+-- USERS
+-- Passwords are plain text here for testing only.
+-- In the real app, Java should hash them with SHA-256
+-- before storing. The TestConnection.java file shows how.
+-- ------------------------------------------------
 
--- 3. INSERT MERCHANT ACCOUNTS (Handles IPOS-SA-ACC)
-INSERT INTO Users (Username, Password, Role, AccountNo, AccountHolderName, ContactName, Address, Phone, CreditLimit, DiscountPlan, DiscountRate, AccountStatus, OutstandingBalance) VALUES
-('northampton', 'city', 'Merchant', 'ACC-1001', 'CityPharmacy', 'Prof David Rhind', 'Northampton Square, London EC1V 0HB', '0207 040 8000', 10000.00, 'Fixed', '5%', 'Normal', 508.60),
-('cosymed', 'bondstreet', 'Merchant', 'ACC-1002', 'Cosymed Ltd', 'Mr Alex Wright', '25, Bond Street, London WC1V 8LS', '0207 321 8001', 5000.00, 'Flexible', 'Volume Based', 'Normal', 376.00),
-('hello', 'there', 'Merchant', 'ACC-1003', 'HelloPharmacy', 'Mr Bruno Wright', '12, Bond Street, London WC1V 9NS', '0207 321 8002', 5000.00, 'Flexible', 'Volume Based', 'In_Default', 450.00);
+-- Admin account
+INSERT INTO Users (Username, Password, Role, AccountHolderName)
+VALUES ('admin', 'admin123', 'Admin', 'System Administrator');
 
--- 4. INSERT CATALOGUE INVENTORY (Handles IPOS-SA-CAT)
--- Updated with 'Category' and 'IsActive' columns
-INSERT INTO Catalogue (ProductID, Name, Description, Category, PackageType, Unit, UnitsInPack, PackageCost, Availability, StockLimit, IsActive) VALUES
-('100 00001', 'Paracetamol', 'Pain relief medication', 'Analgesics', 'box', 'Caps', 20, 0.10, 10345, 300, TRUE),
-('100 00002', 'Aspirin', 'Pain relief and anti-inflammatory', 'Analgesics', 'box', 'Caps', 20, 0.50, 12453, 500, TRUE),
-('100 00004', 'Celebrex', 'caps 100 mg', 'Anti-inflammatory', 'box', 'Caps', 10, 10.00, 3420, 200, TRUE),
-('200 00004', 'Iodine tincture', 'Antiseptic solution', 'First Aid', 'bottle', 'ml', 100, 0.30, 22134, 200, TRUE),
-('400 00001', 'Vitamin C', 'Immune support', 'Vitamins', 'box', 'caps', 30, 1.20, 3258, 300, TRUE);
+-- Director of Operations (can restore In_Default accounts)
+INSERT INTO Users (Username, Password, Role, AccountHolderName)
+VALUES ('director', 'director123', 'Director of Operations', 'Mr Lancaster');
 
--- 5. INSERT ORDERS (Handles IPOS-SA-ORD)
--- Note: You will need to replace MerchantID with the actual generated UserID numbers if your Database tool resets auto-increment differently. 
--- Assuming northampton=8, cosymed=9, hello=10 based on the inserts above.
-INSERT INTO Orders (OrderID, MerchantID, TotalAmount, OrderStatus, EstimatedDelivery, DispatchDetails) VALUES
-('ORD-2026-00001', 8, 508.60, 'ACCEPTED', '2026-04-10 12:00:00', NULL),
-('ORD-2026-00002', 9, 376.00, 'READY_TO_DISPATCH', '2026-04-08 15:00:00', 'Packed in Warehouse A'),
-('ORD-2026-00003', 10, 450.00, 'DELIVERED', '2026-03-20 09:00:00', 'Signed by Bruno');
+-- Warehouse employee
+INSERT INTO Users (Username, Password, Role, AccountHolderName)
+VALUES ('warehouse1', 'warehouse123', 'Warehouse employee', 'Bob Warehouse');
 
--- 6. INSERT ORDER ITEMS (Line items for the orders above)
+-- Accountant (records payments)
+INSERT INTO Users (Username, Password, Role, AccountHolderName)
+VALUES ('accountant1', 'account123', 'Accountant', 'Jane Accountant');
+
+-- Merchant 1 - Normal account, no overdue
+INSERT INTO Users (
+    Username, Password, Role,
+    AccountNo, AccountHolderName, ContactName,
+    Address, Phone,
+    CreditLimit, DiscountPlan, DiscountRate,
+    AccountStatus, OutstandingBalance
+) VALUES (
+             'cosymed', 'merchant123', 'Merchant',
+             'ACC-0001', 'Cosymed Ltd', 'John Smith',
+             '3 High Level Drive, Sydenham, SE26 3ET', '0208 778 0124',
+             5000.00, 'Fixed', '5',
+             'Normal', 0.00
+         );
+
+-- Merchant 2 - Has outstanding balance but within credit limit
+INSERT INTO Users (
+    Username, Password, Role,
+    AccountNo, AccountHolderName, ContactName,
+    Address, Phone,
+    CreditLimit, DiscountPlan, DiscountRate,
+    AccountStatus, OutstandingBalance
+) VALUES (
+             'pharmaco', 'merchant123', 'Merchant',
+             'ACC-0002', 'PharmaCo Ltd', 'Sarah Jones',
+             '14 Market Street, London, EC1A 1BB', '0207 123 4567',
+             8000.00, 'Flexible', '1000:1,2000:2,9999:3',
+             'Normal', 1200.00
+         );
+
+-- Merchant 3 - Suspended (overdue 15-30 days) - for testing status logic
+INSERT INTO Users (
+    Username, Password, Role,
+    AccountNo, AccountHolderName, ContactName,
+    Address, Phone,
+    CreditLimit, DiscountPlan, DiscountRate,
+    AccountStatus, OutstandingBalance
+) VALUES (
+             'latepayer', 'merchant123', 'Merchant',
+             'ACC-0003', 'Late Payer Ltd', 'Mike Late',
+             '99 Debt Street, London, W1A 1AA', '0207 999 0000',
+             3000.00, 'Fixed', '2',
+             'Suspended', 850.00
+         );
+
+-- Merchant 4 - In Default (overdue >30 days)
+INSERT INTO Users (
+    Username, Password, Role,
+    AccountNo, AccountHolderName, ContactName,
+    Address, Phone,
+    CreditLimit, DiscountPlan, DiscountRate,
+    AccountStatus, OutstandingBalance
+) VALUES (
+             'defaulted', 'merchant123', 'Merchant',
+             'ACC-0004', 'Default Pharmacy', 'Tom Default',
+             '1 Bad Street, Manchester, M1 1AA', '0161 000 1111',
+             2000.00, 'Fixed', '0',
+             'In_Default', 1500.00
+         );
+
+-- ------------------------------------------------
+-- CATALOGUE (Products)
+-- ------------------------------------------------
+
+INSERT INTO Catalogue (ProductID, Name, Description, Category, PackageType, Unit, UnitsInPack, PackageCost, Availability, StockLimit, IsActive)
+VALUES
+    ('100-00001', 'Paracetamol',          'Standard paracetamol 500mg',     'Analgesics',    'box',    'Caps', 20,  0.10,  10345, 300,  TRUE),
+    ('100-00002', 'Aspirin',              'Aspirin 300mg tablets',           'Analgesics',    'box',    'Caps', 20,  0.50,  12453, 500,  TRUE),
+    ('100-00003', 'Analgin',              'Analgin pain relief 500mg',       'Analgesics',    'box',    'Caps', 10,  1.20,  4235,  200,  TRUE),
+    ('100-00004', 'Celebrex 100mg',       'Celebrex capsules 100mg',        'Anti-inflam',   'box',    'Caps', 10,  10.00, 3420,  200,  TRUE),
+    ('100-00005', 'Celebrex 200mg',       'Celebrex capsules 200mg',        'Anti-inflam',   'box',    'Caps', 10,  18.50, 1450,  150,  TRUE),
+    ('100-00006', 'Retin-A Tretin 30g',   'Retin-A Tretinoin cream 30g',    'Dermatology',   'box',    'Caps', 20,  25.00, 2013,  200,  TRUE),
+    ('100-00007', 'Lipitor 20mg',         'Lipitor tablets 20mg',           'Cholesterol',   'box',    'Caps', 30,  15.50, 1562,  200,  TRUE),
+    ('100-00008', 'Claritin CR 60g',      'Claritin extended release 60g',  'Allergy',       'box',    'Caps', 20,  19.50, 2540,  200,  TRUE),
+    ('200-00004', 'Iodine Tincture',      'Iodine tincture antiseptic',     'Antiseptics',   'bottle', 'ml',  100,  0.30,  2213,  200,  TRUE),
+    ('200-00005', 'Rhynol',               'Rhynol nasal solution 200ml',    'ENT',           'bottle', 'ml',  200,  2.50,  1908,  300,  TRUE),
+    ('300-00001', 'Ospen',                'Ospen antibiotic 500mg',         'Antibiotics',   'box',    'Caps', 20,  10.50, 809,   200,  TRUE),
+    ('300-00002', 'Amopen',               'Amoxicillin 500mg capsules',     'Antibiotics',   'box',    'Caps', 30,  15.00, 1340,  300,  TRUE),
+    ('400-00001', 'Vitamin C',            'Vitamin C 1000mg tablets',       'Vitamins',      'box',    'Caps', 30,  1.20,  3258,  300,  TRUE),
+    ('400-00002', 'Vitamin B12',          'Vitamin B12 1000mcg tablets',    'Vitamins',      'box',    'Caps', 30,  1.30,  2673,  300,  TRUE),
+-- This one is below stock limit — to test low stock alerts
+    ('100-00009', 'Ibuprofen 400mg',      'Ibuprofen anti-inflammatory',    'Analgesics',    'box',    'Caps', 24,  0.80,  50,    300,  TRUE);
+
+-- ------------------------------------------------
+-- ORDERS (for Merchant 1 - UserID 5 = cosymed)
+-- ------------------------------------------------
+
+-- Order 1 - Delivered and paid
+INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus, EstimatedDelivery)
+VALUES ('ORD-2026-0001', 5, '2026-01-12 10:30:00', 508.60, 'DELIVERED', '2026-01-14 12:00:00');
+
 INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost) VALUES
-('ORD-2026-00001', '100 00001', 50, 0.10),
-('ORD-2026-00001', '100 00004', 50, 10.00),
-('ORD-2026-00002', '200 00004', 100, 0.30);
+                                                                    ('ORD-2026-0001', '100-00001', 10, 0.10),
+                                                                    ('ORD-2026-0001', '100-00003', 20, 1.20),
+                                                                    ('ORD-2026-0001', '200-00004', 20, 0.30),
+                                                                    ('ORD-2026-0001', '200-00005', 10, 2.50),
+                                                                    ('ORD-2026-0001', '300-00001', 10, 10.50),
+                                                                    ('ORD-2026-0001', '300-00002', 20, 15.00),
+                                                                    ('ORD-2026-0001', '400-00001', 20, 1.20),
+                                                                    ('ORD-2026-0001', '400-00002', 20, 1.30);
 
--- 7. INSERT INVOICES & PAYMENTS (The new ledger tables!)
-INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus) VALUES
-('ORD-2026-00001', '2026-04-05', '2026-05-05', 'Pending'),
-('ORD-2026-00003', '2026-03-15', '2026-04-15', 'Overdue');
+-- Order 2 - Processing
+INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus)
+VALUES ('ORD-2026-0002', 5, '2026-03-15 14:00:00', 320.00, 'PROCESSING');
 
--- Adding a sample recorded payment for Cosymed
-INSERT INTO Payments (MerchantID, AmountPaid, PaymentMethod, ReferenceNumber) VALUES
-(9, 100.00, 'Bank Transfer', 'BT-9938475');
+INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost) VALUES
+                                                                    ('ORD-2026-0002', '100-00004', 10, 10.00),
+                                                                    ('ORD-2026-0002', '100-00007', 14, 15.50);
 
--- 8. INSERT PU APPLICATIONS (The new integration holding pen!)
-INSERT INTO PU_Applications (ApplicationID, ApplicationType, CompanyName, ApplicantName, CompanyHouseReg, Address, EmailAddress, ApplicationStatus) VALUES
-('PU0001', 'Non-Commercial', NULL, 'Jane Doe', NULL, '10 Downing St', 'jane.doe@example.com', 'Pending'),
-('PU0002', 'Commercial', 'Pond Pharmacy', 'Amy Pond', 'CRN-55421', 'Leadworth, UK', 'admin@pondpharma.co.uk', 'Pending');
+-- Order 3 - Accepted (brand new)
+INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus)
+VALUES ('ORD-2026-0003', 5, NOW(), 75.00, 'ACCEPTED');
+
+INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost) VALUES
+                                                                    ('ORD-2026-0003', '400-00001', 25, 1.20),
+                                                                    ('ORD-2026-0003', '400-00002', 30, 1.30);
+
+-- ------------------------------------------------
+-- INVOICES
+-- ------------------------------------------------
+
+-- Invoice for Order 1 - PAID
+INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus)
+VALUES ('ORD-2026-0001', '2026-01-12', '2026-02-12', 'Paid');
+
+-- Invoice for Order 2 - PENDING
+INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus)
+VALUES ('ORD-2026-0002', '2026-03-15', '2026-04-15', 'Pending');
+
+-- Invoice for Order 3 - PENDING
+INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus)
+VALUES ('ORD-2026-0003', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 'Pending');
+
+-- Overdue invoice for the suspended merchant (latepayer, UserID 7)
+INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus)
+VALUES ('ORD-2026-0010', 7, '2026-02-01 09:00:00', 850.00, 'DELIVERED');
+
+INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost)
+VALUES ('ORD-2026-0010', '100-00005', 20, 18.50), ('ORD-2026-0010', '300-00002', 30, 15.00);
+
+-- This invoice is overdue by ~20 days to trigger SUSPENDED status
+INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus)
+VALUES ('ORD-2026-0010', '2026-02-01', DATE_SUB(CURDATE(), INTERVAL 20 DAY), 'Overdue');
+
+-- ------------------------------------------------
+-- PAYMENTS
+-- ------------------------------------------------
+
+-- Payment recorded for Order 1 (cosymed paid in full)
+INSERT INTO Payments (MerchantID, PaymentDate, AmountPaid, PaymentMethod, ReferenceNumber)
+VALUES (5, '2026-01-20 11:00:00', 508.60, 'Bank Transfer', 'BACS-20260120-001');
+
+-- ------------------------------------------------
+-- PU APPLICATIONS (from the online portal)
+-- ------------------------------------------------
+
+INSERT INTO PU_Applications (ApplicationID, ApplicationType, ApplicantName, CompanyName, CompanyHouseReg, Address, EmailAddress, ApplicationStatus)
+VALUES
+    ('PU-0001', 'Commercial',     'Alice Green',  'Green Pharmacy Ltd',  'CH12345678', '10 Main St, London', 'alice@greenpharm.com',  'Pending'),
+    ('PU-0002', 'Non-Commercial', 'Bob Normal',    NULL,                  NULL,         '5 Side St, Leeds',   'bob@email.com',         'Approved'),
+    ('PU-0003', 'Commercial',     'Carol White',  'White Medical Ltd',   'CH87654321', '20 Park Rd, Bristol', 'carol@whitemed.com',   'Rejected');

@@ -1,7 +1,9 @@
 package IPOS_Detailed_Design.gui.login;
 
 import IPOS_Detailed_Design.app.SAtoCA;
+import IPOS_Detailed_Design.dao.UserDAO;
 import IPOS_Detailed_Design.gui.dashboard.Dashboard;
+import IPOS_Detailed_Design.model.User;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -207,11 +209,11 @@ public class loginGUI extends javax.swing.JFrame {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword()).trim();
 
-        SAtoCA api = new SAtoCA();
-        boolean success = api.authenticateMerchant(username, password);
+        // Go directly to the DAO — bypasses the hardcoded AccountService
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.authenticateUser(username, password);
 
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Welcome Merchant");
+        if (user != null) {
             this.dispose();
             new Dashboard().setVisible(true);
         } else {

@@ -1,5 +1,6 @@
-package IPOS_Detailed_Design.api;
+package IPOS_Detailed_Design.service;
 
+import IPOS_Detailed_Design.api.I_ApplicationService;
 import IPOS_Detailed_Design.model.Application;
 import IPOS_Detailed_Design.model.enums.ApprovalStatus;
 
