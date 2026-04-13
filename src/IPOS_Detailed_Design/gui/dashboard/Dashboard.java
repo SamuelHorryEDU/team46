@@ -28,6 +28,7 @@ public class Dashboard extends javax.swing.JFrame {
     
     public Dashboard() {
         initComponents();
+        setupOrdersTable();
         this.controller = new DashboardController(this);
         this.controller.init();
     }
@@ -1316,5 +1317,35 @@ public class Dashboard extends javax.swing.JFrame {
     javax.swing.JTabbedPane userTabs;
     javax.swing.JButton usersB;
     javax.swing.JLabel warningLabel;
+    javax.swing.JTable ordersTable;
+    javax.swing.JScrollPane ordersScrollPane;
     // End of variables declaration//GEN-END:variables
+
+    private void setupOrdersTable() {
+        ordersTable = new javax.swing.JTable();
+        ordersTable.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Order ID", "Merchant", "Order Date", "Total £", "Status", "Est. Delivery"}
+        ));
+        ordersTable.setAutoCreateRowSorter(true);
+
+        ordersScrollPane = new javax.swing.JScrollPane(ordersTable);
+
+        javax.swing.JButton updateStatusBtn = new javax.swing.JButton("Update Order Status");
+        updateStatusBtn.addActionListener(e -> {
+            if (controller != null) controller.updateSelectedOrderStatus();
+        });
+
+        Orders.setLayout(new java.awt.BorderLayout());
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 36));
+        jLabel14.setText("ORDERS");
+        Orders.add(jLabel14, java.awt.BorderLayout.NORTH);
+
+        Orders.add(ordersScrollPane, java.awt.BorderLayout.CENTER);
+
+        javax.swing.JPanel bottomPanel = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        bottomPanel.add(updateStatusBtn);
+        Orders.add(bottomPanel, java.awt.BorderLayout.SOUTH);
+    }
 }
