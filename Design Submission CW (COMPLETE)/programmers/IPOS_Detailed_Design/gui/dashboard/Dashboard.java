@@ -28,6 +28,7 @@ public class Dashboard extends javax.swing.JFrame {
     
     public Dashboard() {
         initComponents();
+        setupOrdersTable();
         this.controller = new DashboardController(this);
         this.controller.init();
     }
@@ -141,6 +142,7 @@ public class Dashboard extends javax.swing.JFrame {
         ordersB = new javax.swing.JButton();
         reportsB = new javax.swing.JButton();
         appB = new javax.swing.JButton();
+
 
         jLabel8.setText("jLabel8");
 
@@ -1215,6 +1217,42 @@ public class Dashboard extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new Dashboard().setVisible(true));
     }
+
+    private void setupOrdersTable() {
+        // Create table with correct columns
+        ordersTable = new javax.swing.JTable();
+        ordersTable.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Order ID", "Merchant", "Order Date", "Total £", "Status", "Est. Delivery"}
+        ));
+        ordersTable.setAutoCreateRowSorter(true);
+
+        // Wrap in scroll pane
+        ordersScrollPane = new javax.swing.JScrollPane(ordersTable);
+
+        // Add a status update button
+        javax.swing.JButton updateStatusBtn = new javax.swing.JButton("Update Order Status");
+        updateStatusBtn.addActionListener(e -> {
+            if (controller != null) controller.updateSelectedOrderStatus();
+        });
+
+        // Add components to the Orders panel
+        Orders.setLayout(new java.awt.BorderLayout());
+
+        // Keep the title label at top
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 36));
+        jLabel14.setText("ORDERS");
+        Orders.add(jLabel14, java.awt.BorderLayout.NORTH);
+
+        // Table in center
+        Orders.add(ordersScrollPane, java.awt.BorderLayout.CENTER);
+
+        // Button at bottom
+        javax.swing.JPanel bottomPanel = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        bottomPanel.add(updateStatusBtn);
+        Orders.add(bottomPanel, java.awt.BorderLayout.SOUTH);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JPanel Applications;
     javax.swing.JTable CatalogueTable;
@@ -1316,5 +1354,7 @@ public class Dashboard extends javax.swing.JFrame {
     javax.swing.JTabbedPane userTabs;
     javax.swing.JButton usersB;
     javax.swing.JLabel warningLabel;
+    javax.swing.JTable ordersTable;
+    javax.swing.JScrollPane ordersScrollPane;
     // End of variables declaration//GEN-END:variables
 }

@@ -373,12 +373,59 @@ public class DashboardController {
     // ─────────────────────────────────────────────────────────────
 
     public void loadOrdersTable() {
-        // The Orders tab currently just has a label — we add a table dynamically
         List<Order> incompleteOrders = orderDAO.getIncompleteOrders();
-        // Update pending orders count on dashboard home too
+
+        // Get the table that was created programmatically in Dashboard
+        javax.swing.table.DefaultTableModel model =
+                (javax.swing.table.DefaultTableModel) view.ordersTable.getModel();
+        model.setRowCount(0);
+
+        for (Order o : incompleteOrders) {
+            model.addRow(new Object[]{
+                    o.getOrderId(),
+                    o.getMerchantId(),   // ideally merchant name — we can improve this
+                    o.getOrderDate() != null ? o.getOrderDate().toLocalDate() : "-",
+                    o.getTotalAmount() != null ? "£" + o.getTotalAmount() : "-",
+                    o.getStatus() != null ? o.getStatus().name() : "-",
+                    o.getEstimatedDelivery() != null ? o.getEstimatedDelivery().toLocalDate() : "TBC"
+            });
+        }
+
+        // Also update the pending orders count on dashboard home
         view.pendingOrders.setText(String.valueOf(incompleteOrders.size()));
     }
 
+
+    public void updateSelectedOrderStatus() {
+        if (view.ordersTable.getSelectedRow() < 0) {
+            javax.swing.JOptionPane.showMessageDialog(view, "Select an order first.");
+            return;
+        }
+        int modelRow = view.ordersTable.convertRowIndexToModel(view.ordersTable.getSelectedRow());
+        String orderId = (String) view.ordersTable.getModel().getValueAt(modelRow, 0);
+
+        String[] options = {"PROCESSING", "READY_TO_DISPATCH", "DISPATCHED", "DELIVERED", "CANCELLED"};
+        String choice = (String) javax.swing.JOptionPane.showInputDialog(
+                view, "Select new status for " + orderId + ":",
+                "Update Status", javax.swing.JOptionPane.PLAIN_MESSAGE,
+                null, options, options[0]);
+
+        if (choice != null) {
+            String dispatch = null;
+            if (choice.equals("DISPATCHED")) {
+                dispatch = javax.swing.JOptionPane.showInputDialog(view, "Enter dispatch details (courier, ref no, etc):");
+            }
+            boolean ok = orderDAO.updateOrderStatus(orderId,
+                    IPOS_Detailed_Design.model.enums.OrderStatus.valueOf(choice), dispatch);
+            if (ok) {
+                javax.swing.JOptionPane.showMessageDialog(view, "Order " + orderId + " updated to " + choice);
+                loadOrdersTable();
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(view, "Update failed.", "Error",
+                        javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
     // ─────────────────────────────────────────────────────────────
     // APPLICATIONS TABLE
     // ─────────────────────────────────────────────────────────────
