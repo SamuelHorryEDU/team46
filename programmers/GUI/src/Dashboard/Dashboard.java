@@ -119,7 +119,6 @@ public class Dashboard extends javax.swing.JFrame {
         reportTextPane = new javax.swing.JTextPane();
         systemTurnoverReport = new javax.swing.JToggleButton();
         individualMerchantActvityButton = new javax.swing.JToggleButton();
-        debtorReminders = new javax.swing.JToggleButton();
         merchantOrdersSummary = new javax.swing.JToggleButton();
         stockTurnoverReport = new javax.swing.JToggleButton();
         generatePDFButton = new javax.swing.JButton();
@@ -870,8 +869,6 @@ public class Dashboard extends javax.swing.JFrame {
 
         individualMerchantActvityButton.setText("Individual Merchant Activity");
 
-        debtorReminders.setText("Debtor Reminders");
-
         merchantOrdersSummary.setText("Merchant Orders Summary");
 
         stockTurnoverReport.setText("Stock Turnover Report");
@@ -894,9 +891,7 @@ public class Dashboard extends javax.swing.JFrame {
                             .addComponent(systemTurnoverReport)
                             .addComponent(stockTurnoverReport))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(merchantOrdersSummary)
-                            .addComponent(debtorReminders))
+                        .addComponent(merchantOrdersSummary)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(individualMerchantActvityButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 352, Short.MAX_VALUE)
@@ -917,10 +912,8 @@ public class Dashboard extends javax.swing.JFrame {
                     .addComponent(individualMerchantActvityButton)
                     .addComponent(generatePDFButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(debtorReminders)
-                    .addComponent(stockTurnoverReport))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(stockTurnoverReport)
+                .addContainerGap(160, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Generate Report", jPanel1);
@@ -1614,7 +1607,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JTextField creditLimitField;
     private javax.swing.JPanel dashboardTab;
     private javax.swing.JTabbedPane dashboardTabs;
-    private javax.swing.JToggleButton debtorReminders;
     private javax.swing.JComboBox<String> discountPlanBox;
     private javax.swing.JTextField discountRateField;
     private javax.swing.JButton exitButton;

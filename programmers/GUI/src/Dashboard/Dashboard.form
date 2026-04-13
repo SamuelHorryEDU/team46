@@ -1271,10 +1271,7 @@
                                           <Component id="stockTurnoverReport" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="merchantOrdersSummary" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="debtorReminders" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="merchantOrdersSummary" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="individualMerchantActvityButton" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace pref="352" max="32767" attributes="0"/>
@@ -1300,11 +1297,8 @@
                                   <Component id="generatePDFButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="debtorReminders" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="stockTurnoverReport" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="stockTurnoverReport" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="160" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1340,11 +1334,6 @@
                     <Component class="javax.swing.JToggleButton" name="individualMerchantActvityButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Individual Merchant Activity"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JToggleButton" name="debtorReminders">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Debtor Reminders"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JToggleButton" name="merchantOrdersSummary">
