@@ -22,3 +22,6 @@ Thumbs.db
 *.vpp.lck
 *.vpp.bak
 *.vpp.bak_*
+
+# JFormDesigner IDE state files (change on every open, never worth porting)
+*.jfd

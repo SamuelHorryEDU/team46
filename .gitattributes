@@ -1,0 +1,25 @@
+# Mark compiled and binary files so git diff skips their content.
+# This keeps `git diff organised..origin/main` readable — binary files
+# still appear in --name-only output but won't produce unreadable diffs.
+
+# Compiled output
+*.class binary
+
+# JARs and archives
+*.jar   binary
+*.zip   binary
+
+# Images
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+
+# Visual Paradigm modeller files
+*.vpp   binary
+*.vux   binary
+
+# Office documents
+*.docx  binary
+*.pdf   binary
