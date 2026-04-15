@@ -1154,16 +1154,19 @@ public class Dashboard extends JFrame {
         CatalogueTable1.setAutoCreateRowSorter(true);
         CatalogueTable1.setModel(new DefaultTableModel(
                 new Object[][]{
-                        {null, null, null, null, null, null, null, null},
-                        {null, null, null, null, null, null, null, null},
-                        {null, null, null, null, null, null, null, null},
-                        {null, null, null, null, null, null, null, null}
+                        {null, null, null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null, null, null}
                 },
-                new String[]{"AccountNo", "AccountName", "ContactName", "Address", "Phone", "Credit Limit", "Agreed Discount", "Discount Rate"}
+                new String[]{
+                        "AccountNo", "AccountName", "ContactName", "Address",
+                        "Phone", "Credit Limit", "Discount Plan", "Discount Rate", "Status"
+                }
         ) {
             Class[] types = new Class[]{
-                    Integer.class, String.class, String.class, String.class,
-                    Integer.class, String.class, String.class, String.class
+                    String.class, String.class, String.class, String.class,
+                    String.class, String.class, String.class, String.class, String.class
             };
             public Class getColumnClass(int columnIndex) { return types[columnIndex]; }
         });
