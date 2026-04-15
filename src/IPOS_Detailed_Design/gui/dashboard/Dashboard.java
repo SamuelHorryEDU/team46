@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.logging.Logger;
 
-
 /**
  *
  * @author lapis
@@ -28,16 +27,16 @@ public class Dashboard extends JFrame {
     int mousepX;
     int mousepY;
     private DashboardController controller;
+    private User currentUser;
 
     public Dashboard() {
-        initComponents();
-        this.controller = new DashboardController(this);
-        this.controller.init();
+        this(null);
     }
 
     public Dashboard(User user) {
+        this.currentUser = user;
         initComponents();
-        this.controller = new DashboardController(this, user);
+        this.controller = new DashboardController(this, currentUser);
         this.controller.init();
     }
 
@@ -619,13 +618,12 @@ public class Dashboard extends JFrame {
 
         dashboardTabs.addTab("catalogue", catManagementTab);
 
-        // ===================== ORDERS TAB (TEAMMATE'S FULL VERSION) =====================
+        // ===================== ORDERS TAB =====================
         Orders.setBackground(new Color(255, 255, 255));
 
         jLabel14.setFont(new Font("Segoe UI", 1, 48));
         jLabel14.setText("ORDERS");
 
-        // Orders table model: Order ID, Merchant Name, Total Amount, Order Date, Current Status
         ordersTable.setModel(new DefaultTableModel(
                 new Object[][]{
                         {null, null, null, null, null},
@@ -664,7 +662,6 @@ public class Dashboard extends JFrame {
         jButton2.setText("Generate Invoice");
         jButton2.addActionListener(this::jButton2ActionPerformed);
 
-        // Layout for the ordersPanel (inner panel inside the tab)
         GroupLayout ordersPanelLayout = new GroupLayout(ordersPanel);
         ordersPanel.setLayout(ordersPanelLayout);
         ordersPanelLayout.setHorizontalGroup(
@@ -729,24 +726,24 @@ public class Dashboard extends JFrame {
         jComboBox3.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jTable2.setModel(new DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] { "Date", "Description", "Amount", "Balance" }
+                new Object [][] {
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null}
+                },
+                new String [] { "Date", "Description", "Amount", "Balance" }
         ));
         jScrollPane7.setViewportView(jTable2);
 
         jTable4.setModel(new DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] { "Credit Limit", "Current Balance", "Remaining Credit" }
+                new Object [][] {
+                        {null, null, null},
+                        {null, null, null},
+                        {null, null, null},
+                        {null, null, null}
+                },
+                new String [] { "Credit Limit", "Current Balance", "Remaining Credit" }
         ));
         jScrollPane8.setViewportView(jTable4);
 
@@ -764,76 +761,75 @@ public class Dashboard extends JFrame {
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel19)
-                            .addComponent(jButton8, GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
+                jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
                                 .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel20)
-                                    .addComponent(jLabel21)
-                                    .addComponent(jLabel22))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField5, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-                                    .addComponent(jComboBox4, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextField3))))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jSeparator5, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 15, Short.MAX_VALUE))
-                            .addGroup(GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel17)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox3, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jScrollPane8, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)))
-                .addComponent(jScrollPane7, GroupLayout.PREFERRED_SIZE, 725, GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel19)
+                                                        .addComponent(jButton8, GroupLayout.Alignment.TRAILING)
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addGap(6, 6, 6)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel20)
+                                                                        .addComponent(jLabel21)
+                                                                        .addComponent(jLabel22))
+                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                                        .addComponent(jTextField5, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                                                                        .addComponent(jComboBox4, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(jTextField3))))
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addComponent(jSeparator5, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(0, 15, Short.MAX_VALUE))
+                                                        .addGroup(GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                                                .addComponent(jLabel17)
+                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(jComboBox3, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addComponent(jScrollPane8, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                                .addGap(18, 18, 18)))
+                                .addComponent(jScrollPane7, GroupLayout.PREFERRED_SIZE, 725, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel17)
-                    .addComponent(jComboBox3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane7, GroupLayout.PREFERRED_SIZE, 347, GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane8, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jSeparator5, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel19)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel20)
-                            .addComponent(jTextField3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel21)
-                            .addComponent(jComboBox4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel22)
-                            .addComponent(jTextField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton8)))
-                .addContainerGap(161, Short.MAX_VALUE))
+                jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel17)
+                                        .addComponent(jComboBox3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane7, GroupLayout.PREFERRED_SIZE, 347, GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jScrollPane8, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jSeparator5, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel19)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel20)
+                                                        .addComponent(jTextField3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel21)
+                                                        .addComponent(jComboBox4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabel22)
+                                                        .addComponent(jTextField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jButton8)))
+                                .addContainerGap(161, Short.MAX_VALUE))
         );
 
         ordersTab.addTab("Merchant Balance", jPanel2);
 
-        // Layout for the Orders outer panel
         GroupLayout OrdersLayout = new GroupLayout(Orders);
         Orders.setLayout(OrdersLayout);
         OrdersLayout.setHorizontalGroup(
@@ -923,16 +919,16 @@ public class Dashboard extends JFrame {
         jLabel18.setText("Merchants with an outstanding balance. Send reminders to email them via SMTP");
 
         jTable5.setModel(new DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] { "Merchant", "Balance Owed", "Days Overdue" }
+                new Object [][] {
+                        {null, null, null},
+                        {null, null, null},
+                        {null, null, null},
+                        {null, null, null}
+                },
+                new String [] { "Merchant", "Balance Owed", "Days Overdue" }
         ) {
             Class[] types = new Class [] {
-                String.class, String.class, String.class
+                    String.class, String.class, String.class
             };
             public Class getColumnClass(int columnIndex) { return types[columnIndex]; }
         });
@@ -944,25 +940,25 @@ public class Dashboard extends JFrame {
         GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane9, GroupLayout.PREFERRED_SIZE, 1021, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel18, GroupLayout.PREFERRED_SIZE, 454, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane9, GroupLayout.PREFERRED_SIZE, 1021, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel18, GroupLayout.PREFERRED_SIZE, 454, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton7, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel18)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton7)
-                .addContainerGap(85, Short.MAX_VALUE))
+                jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addComponent(jLabel18)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton7)
+                                .addContainerGap(85, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Debtor Reminder", jPanel3);
@@ -1403,7 +1399,6 @@ public class Dashboard extends JFrame {
                                 .addContainerGap(383, Short.MAX_VALUE))
         );
 
-        // ===================== MAIN CONTENT PANE LAYOUT =====================
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -1440,23 +1435,33 @@ public class Dashboard extends JFrame {
     }
 
     private void usersBActionPerformed(ActionEvent evt) {
-        dashboardTabs.setSelectedIndex(5);
+        if (dashboardTabs.getTabCount() > 5) {
+            dashboardTabs.setSelectedIndex(5);
+        }
     }
 
     private void catBActionPerformed(ActionEvent evt) {
-        dashboardTabs.setSelectedIndex(1);
+        if (dashboardTabs.getTabCount() > 1) {
+            dashboardTabs.setSelectedIndex(1);
+        }
     }
 
     private void ordersBActionPerformed(ActionEvent evt) {
-        dashboardTabs.setSelectedIndex(2);
+        if (dashboardTabs.getTabCount() > 2) {
+            dashboardTabs.setSelectedIndex(2);
+        }
     }
 
     private void reportsBActionPerformed(ActionEvent evt) {
-        dashboardTabs.setSelectedIndex(3);
+        if (dashboardTabs.getTabCount() > 3) {
+            dashboardTabs.setSelectedIndex(3);
+        }
     }
 
     private void appBActionPerformed(ActionEvent evt) {
-        dashboardTabs.setSelectedIndex(4);
+        if (dashboardTabs.getTabCount() > 4) {
+            dashboardTabs.setSelectedIndex(4);
+        }
     }
 
     private void exitButtonActionPerformed(ActionEvent evt) {
@@ -1504,7 +1509,6 @@ public class Dashboard extends JFrame {
     }
 
     private void jButton1ActionPerformed(ActionEvent evt) {
-        // TODO: Update status of selected order to jComboBox1 selection
         if (controller != null) controller.updateSelectedOrderStatus();
     }
 
@@ -1513,7 +1517,7 @@ public class Dashboard extends JFrame {
     }
 
     private void jButton5ActionPerformed(ActionEvent evt) {
-        // TODO: Edit selected user (update with jTextField19/20 and jComboBox5 values)
+        // TODO: Edit selected user
     }
 
     private void jButton6ActionPerformed(ActionEvent evt) {
@@ -1525,7 +1529,7 @@ public class Dashboard extends JFrame {
     }
 
     private void jButton8ActionPerformed(ActionEvent evt) {
-        // TODO: Record payment for selected merchant (jTextField3 amount, jComboBox4 method, jTextField5 reference)
+        // TODO: Record payment for selected merchant
     }
 
     // ===================== PUBLIC ACCESSORS FOR CONTROLLER =====================

@@ -1,12 +1,10 @@
 package IPOS_Detailed_Design.gui.login;
 
-import IPOS_Detailed_Design.app.SAtoCA;
 import IPOS_Detailed_Design.dao.UserDAO;
 import IPOS_Detailed_Design.gui.dashboard.Dashboard;
 import IPOS_Detailed_Design.model.User;
 
 import javax.swing.*;
-import java.awt.event.MouseEvent;
 
 public class loginGUI extends javax.swing.JFrame {
 
@@ -209,11 +207,18 @@ public class loginGUI extends javax.swing.JFrame {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword()).trim();
 
-        // Go directly to the DAO — bypasses the hardcoded AccountService
+        if (username.isBlank() || password.isBlank()
+                || username.equals("Username")
+                || password.equals("Password")) {
+            JOptionPane.showMessageDialog(this, "Please enter username and password.");
+            return;
+        }
+
         UserDAO userDAO = new UserDAO();
         User user = userDAO.authenticateUser(username, password);
 
         if (user != null) {
+            JOptionPane.showMessageDialog(this, "Welcome " + user.getRole().name());
             this.dispose();
             new Dashboard(user).setVisible(true);
         } else {
