@@ -12,81 +12,32 @@ USE ipos_sa_db;
 -- before storing. The TestConnection.java file shows how.
 -- ------------------------------------------------
 
--- Admin account
+-- Staff Accounts
 INSERT INTO Users (Username, Password, Role, AccountHolderName)
-VALUES ('admin', 'admin123', 'Admin', 'System Administrator');
+VALUES ('Sysdba',     'London_weighting', 'Admin',                           'System Administrator'),
+       ('manager',    'Get_it_done',      'Director of Operations',          'Manager'),
+       ('accountant', 'Count_money',      'Senior accountant',               'Senior Accountant'),
+       ('clerk',      'Paperwork',        'Accountant',                      'Clerk'),
+       ('warehouse1', 'Get_a_beer',       'Warehouse employee',              'Warehouse One'),
+       ('warehouse2', 'Lot_smell',        'Warehouse employee',              'Warehouse Two'),
+       ('delivery',   'Too_dark',         'Delivery department employee',    'Delivery');
 
--- Director of Operations (can restore In_Default accounts)
-INSERT INTO Users (Username, Password, Role, AccountHolderName)
-VALUES ('director', 'director123', 'Director of Operations', 'Mr Lancaster');
 
--- Warehouse employee
-INSERT INTO Users (Username, Password, Role, AccountHolderName)
-VALUES ('warehouse1', 'warehouse123', 'Warehouse employee', 'Bob Warehouse');
+-- Merchant Accounts
+INSERT INTO Users (Username, Password, Role, AccountNo, AccountHolderName, ContactName,
+                   Address, Phone, CreditLimit, DiscountPlan, DiscountRate, AccountStatus, OutstandingBalance)
+VALUES
+    ('city',    'northampton', 'Merchant', 'ACC0001', 'CityPharmacy',   'Prof David Rhind',
+     'Northampton Square, London EC1V 0HB', '0207 040 8000',
+     10000.00, 'Fixed',    '3',          'Normal', 0.00),
 
--- Accountant (records payments)
-INSERT INTO Users (Username, Password, Role, AccountHolderName)
-VALUES ('accountant1', 'account123', 'Accountant', 'Jane Accountant');
+    ('cosymed', 'bondstreet',  'Merchant', 'ACC0002', 'Cosymed Ltd',    'Mr Alex Wright',
+     '25, Bond Street, London WC1V 8LS',   '0207 321 8001',
+     5000.00,  'Flexible', '<1000:0,1000-2000:1,2000+:2', 'Normal', 0.00),
 
--- Merchant 1 - Normal account, no overdue
-INSERT INTO Users (
-    Username, Password, Role,
-    AccountNo, AccountHolderName, ContactName,
-    Address, Phone,
-    CreditLimit, DiscountPlan, DiscountRate,
-    AccountStatus, OutstandingBalance
-) VALUES (
-             'cosymed', 'merchant123', 'Merchant',
-             'ACC-0001', 'Cosymed Ltd', 'John Smith',
-             '3 High Level Drive, Sydenham, SE26 3ET', '0208 778 0124',
-             5000.00, 'Fixed', '5',
-             'Normal', 0.00
-         );
-
--- Merchant 2 - Has outstanding balance but within credit limit
-INSERT INTO Users (
-    Username, Password, Role,
-    AccountNo, AccountHolderName, ContactName,
-    Address, Phone,
-    CreditLimit, DiscountPlan, DiscountRate,
-    AccountStatus, OutstandingBalance
-) VALUES (
-             'pharmaco', 'merchant123', 'Merchant',
-             'ACC-0002', 'PharmaCo Ltd', 'Sarah Jones',
-             '14 Market Street, London, EC1A 1BB', '0207 123 4567',
-             8000.00, 'Flexible', '1000:1,2000:2,9999:3',
-             'Normal', 1200.00
-         );
-
--- Merchant 3 - Suspended (overdue 15-30 days) - for testing status logic
-INSERT INTO Users (
-    Username, Password, Role,
-    AccountNo, AccountHolderName, ContactName,
-    Address, Phone,
-    CreditLimit, DiscountPlan, DiscountRate,
-    AccountStatus, OutstandingBalance
-) VALUES (
-             'latepayer', 'merchant123', 'Merchant',
-             'ACC-0003', 'Late Payer Ltd', 'Mike Late',
-             '99 Debt Street, London, W1A 1AA', '0207 999 0000',
-             3000.00, 'Fixed', '2',
-             'Suspended', 850.00
-         );
-
--- Merchant 4 - In Default (overdue >30 days)
-INSERT INTO Users (
-    Username, Password, Role,
-    AccountNo, AccountHolderName, ContactName,
-    Address, Phone,
-    CreditLimit, DiscountPlan, DiscountRate,
-    AccountStatus, OutstandingBalance
-) VALUES (
-             'defaulted', 'merchant123', 'Merchant',
-             'ACC-0004', 'Default Pharmacy', 'Tom Default',
-             '1 Bad Street, Manchester, M1 1AA', '0161 000 1111',
-             2000.00, 'Fixed', '0',
-             'In_Default', 1500.00
-         );
+    ('hello',   'there',       'Merchant', 'ACC0003', 'HelloPharmacy',  'Mr Bruno Wright',
+     '12, Bond Street, London WC1V 9NS',   '0207 321 8002',
+     5000.00,  'Flexible', '<1000:0,1000-2000:1,2000+:3', 'Normal', 0.00);
 
 -- ------------------------------------------------
 -- CATALOGUE (Products)
@@ -112,73 +63,151 @@ VALUES
     ('100-00009', 'Ibuprofen 400mg',      'Ibuprofen anti-inflammatory',    'Analgesics',    'box',    'Caps', 24,  0.80,  50,    300,  TRUE);
 
 -- ------------------------------------------------
--- ORDERS (for Merchant 1 - UserID 5 = cosymed)
+-- ORDERS
+-- Uses subqueries for MerchantID so insertion order doesn't matter.
+-- Scenario source: IPOS_SampleData_2026.pdf
 -- ------------------------------------------------
 
--- Order 1 - Delivered and paid
+-- Scenario 1: CityPharmacy, 20 Feb 2026, £508.60, DELIVERED 23 Feb
 INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus, EstimatedDelivery)
-VALUES ('ORD-2026-0001', 5, '2026-01-12 10:30:00', 508.60, 'DELIVERED', '2026-01-14 12:00:00');
+VALUES ('ORD-2026-0001',
+        (SELECT UserID FROM Users WHERE Username = 'city'),
+        '2026-02-20 09:00:00', 508.60, 'DELIVERED', '2026-02-23 15:00:00');
 
 INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost) VALUES
-                                                                    ('ORD-2026-0001', '100-00001', 10, 0.10),
-                                                                    ('ORD-2026-0001', '100-00003', 20, 1.20),
-                                                                    ('ORD-2026-0001', '200-00004', 20, 0.30),
-                                                                    ('ORD-2026-0001', '200-00005', 10, 2.50),
-                                                                    ('ORD-2026-0001', '300-00001', 10, 10.50),
-                                                                    ('ORD-2026-0001', '300-00002', 20, 15.00),
-                                                                    ('ORD-2026-0001', '400-00001', 20, 1.20),
-                                                                    ('ORD-2026-0001', '400-00002', 20, 1.30);
+    ('ORD-2026-0001', '100-00001', 10,  0.10),
+    ('ORD-2026-0001', '100-00003', 20,  1.20),
+    ('ORD-2026-0001', '200-00004', 12,  0.30),
+    ('ORD-2026-0001', '200-00005', 10,  2.50),
+    ('ORD-2026-0001', '300-00001', 10, 10.50),
+    ('ORD-2026-0001', '300-00002', 20, 15.00),
+    ('ORD-2026-0001', '400-00001', 20,  1.20),
+    ('ORD-2026-0001', '400-00002', 20,  1.30);
 
--- Order 2 - Processing
-INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus)
-VALUES ('ORD-2026-0002', 5, '2026-03-15 14:00:00', 320.00, 'PROCESSING');
-
-INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost) VALUES
-                                                                    ('ORD-2026-0002', '100-00004', 10, 10.00),
-                                                                    ('ORD-2026-0002', '100-00007', 14, 15.50);
-
--- Order 3 - Accepted (brand new)
-INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus)
-VALUES ('ORD-2026-0003', 5, NOW(), 75.00, 'ACCEPTED');
+-- Scenario 2: Cosymed Ltd, 25 Feb 2026, £376.00, DELIVERED 26 Feb
+INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus, EstimatedDelivery)
+VALUES ('ORD-2026-0002',
+        (SELECT UserID FROM Users WHERE Username = 'cosymed'),
+        '2026-02-25 10:00:00', 376.00, 'DELIVERED', '2026-02-26 17:00:00');
 
 INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost) VALUES
-                                                                    ('ORD-2026-0003', '400-00001', 25, 1.20),
-                                                                    ('ORD-2026-0003', '400-00002', 30, 1.30);
+    ('ORD-2026-0002', '100-00001', 10,  0.10),
+    ('ORD-2026-0002', '100-00003', 20,  1.20),
+    ('ORD-2026-0002', '200-00005', 10,  2.50),
+    ('ORD-2026-0002', '300-00002', 20, 15.00),
+    ('ORD-2026-0002', '400-00002', 20,  1.30);
+
+-- Scenario 3: HelloPharmacy, 25 Feb 2026, £259.10, DELIVERED 27 Feb
+INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus, EstimatedDelivery)
+VALUES ('ORD-2026-0003',
+        (SELECT UserID FROM Users WHERE Username = 'hello'),
+        '2026-02-25 11:00:00', 259.10, 'DELIVERED', '2026-02-27 10:00:00');
+
+INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost) VALUES
+    ('ORD-2026-0003', '100-00003', 20,  1.20),
+    ('ORD-2026-0003', '200-00004', 12,  0.30),
+    ('ORD-2026-0003', '300-00001',  3, 10.50),
+    ('ORD-2026-0003', '300-00002', 10, 15.00),
+    ('ORD-2026-0003', '400-00001', 20,  1.20),
+    ('ORD-2026-0003', '400-00002', 20,  1.30);
+
+-- Scenario 4: Cosymed Ltd, 10 Mar 2026, £430.00, DELIVERED 12 Mar
+INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus, EstimatedDelivery)
+VALUES ('ORD-2026-0004',
+        (SELECT UserID FROM Users WHERE Username = 'cosymed'),
+        '2026-03-10 09:00:00', 430.00, 'DELIVERED', '2026-03-12 11:00:00');
+
+INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost) VALUES
+    ('ORD-2026-0004', '200-00005', 10,  2.50),
+    ('ORD-2026-0004', '300-00001', 10, 10.50),
+    ('ORD-2026-0004', '300-00002', 20, 15.00);
+
+-- Scenario 5: HelloPharmacy, 25 Mar 2026, £877.50 — DISPATCHED (active, visible in orders tab)
+INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus, EstimatedDelivery)
+VALUES ('ORD-2026-0005',
+        (SELECT UserID FROM Users WHERE Username = 'hello'),
+        '2026-03-25 09:00:00', 877.50, 'DISPATCHED', '2026-03-27 10:00:00');
+
+INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost) VALUES
+    ('ORD-2026-0005', '100-00003', 20,  1.20),
+    ('ORD-2026-0005', '100-00004',  5, 10.00),
+    ('ORD-2026-0005', '100-00005',  5, 18.50),
+    ('ORD-2026-0005', '100-00006',  5, 25.00),
+    ('ORD-2026-0005', '100-00007', 10, 15.50),
+    ('ORD-2026-0005', '300-00001', 10, 10.50),
+    ('ORD-2026-0005', '300-00002', 20, 15.00),
+    ('ORD-2026-0005', '400-00002', 20,  1.30);
+
+-- Scenario 6: HelloPharmacy, 1 Apr 2026, £577.50 — PROCESSING (active, visible in orders tab)
+INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus, EstimatedDelivery)
+VALUES ('ORD-2026-0006',
+        (SELECT UserID FROM Users WHERE Username = 'hello'),
+        '2026-04-01 10:00:00', 577.50, 'PROCESSING', '2026-04-03 10:00:00');
+
+INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost) VALUES
+    ('ORD-2026-0006', '100-00003', 20,  1.20),
+    ('ORD-2026-0006', '100-00004',  5, 10.00),
+    ('ORD-2026-0006', '100-00005',  5, 18.50),
+    ('ORD-2026-0006', '100-00006',  5, 25.00),
+    ('ORD-2026-0006', '100-00007', 10, 15.50),
+    ('ORD-2026-0006', '300-00001', 10, 10.50),
+    ('ORD-2026-0006', '400-00002', 20,  1.30);
 
 -- ------------------------------------------------
 -- INVOICES
 -- ------------------------------------------------
 
--- Invoice for Order 1 - PAID
+-- ORD1 (CityPharmacy) — PAID (payment received 15 March)
 INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus)
-VALUES ('ORD-2026-0001', '2026-01-12', '2026-02-12', 'Paid');
+VALUES ('ORD-2026-0001', '2026-02-20', '2026-03-31', 'Paid');
 
--- Invoice for Order 2 - PENDING
+-- ORD2 (Cosymed) — PAID (payment received 15 March)
 INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus)
-VALUES ('ORD-2026-0002', '2026-03-15', '2026-04-15', 'Pending');
+VALUES ('ORD-2026-0002', '2026-02-25', '2026-03-31', 'Paid');
 
--- Invoice for Order 3 - PENDING
+-- ORD3 (HelloPharmacy) — PAID (HelloPharmacy cleared balance 5 March)
 INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus)
-VALUES ('ORD-2026-0003', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 'Pending');
+VALUES ('ORD-2026-0003', '2026-02-25', '2026-03-31', 'Paid');
 
--- Overdue invoice for the suspended merchant (latepayer, UserID 7)
-INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, OrderStatus)
-VALUES ('ORD-2026-0010', 7, '2026-02-01 09:00:00', 850.00, 'DELIVERED');
-
-INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost)
-VALUES ('ORD-2026-0010', '100-00005', 20, 18.50), ('ORD-2026-0010', '300-00002', 30, 15.00);
-
--- This invoice is overdue by ~20 days to trigger SUSPENDED status
+-- ORD4 (Cosymed) — PAID (payment received 15 March)
 INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus)
-VALUES ('ORD-2026-0010', '2026-02-01', DATE_SUB(CURDATE(), INTERVAL 20 DAY), 'Overdue');
+VALUES ('ORD-2026-0004', '2026-03-10', '2026-03-31', 'Paid');
+
+-- ORD5 (HelloPharmacy) — OVERDUE (no payment since 5 March; due 31 March, now 15 days overdue)
+INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus)
+VALUES ('ORD-2026-0005', '2026-03-25', '2026-03-31', 'Overdue');
+
+-- ORD6 (HelloPharmacy) — PENDING (due end of April)
+INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus)
+VALUES ('ORD-2026-0006', '2026-04-01', '2026-04-30', 'Pending');
 
 -- ------------------------------------------------
 -- PAYMENTS
 -- ------------------------------------------------
 
--- Payment recorded for Order 1 (cosymed paid in full)
+-- Scenario 8: CityPharmacy cleared balance 15 March (bank transfer)
 INSERT INTO Payments (MerchantID, PaymentDate, AmountPaid, PaymentMethod, ReferenceNumber)
-VALUES (5, '2026-01-20 11:00:00', 508.60, 'Bank Transfer', 'BACS-20260120-001');
+VALUES ((SELECT UserID FROM Users WHERE Username = 'city'),
+        '2026-03-15 10:00:00', 508.60, 'Bank Transfer', 'BACS-20260315-CITY');
+
+-- Scenario 9: Cosymed Ltd cleared balance 15 March (company credit card)
+INSERT INTO Payments (MerchantID, PaymentDate, AmountPaid, PaymentMethod, ReferenceNumber)
+VALUES ((SELECT UserID FROM Users WHERE Username = 'cosymed'),
+        '2026-03-15 11:00:00', 806.00, 'Credit Card', 'CC-20260315-COSY');
+
+-- Scenario 7: HelloPharmacy cleared balance 5 March (last payment received)
+INSERT INTO Payments (MerchantID, PaymentDate, AmountPaid, PaymentMethod, ReferenceNumber)
+VALUES ((SELECT UserID FROM Users WHERE Username = 'hello'),
+        '2026-03-05 09:00:00', 259.10, 'Credit Card', 'CC-20260305-HELLO');
+
+-- ------------------------------------------------
+-- UPDATE HELLOPHARMACY: outstanding balance + suspended status
+-- (ORD5 invoice overdue 15+ days → Suspended per business rules)
+-- ------------------------------------------------
+UPDATE Users
+SET OutstandingBalance = 1455.00,
+    AccountStatus      = 'Suspended'
+WHERE Username = 'hello';
 
 -- ------------------------------------------------
 -- PU APPLICATIONS (from the online portal)

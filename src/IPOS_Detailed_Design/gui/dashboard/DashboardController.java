@@ -32,9 +32,15 @@ public class DashboardController {
     private final ProductDAO productDAO = new ProductDAO();
     private final OrderDAO   orderDAO   = new OrderDAO();
     private final InvoiceDAO invoiceDAO = new InvoiceDAO();
+    private User currentUser;
 
     public DashboardController(Dashboard view) {
         this.view = view;
+    }
+
+    public DashboardController(Dashboard view, User user) {
+        this.view = view;
+        this.currentUser = user;
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -50,6 +56,7 @@ public class DashboardController {
         loadOrdersTable();
         loadApplicationsTable();
         checkLowStockWarning();
+        populateUserInfo();
         wireButtons();
     }
 
@@ -297,6 +304,13 @@ public class DashboardController {
     // ─────────────────────────────────────────────────────────────
     // USERS TABLE
     // ─────────────────────────────────────────────────────────────
+
+    private void populateUserInfo() {
+        if (currentUser != null) { return; }
+        view.roleTXT.setText(currentUser.getRole() != null ? currentUser.getRole().toString() : "Unknown");
+        view.nameTXT.setText(currentUser.getAccountHolderName() != null ? currentUser.getAccountHolderName() : currentUser.getUsername());
+    }
+
 
     public void loadUsersTable() {
         List<User> users = userDAO.getAllUsers();

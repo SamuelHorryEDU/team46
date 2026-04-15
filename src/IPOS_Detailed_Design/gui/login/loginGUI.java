@@ -215,7 +215,7 @@ public class loginGUI extends javax.swing.JFrame {
 
         if (user != null) {
             this.dispose();
-            new Dashboard().setVisible(true);
+            new Dashboard(user).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Incorrect credentials.");
         }
