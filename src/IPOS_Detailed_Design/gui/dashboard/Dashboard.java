@@ -1532,7 +1532,9 @@ public class Dashboard extends JFrame {
     }
 
     private void jButton6ActionPerformed(ActionEvent evt) {
-        // TODO: Edit selected merchant
+        if (controller != null) {
+            controller.editSelectedMerchantFromButton();
+        }
     }
 
     private void jButton7ActionPerformed(ActionEvent evt) {

@@ -150,6 +150,21 @@ public class UserDAO {
         return merchants;
     }
 
+    public boolean updateMerchantDetails(int merchantId, String contactName, String address, String phone) {
+        String sql = "UPDATE Users SET ContactName = ?, Address = ?, Phone = ? WHERE UserID = ? AND Role = 'Merchant'";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, contactName);
+            ps.setString(2, address);
+            ps.setString(3, phone);
+            ps.setInt(4, merchantId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("UserDAO.updateMerchantDetails error: " + e.getMessage());
+        }
+        return false;
+    }
+
     /**
      * Search merchants by name, account number, contact name, or username.
      * Powers the search bar in the Dashboard — worth 5 marks on the marking sheet.

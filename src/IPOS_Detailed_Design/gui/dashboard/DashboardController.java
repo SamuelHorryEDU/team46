@@ -99,6 +99,92 @@ public class DashboardController {
         }
     }
 
+    private void editSelectedMerchant() {
+        int row = view.CatalogueTable1.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(view, "Please select a merchant first.");
+            return;
+        }
+
+        int modelRow = view.CatalogueTable1.convertRowIndexToModel(row);
+        String accountNo = String.valueOf(view.CatalogueTable1.getModel().getValueAt(modelRow, 0));
+
+        User merchant = userDAO.getAllMerchants().stream()
+                .filter(m -> accountNo.equals(m.getAccountNo()))
+                .findFirst()
+                .orElse(null);
+
+        if (merchant == null) {
+            JOptionPane.showMessageDialog(view, "Merchant not found.");
+            return;
+        }
+
+        JTextField contactField = new JTextField(
+                merchant.getContactName() != null ? merchant.getContactName() : ""
+        );
+        JTextField addressField = new JTextField(
+                merchant.getAddress() != null ? merchant.getAddress() : ""
+        );
+        JTextField phoneField = new JTextField(
+                merchant.getPhone() != null ? merchant.getPhone() : ""
+        );
+        JTextField creditLimitField = new JTextField(
+                merchant.getCreditLimit() != null ? merchant.getCreditLimit().toPlainString() : "0.00"
+        );
+
+        JPanel panel = new JPanel(new java.awt.GridLayout(0, 1, 5, 5));
+        panel.add(new JLabel("Contact Name:"));
+        panel.add(contactField);
+        panel.add(new JLabel("Address:"));
+        panel.add(addressField);
+        panel.add(new JLabel("Phone:"));
+        panel.add(phoneField);
+        panel.add(new JLabel("Credit Limit (£):"));
+        panel.add(creditLimitField);
+
+        int result = JOptionPane.showConfirmDialog(
+                view,
+                panel,
+                "Edit Merchant - " + merchant.getAccountHolderName(),
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (result != JOptionPane.OK_OPTION) {
+            return;
+        }
+
+        BigDecimal newCreditLimit;
+        try {
+            newCreditLimit = new BigDecimal(creditLimitField.getText().trim());
+            if (newCreditLimit.compareTo(BigDecimal.ZERO) < 0) {
+                JOptionPane.showMessageDialog(view, "Credit limit cannot be negative.");
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(view, "Invalid credit limit.");
+            return;
+        }
+
+        boolean okDetails = userDAO.updateMerchantDetails(
+                merchant.getUserId(),
+                contactField.getText().trim(),
+                addressField.getText().trim(),
+                phoneField.getText().trim()
+        );
+
+        boolean okCredit = userDAO.updateCreditLimit(merchant.getUserId(), newCreditLimit);
+
+        if (okDetails && okCredit) {
+            JOptionPane.showMessageDialog(view, "Merchant updated successfully.");
+            loadMerchantsTable();
+            loadMerchantComboBox();
+            loadMerchantBalancePanel();
+        } else {
+            JOptionPane.showMessageDialog(view, "Failed to update merchant.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 
 
     private void applyRolePermissions() {
@@ -1240,6 +1326,10 @@ public class DashboardController {
     // ─────────────────────────────────────────────────────────────
     // WIRE ALL BUTTON ACTIONS
     // ─────────────────────────────────────────────────────────────
+    public void editSelectedMerchantFromButton() {
+        editSelectedMerchant();
+    }
+
 
     private void wireButtons() {
         view.searchField.addActionListener(e -> searchCatalogue(view.searchField.getText()));
@@ -1251,6 +1341,8 @@ public class DashboardController {
 
         view.addItemButton.addActionListener(e -> addCatalogueItem());
         view.rmvSelectedButton.addActionListener(e -> removeSelectedCatalogueItem());
+        view.jButton6.addActionListener(e -> editSelectedMerchant());
+
 
         view.CatalogueTable.getModel().addTableModelListener(e -> {
             // Only react to single-cell edits in the Stock Limit column (col 7)
