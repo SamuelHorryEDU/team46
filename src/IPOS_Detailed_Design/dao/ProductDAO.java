@@ -63,6 +63,19 @@ public class ProductDAO {
         return "100-00001";
     }
 
+    public boolean updateStockLimit(String productId, int newLimit) {
+        String sql = "UPDATE Catalogue SET StockLimit = ? WHERE ProductID = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, newLimit);
+            ps.setString(2, productId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("ProductDAO.updateStockLimit error: " + e.getMessage());
+            return false;
+        }
+    }
+
     // ─────────────────────────────────────────────
     // READ
     // ─────────────────────────────────────────────
