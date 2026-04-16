@@ -488,6 +488,8 @@ public class Dashboard extends JFrame {
                     Integer.class, Integer.class
             };
             public Class getColumnClass(int columnIndex) { return types[columnIndex]; }
+            @Override
+            public boolean isCellEditable(int row, int column) { return column == 7; }
         });
         jScrollPane2.setViewportView(CatalogueTable);
 
