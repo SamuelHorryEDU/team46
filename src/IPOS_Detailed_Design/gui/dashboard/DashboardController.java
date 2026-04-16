@@ -1226,7 +1226,9 @@ public class DashboardController {
         } catch (java.sql.SQLException e) {
             sb.append("Error loading report: ").append(e.getMessage());
         }
+        view.reportTextPane.setFont(new java.awt.Font("Courier New", java.awt.Font.PLAIN, 12));
         view.reportTextPane.setText(sb.toString());
+
     }
 
     private void loadMerchantOrdersSummaryPrompt() {
@@ -1275,7 +1277,7 @@ public class DashboardController {
         } catch (java.sql.SQLException e) {
             sb.append("Error loading report: ").append(e.getMessage());
         }
-
+        view.reportTextPane.setFont(new java.awt.Font("Courier New", java.awt.Font.PLAIN, 12));
         view.reportTextPane.setText(sb.toString());
     }
 
@@ -1336,7 +1338,7 @@ public class DashboardController {
         } catch (java.sql.SQLException e) {
             sb.append("Error: ").append(e.getMessage());
         }
-
+        view.reportTextPane.setFont(new java.awt.Font("Courier New", java.awt.Font.PLAIN, 12));
         view.reportTextPane.setText(sb.toString());
     }
 
@@ -1364,6 +1366,7 @@ public class DashboardController {
         }
 
         sb.append("\nTotal products below stock limit: ").append(lowStock.size());
+        view.reportTextPane.setFont(new java.awt.Font("Courier New", java.awt.Font.PLAIN, 12));
         view.reportTextPane.setText(sb.toString());
     }
 
@@ -1404,7 +1407,7 @@ public class DashboardController {
         } catch (java.sql.SQLException e) {
             sb.append("Error: ").append(e.getMessage());
         }
-
+        view.reportTextPane.setFont(new java.awt.Font("Courier New", java.awt.Font.PLAIN, 12));
         view.reportTextPane.setText(sb.toString());
     }
 
