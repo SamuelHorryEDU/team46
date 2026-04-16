@@ -12,12 +12,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="flatlaf-3.7.1" level="project" />
     <orderEntry type="library" exported="" name="mysql-connector-j-9.6.0" level="project" />
-    <orderEntry type="library" name="junit-jupiter-5.8.1" level="project" />
-    <orderEntry type="library" name="junit-jupiter-5.8.2" level="project" />
-    <orderEntry type="library" name="junit-jupiter-api-5.8.1" level="project" />
-    <orderEntry type="library" name="junit-platform-commons-1.8.1" level="project" />
-    <orderEntry type="library" name="opentest4j-1.2.0" level="project" />
-    <orderEntry type="module-library" scope="TEST">
+    <orderEntry type="library" exported="" name="opentest4j-1.2.0" level="project" />
+    <orderEntry type="module-library" exported="" scope="TEST">
       <library name="testng">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/testng-7.1.0.jar!/" />
@@ -32,7 +28,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
+    <orderEntry type="module-library" exported="" scope="TEST">
       <library name="JUnit5">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/junit-jupiter-5.14.0.jar!/" />
@@ -48,5 +44,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="aopalliance-1.0" level="project" />
   </component>
 </module>
