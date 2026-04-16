@@ -1020,6 +1020,71 @@ public class DashboardController {
         } catch (java.sql.SQLException e) {
             System.err.println("loadApplicationsTable error: " + e.getMessage());
         }
+
+        view.jTable1.setDefaultRenderer(Object.class,
+                new javax.swing.table.DefaultTableCellRenderer() {
+                    @Override
+                    public java.awt.Component getTableCellRendererComponent(
+                            javax.swing.JTable table, Object value,
+                            boolean isSelected, boolean hasFocus, int row, int column) {
+
+                        super.getTableCellRendererComponent(
+                                table, value, isSelected, hasFocus, row, column);
+
+                        Object statusVal = table.getModel().getValueAt(
+                                table.convertRowIndexToModel(row), 1);
+                        String status = statusVal != null ? statusVal.toString() : "";
+
+                        if (!isSelected) {
+                            switch (status) {
+                                case "Approved" -> {
+                                    setBackground(new java.awt.Color(220, 252, 231));
+                                    setForeground(new java.awt.Color(22, 101, 52));
+                                }
+                                case "Rejected" -> {
+                                    setBackground(new java.awt.Color(254, 226, 226));
+                                    setForeground(new java.awt.Color(153, 27, 27));
+                                }
+                                default -> {
+                                    setBackground(new java.awt.Color(255, 243, 205));
+                                    setForeground(new java.awt.Color(120, 60, 0));
+                                }
+                            }
+                        }
+                        return this;
+                    }
+                });
+    }
+
+    private void sendEmail(String recipient, String subject, String body) {
+        try {
+            java.net.URL url = new java.net.URL("http://localhost:8080/send-email");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/json");
+
+            // Build JSON body
+            String json = String.format(
+                    "{\"recipient\": \"%s\", \"subject\": \"%s\", \"body\": \"%s\"}",
+                    recipient, subject, body.replace("\n", "\\n").replace("\"", "\\\"")
+            );
+
+            try (java.io.OutputStream os = conn.getOutputStream()) {
+                os.write(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            }
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == 200) {
+                System.out.println("Email sent to " + recipient);
+            } else {
+                System.err.println("Email failed, response code: " + responseCode);
+            }
+            conn.disconnect();
+
+        } catch (Exception e) {
+            System.err.println("sendEmail error: " + e.getMessage());
+        }
     }
 
     public void approveSelectedApplication() {
@@ -1051,9 +1116,58 @@ public class DashboardController {
             ps.setString(1, status);
             ps.setString(2, appId);
             ps.executeUpdate();
-            JOptionPane.showMessageDialog(view, "Application " + appId + " marked as " + status + ".");
+
+            // Get applicant email and name to send notification
+            try (java.sql.PreparedStatement ps2 = conn.prepareStatement(
+                    "SELECT ApplicantName, EmailAddress, ApplicationType " +
+                            "FROM PU_Applications WHERE ApplicationID = ?")) {
+                ps2.setString(1, appId);
+                java.sql.ResultSet rs = ps2.executeQuery();
+
+                if (rs.next()) {
+                    String name    = rs.getString("ApplicantName");
+                    String email   = rs.getString("EmailAddress");
+                    String type    = rs.getString("ApplicationType");
+
+                    String subject;
+                    String body;
+
+                    if ("Approved".equals(status)) {
+                        subject = "Your IPOS Application Has Been Approved";
+                        body = "Dear " + name + ",\n\n" +
+                                "We are pleased to inform you that your " + type +
+                                " membership application (ID: " + appId + ") " +
+                                "has been approved.\n\n" +
+                                (type.equals("Commercial")
+                                        ? "Our team will be in touch shortly with your " +
+                                        "IPOS-SA account details.\n\n"
+                                        : "You can now log in to IPOS-PU using your " +
+                                        "registered email address.\n\n") +
+                                "Welcome to InfoPharma!\n\n" +
+                                "Regards,\nInfoPharma Ltd";
+                    } else {
+                        subject = "Your IPOS Application Status Update";
+                        body = "Dear " + name + ",\n\n" +
+                                "Thank you for your interest in InfoPharma. " +
+                                "Unfortunately, your " + type +
+                                " membership application (ID: " + appId + ") " +
+                                "has not been successful at this time.\n\n" +
+                                "If you believe this is an error or wish to " +
+                                "reapply, please contact us.\n\n" +
+                                "Regards,\nInfoPharma Ltd";
+                    }
+
+                    // Send the email
+                    sendEmail(email, subject, body);
+                }
+            }
+
+            JOptionPane.showMessageDialog(view,
+                    "Application " + appId + " marked as " + status +
+                            " and email notification sent.");
             loadApplicationsTable();
             loadDashboardStats();
+
         } catch (java.sql.SQLException e) {
             System.err.println("updateApplicationStatus error: " + e.getMessage());
         }
