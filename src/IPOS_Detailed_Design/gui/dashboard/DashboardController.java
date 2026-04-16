@@ -300,7 +300,7 @@ public class DashboardController {
     public void addCatalogueItem() {
         try {
             Product p = new Product();
-            p.setProductId("P-" + System.currentTimeMillis());
+            p.setProductId(productDAO.getNextProductId());
             p.setDescription(view.jTextField1.getText().trim());
             p.setPackageType(view.packageField.getText().trim());
             p.setUnit(view.unitField.getText().trim());
