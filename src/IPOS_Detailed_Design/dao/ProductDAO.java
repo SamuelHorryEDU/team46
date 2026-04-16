@@ -43,6 +43,26 @@ public class ProductDAO {
         }
     }
 
+    /**
+     * Generates the next available ProductID in the format "100-NNNNN",
+     * incrementing from the highest numeric suffix currently in the Catalogue table.
+     * Falls back to "100-00001" if the table is empty or no matching IDs exist.
+     */
+    public String getNextProductId() {
+        String sql = "SELECT MAX(CAST(SUBSTRING_INDEX(ProductID, '-', -1) AS UNSIGNED)) FROM Catalogue";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next() && rs.getObject(1) != null) {
+                int next = rs.getInt(1) + 1;
+                return String.format("100-%05d", next);
+            }
+        } catch (SQLException e) {
+            System.err.println("ProductDAO.getNextProductId error: " + e.getMessage());
+        }
+        return "100-00001";
+    }
+
     // ─────────────────────────────────────────────
     // READ
     // ─────────────────────────────────────────────
