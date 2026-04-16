@@ -83,7 +83,7 @@ public class OrderService {
             }
         }
 
-        String orderId = "ORD-" + (orders.size() + 1);
+        String orderId = "ORD-" + System.currentTimeMillis();
 
         Order order = new Order();
         order.setOrderId(orderId);

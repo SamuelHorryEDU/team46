@@ -161,6 +161,22 @@ public class OrderDAO {
     }
 
     /**
+     * Get all orders regardless of status — powers the "Show All" view.
+     */
+    public List<Order> getAllOrders() {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM Orders ORDER BY OrderDate DESC";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) orders.add(mapOrder(rs));
+        } catch (SQLException e) {
+            System.err.println("OrderDAO.getAllOrders error: " + e.getMessage());
+        }
+        return orders;
+    }
+
+    /**
      * Count pending orders — for the dashboard home panel pendingOrders label.
      */
     public int getPendingOrderCount() {

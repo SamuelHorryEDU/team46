@@ -7,6 +7,7 @@ import IPOS_Detailed_Design.model.User;
 import IPOS_Detailed_Design.model.enums.AccountStatus;
 import IPOS_Detailed_Design.model.enums.DiscountPlanType;
 import IPOS_Detailed_Design.model.enums.UserRole;
+import IPOS_Detailed_Design.service.AccountStatusService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,7 +19,7 @@ import java.util.List;
  *
  * HOW TO USE:
  *   In Dashboard constructor, after initComponents(), call:
- *       new DashboardController(this).init();
+ *       new DashboardController(this, currentUser).init();
  *
  * This class accesses all the package-private fields that NetBeans generated
  * in Dashboard.java. Make sure Dashboard is in the same package.
@@ -26,15 +27,20 @@ import java.util.List;
 public class DashboardController {
 
     private final Dashboard view;
+    private final User currentUser;
 
     // DAOs
-    private final UserDAO    userDAO    = new UserDAO();
+    private final UserDAO userDAO = new UserDAO();
     private final ProductDAO productDAO = new ProductDAO();
-    private final OrderDAO   orderDAO   = new OrderDAO();
+    private final OrderDAO orderDAO = new OrderDAO();
     private final InvoiceDAO invoiceDAO = new InvoiceDAO();
+    private final PaymentDAO paymentDAO = new PaymentDAO();
 
-    public DashboardController(Dashboard view) {
+    private javax.swing.table.TableRowSorter<DefaultTableModel> orderSorter;
+
+    public DashboardController(Dashboard view, User user) {
         this.view = view;
+        this.currentUser = user;
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -42,15 +48,23 @@ public class DashboardController {
     // ─────────────────────────────────────────────────────────────
 
     public void init() {
+        AccountStatusService statusService = new AccountStatusService();
+        List<String> warnings = statusService.runStatusChecks();
+
+        loadRoleHeader();
+        applyRolePermissions();
         clearAllTables();
         loadDashboardStats();
         loadCatalogueTable();
         loadMerchantsTable();
+        loadMerchantComboBox();
         loadUsersTable();
         loadOrdersTable();
         loadApplicationsTable();
-        checkLowStockWarning();
         wireButtons();
+
+
+        showStatusWarnings(warnings);
     }
 
     private void clearAllTables() {
@@ -58,6 +72,68 @@ public class DashboardController {
         ((DefaultTableModel) view.CatalogueTable1.getModel()).setRowCount(0);
         ((DefaultTableModel) view.jTable1.getModel()).setRowCount(0);
         ((DefaultTableModel) view.jTable3.getModel()).setRowCount(0);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // CURRENT USER / ROLE-BASED GUI
+    // ─────────────────────────────────────────────────────────────
+
+    private void loadRoleHeader() {
+        if (currentUser == null) {
+            view.roleTXT.setText("GUEST");
+            view.nameTXT.setText("Unknown User");
+            return;
+        }
+
+        view.roleTXT.setText(currentUser.getRole() != null ? currentUser.getRole().name() : "UNKNOWN");
+
+        if (currentUser.getAccountHolderName() != null && !currentUser.getAccountHolderName().isBlank()) {
+            view.nameTXT.setText(currentUser.getAccountHolderName());
+        } else if (currentUser.getContactName() != null && !currentUser.getContactName().isBlank()) {
+            view.nameTXT.setText(currentUser.getContactName());
+        } else if (currentUser.getUsername() != null && !currentUser.getUsername().isBlank()) {
+            view.nameTXT.setText(currentUser.getUsername());
+        } else {
+            view.nameTXT.setText("Unknown User");
+        }
+    }
+
+
+
+    private void applyRolePermissions() {
+        if (currentUser == null || currentUser.getRole() == null) {
+            return;
+        }
+
+        switch (currentUser.getRole()) {
+            case MERCHANT -> {
+                view.usersB.setVisible(false);
+                view.reportsB.setVisible(false);
+                view.appB.setVisible(false);
+            }
+
+            case ACCOUNTANT, SENIOR_ACCOUNTANT -> {
+                view.catB.setVisible(false);
+                view.appB.setVisible(false);
+            }
+
+            case WAREHOUSE_EMPLOYEE -> {
+                view.usersB.setVisible(false);
+                view.reportsB.setVisible(false);
+                view.appB.setVisible(false);
+            }
+
+            case DELIVERY_DEPARTMENT_EMPLOYEE -> {
+                view.usersB.setVisible(false);
+                view.catB.setVisible(false);
+                view.reportsB.setVisible(false);
+                view.appB.setVisible(false);
+            }
+
+            case DIRECTOR_OF_OPERATIONS, ADMIN -> {
+                // full access
+            }
+        }
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -71,7 +147,6 @@ public class DashboardController {
         int userCount = userDAO.getTotalUserCount();
         view.totalUsers.setText(String.valueOf(userCount));
 
-        // Pending applications count from PU_Applications table
         int appCount = getPendingApplicationCount();
         view.pendingApplications.setText(String.valueOf(appCount));
     }
@@ -92,15 +167,89 @@ public class DashboardController {
     // LOW STOCK WARNING — shown on dashboard home
     // ─────────────────────────────────────────────────────────────
 
-    public void checkLowStockWarning() {
+    private void showStatusWarnings(List<String> accountWarnings) {
         List<Product> lowStock = productDAO.getLowStockProducts();
-        if (!lowStock.isEmpty()) {
-            view.jLabel6.setText("⚠  WARNING: " + lowStock.size() + " catalogue item(s) are below minimum stock level!");
-            view.jLabel6.setForeground(new java.awt.Color(200, 50, 50));
-        } else {
-            view.jLabel6.setText("All stock levels are healthy.");
-            view.jLabel6.setForeground(new java.awt.Color(50, 150, 50));
+
+        // Clear the jPanel6 and rebuild it
+        view.jPanel6.removeAll();
+        view.jPanel6.setLayout(new javax.swing.BoxLayout(view.jPanel6, javax.swing.BoxLayout.Y_AXIS));
+        view.jPanel6.setBackground(java.awt.Color.WHITE);
+
+        // No warnings — show green all-clear
+        if (lowStock.isEmpty() && accountWarnings.isEmpty()) {
+            JLabel ok = new JLabel("  ✓  All merchant accounts in good standing. All stock levels healthy.");
+            ok.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+            ok.setForeground(new java.awt.Color(22, 101, 52));
+            ok.setBackground(new java.awt.Color(220, 252, 231));
+            ok.setOpaque(true);
+            ok.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                    javax.swing.BorderFactory.createMatteBorder(0, 4, 0, 0, new java.awt.Color(22, 101, 52)),
+                    javax.swing.BorderFactory.createEmptyBorder(6, 8, 6, 8)
+            ));
+            ok.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 32));
+            view.jPanel6.add(ok);
+            view.jPanel6.revalidate();
+            view.jPanel6.repaint();
+            return;
         }
+
+        // Low stock warnings — amber
+        for (Product p : lowStock) {
+            JLabel label = new JLabel(
+                    "  ⚠  LOW STOCK: " + p.getName()
+                            + "   —   Available: " + p.getAvailability()
+                            + "  /  Minimum: " + p.getStockLimit()
+            );
+            label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+            label.setForeground(new java.awt.Color(120, 60, 0));
+            label.setBackground(new java.awt.Color(255, 243, 205));
+            label.setOpaque(true);
+            label.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                    javax.swing.BorderFactory.createMatteBorder(0, 4, 0, 0, new java.awt.Color(217, 119, 6)),
+                    javax.swing.BorderFactory.createEmptyBorder(6, 8, 6, 8)
+            ));
+            label.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 32));
+            view.jPanel6.add(label);
+            view.jPanel6.add(javax.swing.Box.createVerticalStrut(3));
+        }
+
+        // Account status warnings
+        for (String w : accountWarnings) {
+            boolean isDefault  = w.contains("IN DEFAULT");
+            boolean isSuspended = w.contains("SUSPENDED");
+            boolean isReminder  = w.contains("REMINDER");
+
+            java.awt.Color fg, bg, accent;
+            if (isDefault) {
+                fg     = new java.awt.Color(153, 27, 27);
+                bg     = new java.awt.Color(254, 226, 226);
+                accent = new java.awt.Color(220, 38, 38);
+            } else if (isSuspended) {
+                fg     = new java.awt.Color(120, 60, 0);
+                bg     = new java.awt.Color(255, 237, 213);
+                accent = new java.awt.Color(234, 88, 12);
+            } else {
+                fg     = new java.awt.Color(133, 77, 14);
+                bg     = new java.awt.Color(255, 243, 205);
+                accent = new java.awt.Color(217, 119, 6);
+            }
+
+            JLabel label = new JLabel("  " + w);
+            label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
+            label.setForeground(fg);
+            label.setBackground(bg);
+            label.setOpaque(true);
+            label.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                    javax.swing.BorderFactory.createMatteBorder(0, 4, 0, 0, accent),
+                    javax.swing.BorderFactory.createEmptyBorder(6, 8, 6, 8)
+            ));
+            label.setMaximumSize(new java.awt.Dimension(Integer.MAX_VALUE, 32));
+            view.jPanel6.add(label);
+            view.jPanel6.add(javax.swing.Box.createVerticalStrut(3));
+        }
+
+        view.jPanel6.revalidate();
+        view.jPanel6.repaint();
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -110,7 +259,7 @@ public class DashboardController {
     public void loadCatalogueTable() {
         List<Product> products = productDAO.getAllActiveProducts();
         DefaultTableModel model = (DefaultTableModel) view.CatalogueTable.getModel();
-        model.setRowCount(0); // clear existing rows
+        model.setRowCount(0);
 
         for (Product p : products) {
             model.addRow(new Object[]{
@@ -126,7 +275,6 @@ public class DashboardController {
         }
     }
 
-    /** Search catalogue — triggered by searchField action or document listener */
     public void searchCatalogue(String keyword) {
         List<Product> results = keyword == null || keyword.isBlank() || keyword.equals("Search..")
                 ? productDAO.getAllActiveProducts()
@@ -148,11 +296,9 @@ public class DashboardController {
         }
     }
 
-    /** Add item — reads from the addItem tab fields */
     public void addCatalogueItem() {
         try {
             Product p = new Product();
-            // Generate a simple ID — in production you'd let the DB auto-generate or use a sequence
             p.setProductId("P-" + System.currentTimeMillis());
             p.setDescription(view.jTextField1.getText().trim());
             p.setPackageType(view.packageField.getText().trim());
@@ -162,7 +308,7 @@ public class DashboardController {
             p.setAvailability(Integer.parseInt(view.availabilityField.getText().trim()));
             p.setStockLimit(Integer.parseInt(view.jTextField2.getText().trim()));
             p.setActive(true);
-            p.setName(view.jTextField1.getText().trim()); // description used as name here
+            p.setName(view.jTextField1.getText().trim());
 
             boolean ok = productDAO.addProduct(p);
             if (ok) {
@@ -177,19 +323,23 @@ public class DashboardController {
         }
     }
 
-    /** Remove selected row from catalogue */
     public void removeSelectedCatalogueItem() {
         int row = view.CatalogueTable.getSelectedRow();
         if (row < 0) {
             JOptionPane.showMessageDialog(view, "Please select a row to remove.");
             return;
         }
-        // Convert to model index in case table is sorted
+
         int modelRow = view.CatalogueTable.convertRowIndexToModel(row);
         String productId = (String) view.CatalogueTable.getModel().getValueAt(modelRow, 0);
 
-        int confirm = JOptionPane.showConfirmDialog(view,
-                "Soft-delete product " + productId + "?", "Confirm", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(
+                view,
+                "Soft-delete product " + productId + "?",
+                "Confirm",
+                JOptionPane.YES_NO_OPTION
+        );
+
         if (confirm == JOptionPane.YES_OPTION) {
             productDAO.deleteProduct(productId);
             loadCatalogueTable();
@@ -204,8 +354,21 @@ public class DashboardController {
         List<User> merchants = userDAO.getAllMerchants();
         DefaultTableModel model = (DefaultTableModel) view.CatalogueTable1.getModel();
         model.setRowCount(0);
+        addStatusCellEditor();
 
         for (User m : merchants) {
+            // Pick a colour indicator for status
+            String statusDisplay;
+            if (m.getAccountStatus() == null) {
+                statusDisplay = "Normal";
+            } else {
+                statusDisplay = switch (m.getAccountStatus()) {
+                    case SUSPENDED  -> "🔒 Suspended";
+                    case IN_DEFAULT -> "❌ In Default";
+                    default         -> "✓ Normal";
+                };
+            }
+
             model.addRow(new Object[]{
                     m.getAccountNo(),
                     m.getAccountHolderName(),
@@ -214,21 +377,55 @@ public class DashboardController {
                     m.getPhone(),
                     m.getCreditLimit() != null ? "£" + m.getCreditLimit() : "-",
                     m.getDiscountPlan() != null ? m.getDiscountPlan().name() : "-",
-                    m.getDiscountRate() != null ? m.getDiscountRate() : "-"
+                    m.getDiscountRate() != null ? m.getDiscountRate() : "-",
+                    statusDisplay
+
             });
+
         }
+
+        // Colour the status column rows
+        view.CatalogueTable1.setDefaultRenderer(Object.class,
+                new javax.swing.table.DefaultTableCellRenderer() {
+                    @Override
+                    public java.awt.Component getTableCellRendererComponent(
+                            javax.swing.JTable table, Object value,
+                            boolean isSelected, boolean hasFocus, int row, int column) {
+
+                        super.getTableCellRendererComponent(
+                                table, value, isSelected, hasFocus, row, column);
+
+                        // Get the status column value for this row
+                        Object statusVal = table.getModel().getValueAt(
+                                table.convertRowIndexToModel(row), 8);
+                        String status = statusVal != null ? statusVal.toString() : "";
+
+                        if (!isSelected) {
+                            if (status.contains("Suspended")) {
+                                setBackground(new java.awt.Color(255, 243, 205)); // amber
+                                setForeground(new java.awt.Color(133, 77, 14));
+                            } else if (status.contains("In Default")) {
+                                setBackground(new java.awt.Color(254, 226, 226)); // red
+                                setForeground(new java.awt.Color(153, 27, 27));
+                            } else {
+                                setBackground(java.awt.Color.WHITE);
+                                setForeground(java.awt.Color.BLACK);
+                            }
+                        }
+                        return this;
+                    }
+                });
     }
 
-    /** Add merchant from the addMerchants tab */
     public void addMerchant() {
-        String username  = view.merchant_usernameField.getText().trim();
-        String password  = view.merchant_passwordField.getText().trim();
+        String username = view.merchant_usernameField.getText().trim();
+        String password = view.merchant_passwordField.getText().trim();
         String accHolder = view.accHolderNameField.getText().trim();
-        String contact   = view.contactNameField.getText().trim();
-        String address   = view.addressField.getText().trim();
-        String phone     = view.creditLimitField.getText().trim(); // field is labelled Phone Number
-        String discRate  = view.discountRateField.getText().trim();
-        String discPlan  = (String) view.discountPlanBox.getSelectedItem();
+        String contact = view.contactNameField.getText().trim();
+        String address = view.addressField.getText().trim();
+        String phone = view.creditLimitField.getText().trim();
+        String discRate = view.discountRateField.getText().trim();
+        String discPlan = (String) view.discountPlanBox.getSelectedItem();
 
         if (username.isBlank() || password.isBlank() || accHolder.isBlank()) {
             JOptionPane.showMessageDialog(view, "Username, Password and Account Holder Name are required.");
@@ -247,19 +444,27 @@ public class DashboardController {
         newMerchant.setDiscountRate(discRate);
         newMerchant.setAccountStatus(AccountStatus.NORMAL);
         newMerchant.setOutstandingBalance(BigDecimal.ZERO);
-        newMerchant.setCreditLimit(new BigDecimal("1000.00")); // default credit limit
+
+        String limitStr = JOptionPane.showInputDialog(view, "Enter credit limit (£):", "1000.00");
+        BigDecimal creditLimit;
+        try {
+            creditLimit = new BigDecimal(limitStr == null ? "1000.00" : limitStr.trim());
+        } catch (NumberFormatException ex) {
+            creditLimit = new BigDecimal("1000.00");
+        }
+        newMerchant.setCreditLimit(creditLimit);
 
         int id = userDAO.createUser(newMerchant);
         if (id > 0) {
             JOptionPane.showMessageDialog(view, "Merchant created with ID: " + id);
             loadMerchantsTable();
+            loadMerchantComboBox();
             loadDashboardStats();
         } else {
             JOptionPane.showMessageDialog(view, "Failed to create merchant. Username may already exist.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    /** Remove selected merchant */
     public void removeSelectedMerchant() {
         int row = view.CatalogueTable1.getSelectedRow();
         if (row < 0) {
@@ -269,7 +474,6 @@ public class DashboardController {
         int modelRow = view.CatalogueTable1.convertRowIndexToModel(row);
         String accountNo = (String) view.CatalogueTable1.getModel().getValueAt(modelRow, 0);
 
-        // Find merchant by account number
         List<User> merchants = userDAO.getAllMerchants();
         int merchantId = -1;
         for (User m : merchants) {
@@ -284,14 +488,189 @@ public class DashboardController {
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(view,
+        int confirm = JOptionPane.showConfirmDialog(
+                view,
                 "Delete merchant account " + accountNo + "? This cannot be undone.",
-                "Confirm Delete", JOptionPane.YES_NO_OPTION);
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION
+        );
+
         if (confirm == JOptionPane.YES_OPTION) {
             userDAO.deleteMerchant(merchantId);
             loadMerchantsTable();
+            loadMerchantComboBox();
             loadDashboardStats();
         }
+    }
+
+    private void loadMerchantComboBox() {
+        List<User> merchants = userDAO.getAllMerchants();
+        view.jComboBox3.removeAllItems();
+        view.jComboBox3.addItem("-- Select Merchant --");
+        for (User m : merchants) {
+            view.jComboBox3.addItem(m.getAccountNo() + " — " + m.getAccountHolderName());
+        }
+    }
+
+    private void loadMerchantBalancePanel() {
+        String selected = (String) view.jComboBox3.getSelectedItem();
+        if (selected == null || selected.startsWith("--")) return;
+
+        String accountNo = selected.split(" — ")[0].trim();
+        List<User> merchants = userDAO.getAllMerchants();
+        User merchant = merchants.stream()
+                .filter(m -> accountNo.equals(m.getAccountNo()))
+                .findFirst()
+                .orElse(null);
+
+        if (merchant == null) return;
+
+        DefaultTableModel creditModel = (DefaultTableModel) view.jTable4.getModel();
+        creditModel.setRowCount(0);
+        BigDecimal limit = merchant.getCreditLimit() != null ? merchant.getCreditLimit() : BigDecimal.ZERO;
+        BigDecimal balance = userDAO.getOutstandingBalance(merchant.getUserId());
+        creditModel.addRow(new Object[]{"£" + limit, "£" + balance, "£" + limit.subtract(balance)});
+
+        DefaultTableModel invoiceModel = (DefaultTableModel) view.jTable2.getModel();
+        invoiceModel.setRowCount(0);
+        view.jTable2.getColumnModel().getColumn(3).setHeaderValue("Status");
+        view.jTable2.getTableHeader().repaint();
+
+        String sql = "SELECT ip.InvoiceID, ip.OrderID, ip.IssueDate, o.TotalAmount, ip.PaymentStatus " +
+                "FROM Invoices_Payments ip " +
+                "JOIN Orders o ON ip.OrderID = o.OrderID " +
+                "WHERE o.MerchantID = ? ORDER BY ip.IssueDate DESC";
+
+        try (java.sql.Connection conn = DatabaseConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, merchant.getUserId());
+            java.sql.ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                invoiceModel.addRow(new Object[]{
+                        rs.getDate("IssueDate").toLocalDate(),
+                        "Inv#" + rs.getInt("InvoiceID") + " (" + rs.getString("OrderID") + ")",
+                        "£" + rs.getBigDecimal("TotalAmount"),
+                        rs.getString("PaymentStatus")
+                });
+            }
+        } catch (java.sql.SQLException e) {
+            System.err.println("loadMerchantBalancePanel error: " + e.getMessage());
+        }
+
+        addInvoiceStatusCellEditor();
+    }
+
+    private void changeMerchantStatus(AccountStatus newStatus) {
+        int row = view.CatalogueTable1.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(view, "Select a merchant first.");
+            return;
+        }
+
+        int modelRow = view.CatalogueTable1.convertRowIndexToModel(row);
+        String accountNo = (String) view.CatalogueTable1.getModel().getValueAt(modelRow, 0);
+
+        List<User> merchants = userDAO.getAllMerchants();
+        int id = merchants.stream()
+                .filter(m -> accountNo.equals(m.getAccountNo()))
+                .mapToInt(User::getUserId)
+                .findFirst()
+                .orElse(-1);
+
+        if (id == -1) return;
+
+        boolean ok = userDAO.setAccountStatus(id, newStatus);
+        if (ok) {
+            loadMerchantsTable();
+        } else {
+            JOptionPane.showMessageDialog(view, "Status change failed.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void wireMerchantStatusMenu() {
+        // Row selection helper — clicking a row selects it properly
+        view.CatalogueTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                int row = view.CatalogueTable1.rowAtPoint(e.getPoint());
+                if (row >= 0) {
+                    view.CatalogueTable1.setRowSelectionInterval(row, row);
+                }
+            }
+        });
+    }
+
+    private void addStatusCellEditor() {
+        JComboBox<String> statusCombo = new JComboBox<>(new String[]{
+                "✓ Normal",
+                "🔒 Suspended",
+                "❌ In Default"
+        });
+
+        // Column 8 is the Status column
+        view.CatalogueTable1.getColumnModel().getColumn(8)
+                .setCellEditor(new DefaultCellEditor(statusCombo) {
+                    @Override
+                    public boolean stopCellEditing() {
+                        String selected = (String) statusCombo.getSelectedItem();
+                        int row = view.CatalogueTable1.getEditingRow();
+                        if (row < 0) return super.stopCellEditing();
+
+                        int modelRow = view.CatalogueTable1.convertRowIndexToModel(row);
+                        String accountNo = (String) view.CatalogueTable1.getModel()
+                                .getValueAt(modelRow, 0);
+
+                        java.util.Optional<User> found = userDAO.getAllMerchants().stream()
+                                .filter(m -> accountNo.equals(m.getAccountNo()))
+                                .findFirst();
+
+                        if (found.isEmpty()) return super.stopCellEditing();
+                        User merchant = found.get();
+
+                        if (selected != null && selected.contains("In Default")) {
+                            // Director only check
+                            if (currentUser == null ||
+                                    currentUser.getRole() != UserRole.DIRECTOR_OF_OPERATIONS) {
+                                JOptionPane.showMessageDialog(view,
+                                        "Only the Director of Operations can mark In Default.",
+                                        "Access Denied", JOptionPane.WARNING_MESSAGE);
+                                cancelCellEditing();
+                                return false;
+                            }
+                            userDAO.markMerchantInDefault(merchant.getUserId());
+                        } else if (selected != null && selected.contains("Suspended")) {
+                            userDAO.suspendMerchant(merchant.getUserId());
+                        } else if (selected != null && selected.contains("Normal")) {
+                            if (merchant.getAccountStatus() == AccountStatus.IN_DEFAULT) {
+                                // Director only check for restoring from default
+                                if (currentUser == null ||
+                                        currentUser.getRole() != UserRole.DIRECTOR_OF_OPERATIONS) {
+                                    JOptionPane.showMessageDialog(view,
+                                            "Only the Director of Operations can restore from In Default.",
+                                            "Access Denied", JOptionPane.WARNING_MESSAGE);
+                                    cancelCellEditing();
+                                    return false;
+                                }
+                                AccountStatusService svc = new AccountStatusService();
+                                boolean ok = svc.directorRestoreToNormal(
+                                        merchant.getUserId(), currentUser.getRole());
+                                if (!ok) {
+                                    JOptionPane.showMessageDialog(view,
+                                            "Cannot restore: still 30+ days overdue.",
+                                            "Failed", JOptionPane.ERROR_MESSAGE);
+                                    cancelCellEditing();
+                                    return false;
+                                }
+                            } else {
+                                userDAO.restoreMerchantToNormal(merchant.getUserId());
+                            }
+                        }
+
+                        boolean result = super.stopCellEditing();
+                        loadMerchantsTable();
+                        return result;
+                    }
+                });
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -307,27 +686,106 @@ public class DashboardController {
             model.addRow(new Object[]{
                     u.getAccountNo() != null ? u.getAccountNo() : "-",
                     u.getUsername(),
-                    "••••••••",  // never show plain text password
+                    "••••••••",
                     u.getRole() != null ? u.getRole().name() : "-"
             });
         }
     }
 
-    /** Add a non-merchant staff user */
+    private void addInvoiceStatusCellEditor() {
+        JComboBox<String> statusCombo = new JComboBox<>(new String[]{
+                "Pending",
+                "Paid",
+                "Overdue"
+        });
+
+        // Status is column 3 in jTable2
+        view.jTable2.getColumnModel().getColumn(3)
+                .setCellEditor(new DefaultCellEditor(statusCombo) {
+                    @Override
+                    public boolean stopCellEditing() {
+                        String selected = (String) statusCombo.getSelectedItem();
+                        int row = view.jTable2.getEditingRow();
+                        if (row < 0) return super.stopCellEditing();
+
+                        // Get the invoice description from column 1 e.g. "Inv#5 (ORD-2026-0005)"
+                        Object descVal = view.jTable2.getModel().getValueAt(row, 1);
+                        if (descVal == null) return super.stopCellEditing();
+
+                        // Extract InvoiceID from description string "Inv#5 (ORD-2026-0005)"
+                        String desc = descVal.toString();
+                        int invoiceId = -1;
+                        try {
+                            // Parse the number after "Inv#"
+                            String idStr = desc.substring(desc.indexOf("#") + 1, desc.indexOf(" "));
+                            invoiceId = Integer.parseInt(idStr);
+                        } catch (Exception ex) {
+                            System.err.println("Could not parse invoice ID from: " + desc);
+                            return super.stopCellEditing();
+                        }
+
+                        // Update in DB
+                        final int finalInvoiceId = invoiceId;
+                        final String finalStatus = selected;
+                        try (java.sql.Connection conn = DatabaseConnection.getConnection();
+                             java.sql.PreparedStatement ps = conn.prepareStatement(
+                                     "UPDATE Invoices_Payments SET PaymentStatus = ? WHERE InvoiceID = ?")) {
+                            ps.setString(1, finalStatus);
+                            ps.setInt(2, finalInvoiceId);
+                            ps.executeUpdate();
+                        } catch (java.sql.SQLException e) {
+                            System.err.println("Invoice status update error: " + e.getMessage());
+                        }
+
+                        boolean result = super.stopCellEditing();
+
+                        // Refresh the balance panel after status change
+                        SwingUtilities.invokeLater(() -> {
+                            loadMerchantBalancePanel();
+                            // Re-run status checks since payment status changed
+                            AccountStatusService svc = new AccountStatusService();
+                            svc.runStatusChecks();
+                            loadMerchantsTable();
+                            loadDashboardStats();
+                        });
+
+                        return result;
+                    }
+                });
+    }
+
     public void addStaffUser() {
         String username = view.jTextField17.getText().trim();
         String password = view.jTextField18.getText().trim();
-        String roleStr  = (String) view.jComboBox2.getSelectedItem();
+        String roleStr = (String) view.jComboBox2.getSelectedItem();
 
         if (username.isBlank() || password.isBlank() || "role...".equals(roleStr)) {
             JOptionPane.showMessageDialog(view, "Please fill in all fields and select a role.");
             return;
         }
 
+        UserRole selectedRole;
+        if ("admin".equalsIgnoreCase(roleStr)) {
+            selectedRole = UserRole.ADMIN;
+        } else if ("manager".equalsIgnoreCase(roleStr) || "director".equalsIgnoreCase(roleStr)) {
+            selectedRole = UserRole.DIRECTOR_OF_OPERATIONS;
+        } else if ("accountant".equalsIgnoreCase(roleStr)) {
+            selectedRole = UserRole.ACCOUNTANT;
+        } else if ("senior accountant".equalsIgnoreCase(roleStr) || "senior_accountant".equalsIgnoreCase(roleStr)) {
+            selectedRole = UserRole.SENIOR_ACCOUNTANT;
+        } else if ("warehouse employee".equalsIgnoreCase(roleStr) || "warehouse_employee".equalsIgnoreCase(roleStr)) {
+            selectedRole = UserRole.WAREHOUSE_EMPLOYEE;
+        } else if ("delivery department employee".equalsIgnoreCase(roleStr) || "delivery_department_employee".equalsIgnoreCase(roleStr)) {
+            selectedRole = UserRole.DELIVERY_DEPARTMENT_EMPLOYEE;
+        } else {
+            JOptionPane.showMessageDialog(view, "Unsupported role selected.");
+            return;
+        }
+
         User newUser = new User();
         newUser.setUsername(username);
         newUser.setPassword(password);
-        newUser.setRole("admin".equals(roleStr) ? UserRole.ADMIN : UserRole.DIRECTOR_OF_OPERATIONS);
+        newUser.setRole(selectedRole);
         newUser.setAccountStatus(AccountStatus.NORMAL);
         newUser.setOutstandingBalance(BigDecimal.ZERO);
 
@@ -341,19 +799,23 @@ public class DashboardController {
         }
     }
 
-    /** Remove selected staff user */
     public void removeSelectedUser() {
         int row = view.jTable3.getSelectedRow();
         if (row < 0) {
             JOptionPane.showMessageDialog(view, "Please select a user to remove.");
             return;
         }
-        // Simple delete by username
+
         int modelRow = view.jTable3.convertRowIndexToModel(row);
         String username = (String) view.jTable3.getModel().getValueAt(modelRow, 1);
 
-        int confirm = JOptionPane.showConfirmDialog(view,
-                "Remove user '" + username + "'?", "Confirm", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(
+                view,
+                "Remove user '" + username + "'?",
+                "Confirm",
+                JOptionPane.YES_NO_OPTION
+        );
+
         if (confirm == JOptionPane.YES_OPTION) {
             try (java.sql.Connection conn = DatabaseConnection.getConnection();
                  java.sql.PreparedStatement ps = conn.prepareStatement(
@@ -369,60 +831,101 @@ public class DashboardController {
     }
 
     // ─────────────────────────────────────────────────────────────
-    // ORDERS TABLE (incomplete orders panel)
+    // ORDERS TABLE
     // ─────────────────────────────────────────────────────────────
 
     public void loadOrdersTable() {
-        List<Order> incompleteOrders = orderDAO.getIncompleteOrders();
+        List<Order> orders = orderDAO.getAllOrders();
 
-        javax.swing.table.DefaultTableModel model =
-                (javax.swing.table.DefaultTableModel) view.ordersTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) view.ordersTable.getModel();
+
+        view.ordersTable.setRowSorter(null);
+        orderSorter = null;
         model.setRowCount(0);
 
-        for (Order o : incompleteOrders) {
+        for (Order o : orders) {
             model.addRow(new Object[]{
                     o.getOrderId(),
                     o.getMerchantId(),
-                    o.getOrderDate() != null ? o.getOrderDate().toLocalDate() : "-",
                     o.getTotalAmount() != null ? "£" + o.getTotalAmount() : "-",
-                    o.getStatus() != null ? o.getStatus().name() : "-",
-                    o.getEstimatedDelivery() != null ? o.getEstimatedDelivery().toLocalDate() : "TBC"
+                    o.getOrderDate() != null ? o.getOrderDate().toLocalDate() : "-",
+                    o.getStatus() != null ? o.getStatus().name() : "-"
             });
         }
 
-        // Update pending orders count on dashboard home too
-        view.pendingOrders.setText(String.valueOf(incompleteOrders.size()));
+        orderSorter = new javax.swing.table.TableRowSorter<>(model);
+        view.ordersTable.setRowSorter(orderSorter);
+
+        orderSorter.setRowFilter(javax.swing.RowFilter.notFilter(
+                javax.swing.RowFilter.regexFilter("(?i)DELIVERED|CANCELLED", 4)));
+
+        view.pendingOrders.setText(String.valueOf(orderDAO.getPendingOrderCount()));
     }
 
     public void updateSelectedOrderStatus() {
         if (view.ordersTable.getSelectedRow() < 0) {
-            javax.swing.JOptionPane.showMessageDialog(view, "Select an order first.");
+            JOptionPane.showMessageDialog(view, "Select an order first.");
             return;
         }
+
         int modelRow = view.ordersTable.convertRowIndexToModel(view.ordersTable.getSelectedRow());
         String orderId = (String) view.ordersTable.getModel().getValueAt(modelRow, 0);
 
         String[] options = {"PROCESSING", "PACKED", "DISPATCHED", "DELIVERED", "CANCELLED"};
-        String choice = (String) javax.swing.JOptionPane.showInputDialog(
-                view, "Select new status for " + orderId + ":",
-                "Update Status", javax.swing.JOptionPane.PLAIN_MESSAGE,
-                null, options, options[0]);
+        String choice = (String) JOptionPane.showInputDialog(
+                view,
+                "Select new status for " + orderId + ":",
+                "Update Status",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
 
         if (choice != null) {
             String dispatch = null;
             if (choice.equals("DISPATCHED")) {
-                dispatch = javax.swing.JOptionPane.showInputDialog(view, "Enter dispatch details (courier, ref no, etc):");
+                dispatch = JOptionPane.showInputDialog(view, "Enter dispatch details (courier, ref no, etc):");
             }
-            boolean ok = orderDAO.updateOrderStatus(orderId,
-                    IPOS_Detailed_Design.model.enums.OrderStatus.valueOf(choice), dispatch);
+
+            boolean ok = orderDAO.updateOrderStatus(
+                    orderId,
+                    IPOS_Detailed_Design.model.enums.OrderStatus.valueOf(choice),
+                    dispatch
+            );
+
             if (ok) {
-                javax.swing.JOptionPane.showMessageDialog(view, "Order " + orderId + " updated to " + choice);
+                JOptionPane.showMessageDialog(view, "Order " + orderId + " updated to " + choice);
                 loadOrdersTable();
             } else {
-                javax.swing.JOptionPane.showMessageDialog(view, "Update failed.", "Error",
-                        javax.swing.JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "Update failed.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private void filterOrders() {
+        if (orderSorter == null) return;
+
+        String text = view.orderSearchField.getText().trim();
+        orderSorter.setRowFilter(text.isEmpty()
+                ? null
+                : javax.swing.RowFilter.regexFilter("(?i)" + text));
+    }
+
+    private void generateInvoiceForSelectedOrder() {
+        int row = view.ordersTable.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(view, "Select an order first.");
+            return;
+        }
+
+        int modelRow = view.ordersTable.convertRowIndexToModel(row);
+        String orderId = (String) view.ordersTable.getModel().getValueAt(modelRow, 0);
+
+        boolean ok = invoiceDAO.createInvoice(orderId);
+        JOptionPane.showMessageDialog(view,
+                ok ? "Invoice created for " + orderId
+                        : "Invoice already exists or failed for " + orderId);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -452,19 +955,23 @@ public class DashboardController {
         }
     }
 
-    /** Approve selected application */
     public void approveSelectedApplication() {
         int row = view.jTable1.getSelectedRow();
-        if (row < 0) { JOptionPane.showMessageDialog(view, "Select an application first."); return; }
+        if (row < 0) {
+            JOptionPane.showMessageDialog(view, "Select an application first.");
+            return;
+        }
         int modelRow = view.jTable1.convertRowIndexToModel(row);
         String appId = (String) view.jTable1.getModel().getValueAt(modelRow, 0);
         updateApplicationStatus(appId, "Approved");
     }
 
-    /** Reject selected application */
     public void rejectSelectedApplication() {
         int row = view.jTable1.getSelectedRow();
-        if (row < 0) { JOptionPane.showMessageDialog(view, "Select an application first."); return; }
+        if (row < 0) {
+            JOptionPane.showMessageDialog(view, "Select an application first.");
+            return;
+        }
         int modelRow = view.jTable1.convertRowIndexToModel(row);
         String appId = (String) view.jTable1.getModel().getValueAt(modelRow, 0);
         updateApplicationStatus(appId, "Rejected");
@@ -486,12 +993,69 @@ public class DashboardController {
     }
 
     // ─────────────────────────────────────────────────────────────
+    // PAYMENTS
+    // ─────────────────────────────────────────────────────────────
+
+    private void recordPayment() {
+        String selected = (String) view.jComboBox3.getSelectedItem();
+        if (selected == null || selected.startsWith("--")) {
+            JOptionPane.showMessageDialog(view, "Select a merchant from the dropdown first.");
+            return;
+        }
+
+        String accountNo = selected.split(" — ")[0].trim();
+
+        List<User> merchants = userDAO.getAllMerchants();
+        User merchant = merchants.stream()
+                .filter(m -> accountNo.equals(m.getAccountNo()))
+                .findFirst()
+                .orElse(null);
+
+        if (merchant == null) {
+            JOptionPane.showMessageDialog(view, "Merchant not found.");
+            return;
+        }
+
+        String amtStr = view.jTextField3.getText().trim().replace("£", "");
+        String method = (String) view.jComboBox4.getSelectedItem();
+        String ref = view.jTextField5.getText().trim();
+
+        if (amtStr.isBlank()) {
+            JOptionPane.showMessageDialog(view, "Enter a payment amount.");
+            return;
+        }
+
+        BigDecimal amount;
+        try {
+            amount = new BigDecimal(amtStr);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(view, "Invalid amount.");
+            return;
+        }
+
+        boolean ok = paymentDAO.recordPayment(merchant.getUserId(), amount, method, ref);
+        if (ok) {
+            userDAO.reduceBalance(merchant.getUserId(), amount);
+
+            BigDecimal remaining = userDAO.getOutstandingBalance(merchant.getUserId());
+            if (remaining.compareTo(BigDecimal.ZERO) <= 0
+                    && merchant.getAccountStatus() == AccountStatus.SUSPENDED) {
+                userDAO.restoreMerchantToNormal(merchant.getUserId());
+            }
+
+            JOptionPane.showMessageDialog(view, "Payment of £" + amount + " recorded.");
+            loadMerchantsTable();
+            loadMerchantBalancePanel();
+        } else {
+            JOptionPane.showMessageDialog(view, "Failed to record payment.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────
     // WIRE ALL BUTTON ACTIONS
     // ─────────────────────────────────────────────────────────────
 
     private void wireButtons() {
-
-        // Catalogue tab — search field
         view.searchField.addActionListener(e -> searchCatalogue(view.searchField.getText()));
         view.searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             public void insertUpdate(javax.swing.event.DocumentEvent e)  { searchCatalogue(view.searchField.getText()); }
@@ -499,32 +1063,59 @@ public class DashboardController {
             public void changedUpdate(javax.swing.event.DocumentEvent e) { searchCatalogue(view.searchField.getText()); }
         });
 
-        // Catalogue tab — add & remove buttons
         view.addItemButton.addActionListener(e -> addCatalogueItem());
         view.rmvSelectedButton.addActionListener(e -> removeSelectedCatalogueItem());
 
-        // Merchants tab — add & remove buttons
         view.addMerchantButton.addActionListener(e -> addMerchant());
         view.jButton16.addActionListener(e -> removeSelectedMerchant());
 
-        // Users tab — add & remove buttons
         view.jButton14.addActionListener(e -> addStaffUser());
         view.jButton15.addActionListener(e -> removeSelectedUser());
 
-        // Applications tab — approve & reject
         view.jToggleButton5.addActionListener(e -> approveSelectedApplication());
         view.jToggleButton6.addActionListener(e -> rejectSelectedApplication());
 
-        // Reports tab — each toggle button loads the relevant report text
         view.systemTurnoverReport.addActionListener(e -> loadSystemTurnoverReport());
         view.merchantOrdersSummary.addActionListener(e -> loadMerchantOrdersSummaryPrompt());
         view.individualMerchantActvityButton.addActionListener(e -> loadIndividualMerchantActivityPrompt());
         view.stockTurnoverReport.addActionListener(e -> loadStockTurnoverReport());
         view.debtorReminders.addActionListener(e -> loadDebtorRemindersReport());
 
-        // Reports tab — generate PDF placeholder
         view.generatePDFButton.addActionListener(e ->
                 JOptionPane.showMessageDialog(view, "PDF export: copy the text above into a document or use a library like iText."));
+
+        view.jButton8.addActionListener(e -> recordPayment());
+        view.jButton2.addActionListener(e -> generateInvoiceForSelectedOrder());
+        wireMerchantStatusMenu();
+
+        view.jComboBox3.addActionListener(e -> loadMerchantBalancePanel());
+
+        view.orderSearchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            public void insertUpdate(javax.swing.event.DocumentEvent e)  { filterOrders(); }
+            public void removeUpdate(javax.swing.event.DocumentEvent e)  { filterOrders(); }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { filterOrders(); }
+        });
+
+        view.hideCompletedButton.addActionListener(e -> {
+            if (orderSorter != null) {
+                orderSorter.setRowFilter(javax.swing.RowFilter.notFilter(
+                        javax.swing.RowFilter.regexFilter("(?i)DELIVERED|CANCELLED", 4)));
+            }
+        });
+
+        view.unHideAllButton.addActionListener(e -> {
+            if (orderSorter != null) {
+                orderSorter.setRowFilter(null);
+            }
+        });
+
+        view.jButton3.addActionListener(e -> {
+            AccountStatusService svc = new AccountStatusService();
+            List<String> w = svc.runStatusChecks();
+            showStatusWarnings(w);
+            loadMerchantsTable();
+            loadDashboardStats();
+        });
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -568,7 +1159,7 @@ public class DashboardController {
     private void loadMerchantOrdersSummaryPrompt() {
         String input = JOptionPane.showInputDialog(view,
                 "Enter Merchant Account No (or leave blank for all merchants):");
-        if (input == null) return; // cancelled
+        if (input == null) return;
 
         StringBuilder sb = new StringBuilder();
         sb.append("MERCHANT ORDERS SUMMARY\n");
@@ -586,9 +1177,11 @@ public class DashboardController {
              java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
             if (!input.isBlank()) ps.setString(1, input.trim());
             java.sql.ResultSet rs = ps.executeQuery();
+
             sb.append(String.format("%-12s %-25s %-22s %12s %12s%n",
                     "Order ID", "Merchant", "Date", "Amount £", "Status"));
             sb.append("──────────────────────────────────────────────────────\n");
+
             BigDecimal total = BigDecimal.ZERO;
             int count = 0;
             while (rs.next()) {
@@ -603,11 +1196,13 @@ public class DashboardController {
                         amt,
                         rs.getString("OrderStatus")));
             }
+
             sb.append("──────────────────────────────────────────────────────\n");
             sb.append(String.format("Total Orders: %d    Total Value: £%.2f%n", count, total));
         } catch (java.sql.SQLException e) {
             sb.append("Error loading report: ").append(e.getMessage());
         }
+
         view.reportTextPane.setText(sb.toString());
     }
 
@@ -622,12 +1217,14 @@ public class DashboardController {
         sb.append("──────────────────────────────────────────────────────\n\n");
 
         try (java.sql.Connection conn = DatabaseConnection.getConnection()) {
-            // Merchant header
             java.sql.PreparedStatement psMerchant = conn.prepareStatement(
                     "SELECT * FROM Users WHERE AccountNo = ?");
             psMerchant.setString(1, accountNo);
             java.sql.ResultSet rsMerchant = psMerchant.executeQuery();
-            if (!rsMerchant.next()) { view.reportTextPane.setText("Merchant not found."); return; }
+            if (!rsMerchant.next()) {
+                view.reportTextPane.setText("Merchant not found.");
+                return;
+            }
 
             sb.append("Name:    ").append(rsMerchant.getString("AccountHolderName")).append("\n");
             sb.append("Contact: ").append(rsMerchant.getString("ContactName")).append("\n");
@@ -636,7 +1233,6 @@ public class DashboardController {
 
             int merchantId = rsMerchant.getInt("UserID");
 
-            // Orders + items
             java.sql.PreparedStatement psOrders = conn.prepareStatement(
                     "SELECT * FROM Orders WHERE MerchantID = ? ORDER BY OrderDate DESC");
             psOrders.setInt(1, merchantId);
@@ -667,6 +1263,7 @@ public class DashboardController {
         } catch (java.sql.SQLException e) {
             sb.append("Error: ").append(e.getMessage());
         }
+
         view.reportTextPane.setText(sb.toString());
     }
 
@@ -714,9 +1311,11 @@ public class DashboardController {
                              "GROUP BY u.UserID HAVING MaxDaysOverdue > 0 " +
                              "ORDER BY MaxDaysOverdue DESC")) {
             java.sql.ResultSet rs = ps.executeQuery();
+
             sb.append(String.format("%-12s %-25s %15s %10s %12s%n",
                     "Account No", "Name", "Balance £", "Status", "Days Overdue"));
             sb.append("──────────────────────────────────────────────────────\n");
+
             boolean any = false;
             while (rs.next()) {
                 any = true;
@@ -727,10 +1326,12 @@ public class DashboardController {
                         rs.getString("AccountStatus"),
                         rs.getLong("MaxDaysOverdue")));
             }
+
             if (!any) sb.append("No overdue payments found.\n");
         } catch (java.sql.SQLException e) {
             sb.append("Error: ").append(e.getMessage());
         }
+
         view.reportTextPane.setText(sb.toString());
     }
 }
