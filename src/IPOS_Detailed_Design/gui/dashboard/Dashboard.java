@@ -919,19 +919,17 @@ public class Dashboard extends JFrame {
         jLabel18.setText("Merchants with an outstanding balance. Send reminders to email them via SMTP");
 
         jTable5.setModel(new DefaultTableModel(
-                new Object [][] {
-                        {null, null, null},
-                        {null, null, null},
-                        {null, null, null},
-                        {null, null, null}
-                },
-                new String [] { "Merchant", "Balance Owed", "Days Overdue" }
+                new Object[][]{},
+                new String[]{"Merchant", "Balance Owed", "Days Overdue", "Status", "Phone", "AccountNo"}
         ) {
-            Class[] types = new Class [] {
+            Class[] types = new Class[]{
+                    String.class, String.class, String.class,
                     String.class, String.class, String.class
             };
             public Class getColumnClass(int columnIndex) { return types[columnIndex]; }
+            public boolean isCellEditable(int row, int col) { return false; }
         });
+
         jScrollPane9.setViewportView(jTable5);
 
         jButton7.setText("Send Reminder");
