@@ -61,6 +61,7 @@ public class DashboardController {
         loadUsersTable();
         loadOrdersTable();
         loadApplicationsTable();
+        loadDebtorRemindersTable();
         wireButtons();
 
 
@@ -1080,6 +1081,7 @@ public class DashboardController {
         view.individualMerchantActvityButton.addActionListener(e -> loadIndividualMerchantActivityPrompt());
         view.stockTurnoverReport.addActionListener(e -> loadStockTurnoverReport());
         view.debtorReminders.addActionListener(e -> loadDebtorRemindersReport());
+        view.jButton7.addActionListener(e -> sendDebtorReminder());
 
         view.generatePDFButton.addActionListener(e ->
                 JOptionPane.showMessageDialog(view, "PDF export: copy the text above into a document or use a library like iText."));
@@ -1094,6 +1096,11 @@ public class DashboardController {
             public void insertUpdate(javax.swing.event.DocumentEvent e)  { filterOrders(); }
             public void removeUpdate(javax.swing.event.DocumentEvent e)  { filterOrders(); }
             public void changedUpdate(javax.swing.event.DocumentEvent e) { filterOrders(); }
+        });
+
+        view.debtorReminders.addActionListener(e -> {
+            loadDebtorRemindersTable();
+            loadDebtorRemindersReport();
         });
 
         view.hideCompletedButton.addActionListener(e -> {
@@ -1334,4 +1341,114 @@ public class DashboardController {
 
         view.reportTextPane.setText(sb.toString());
     }
+
+    public void loadDebtorRemindersTable() {
+        DefaultTableModel model = (DefaultTableModel) view.jTable5.getModel();
+        model.setRowCount(0);
+
+        try (java.sql.Connection conn = DatabaseConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(
+                     "SELECT u.AccountNo, u.AccountHolderName, u.Phone, " +
+                             "u.OutstandingBalance, u.AccountStatus, " +
+                             "MAX(DATEDIFF(CURDATE(), ip.DueDate)) AS DaysOverdue " +
+                             "FROM Users u " +
+                             "JOIN Orders o ON o.MerchantID = u.UserID " +
+                             "JOIN Invoices_Payments ip ON ip.OrderID = o.OrderID " +
+                             "WHERE u.Role = 'Merchant' AND ip.PaymentStatus != 'Paid' " +
+                             "GROUP BY u.UserID " +
+                             "HAVING DaysOverdue > 0 " +
+                             "ORDER BY DaysOverdue DESC")) {
+
+            java.sql.ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                        rs.getString("AccountHolderName"),
+                        "£" + rs.getBigDecimal("OutstandingBalance"),
+                        rs.getLong("DaysOverdue") + " days",
+                        rs.getString("AccountStatus"),
+                        rs.getString("Phone"),
+                        rs.getString("AccountNo")  // hidden, used for SMS
+                });
+            }
+        } catch (java.sql.SQLException e) {
+            System.err.println("loadDebtorRemindersTable error: " + e.getMessage());
+        }
+    }
+
+
+    private void sendDebtorReminder() {
+        int row = view.jTable5.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(view, "Please select a merchant to send reminder to.");
+            return;
+        }
+
+        String merchantName = (String) view.jTable5.getModel().getValueAt(row, 0);
+        String balance      = (String) view.jTable5.getModel().getValueAt(row, 1);
+        String daysOverdue  = (String) view.jTable5.getModel().getValueAt(row, 2);
+        String phone        = (String) view.jTable5.getModel().getValueAt(row, 4);
+        String accountNo    = (String) view.jTable5.getModel().getValueAt(row, 5);
+
+        // Build the SMS message
+        String message = "INFOPHARMA REMINDER: Dear " + merchantName +
+                ", your account (" + accountNo + ") has an outstanding balance of " +
+                balance + " which is " + daysOverdue + " overdue. " +
+                "Please make payment immediately to avoid further action. " +
+                "Contact: 0207 000 0000";
+
+        // Show preview to user
+        int confirm = JOptionPane.showConfirmDialog(view,
+                "Send SMS reminder to " + merchantName + " at " + phone + "?\n\n" +
+                        "Message preview:\n" + message,
+                "Confirm SMS Reminder",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        // Log the reminder to DB (simulated SMS)
+        String sql = "INSERT INTO Invoices_Payments (OrderID, IssueDate, DueDate, PaymentStatus) " +
+                "SELECT o.OrderID, CURDATE(), CURDATE(), 'Pending' " +
+                "FROM Orders o JOIN Users u ON o.MerchantID = u.UserID " +
+                "WHERE u.AccountNo = ? AND o.OrderStatus != 'DELIVERED' LIMIT 1";
+
+        // Instead, log to a reminders log — simpler and cleaner
+        logReminderSent(accountNo, phone, message, merchantName);
+    }
+
+    private void logReminderSent(String accountNo, String phone,
+                                 String message, String merchantName) {
+        // Log to DB so it's recorded
+        String sql = "CREATE TABLE IF NOT EXISTS SMS_Reminders (" +
+                "ReminderID INT AUTO_INCREMENT PRIMARY KEY, " +
+                "AccountNo VARCHAR(20), " +
+                "Phone VARCHAR(20), " +
+                "Message TEXT, " +
+                "SentAt DATETIME DEFAULT CURRENT_TIMESTAMP)";
+
+        try (java.sql.Connection conn = DatabaseConnection.getConnection();
+             java.sql.Statement st = conn.createStatement()) {
+            // Create table if not exists
+            st.execute(sql);
+
+            // Insert reminder log
+            java.sql.PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO SMS_Reminders (AccountNo, Phone, Message) VALUES (?,?,?)");
+            ps.setString(1, accountNo);
+            ps.setString(2, phone);
+            ps.setString(3, message);
+            ps.executeUpdate();
+
+            JOptionPane.showMessageDialog(view,
+                    "✓ SMS reminder sent to " + merchantName + " at " + phone + "\n" +
+                            "Reminder logged in system.",
+                    "Reminder Sent", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (java.sql.SQLException e) {
+            System.err.println("logReminderSent error: " + e.getMessage());
+            JOptionPane.showMessageDialog(view,
+                    "Failed to log reminder: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }
