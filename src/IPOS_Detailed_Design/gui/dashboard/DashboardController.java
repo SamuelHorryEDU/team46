@@ -274,6 +274,49 @@ public class DashboardController {
                     p.getStockLimit()
             });
         }
+
+        view.CatalogueTable.setDefaultRenderer(Object.class,
+                new javax.swing.table.DefaultTableCellRenderer() {
+                    @Override
+                    public java.awt.Component getTableCellRendererComponent(
+                            javax.swing.JTable table, Object value,
+                            boolean isSelected, boolean hasFocus, int row, int column) {
+
+                        super.getTableCellRendererComponent(
+                                table, value, isSelected, hasFocus, row, column);
+
+                        int modelRow = table.convertRowIndexToModel(row);
+
+                        // Get availability (col 6) and stock limit (col 7)
+                        Object availObj = table.getModel().getValueAt(modelRow, 6);
+                        Object limitObj = table.getModel().getValueAt(modelRow, 7);
+
+                        if (!isSelected && availObj != null && limitObj != null) {
+                            try {
+                                int availability = Integer.parseInt(availObj.toString());
+                                int stockLimit   = Integer.parseInt(limitObj.toString());
+
+                                if (availability == 0) {
+                                    // Out of stock — red
+                                    setBackground(new java.awt.Color(254, 226, 226));
+                                    setForeground(new java.awt.Color(153, 27, 27));
+                                } else if (availability < stockLimit) {
+                                    // Below minimum — amber
+                                    setBackground(new java.awt.Color(255, 243, 205));
+                                    setForeground(new java.awt.Color(120, 60, 0));
+                                } else {
+                                    // Healthy stock — white
+                                    setBackground(java.awt.Color.WHITE);
+                                    setForeground(java.awt.Color.BLACK);
+                                }
+                            } catch (NumberFormatException e) {
+                                setBackground(java.awt.Color.WHITE);
+                                setForeground(java.awt.Color.BLACK);
+                            }
+                        }
+                        return this;
+                    }
+                });
     }
 
     public void searchCatalogue(String keyword) {
@@ -300,7 +343,7 @@ public class DashboardController {
     public void addCatalogueItem() {
         try {
             Product p = new Product();
-            p.setProductId("P-" + System.currentTimeMillis());
+            p.setProductId(productDAO.getNextProductId());
             p.setDescription(view.jTextField1.getText().trim());
             p.setPackageType(view.packageField.getText().trim());
             p.setUnit(view.unitField.getText().trim());
@@ -385,8 +428,8 @@ public class DashboardController {
 
         }
 
-        // Colour the status column rows
-        view.CatalogueTable1.setDefaultRenderer(Object.class,
+        // Add colour coding for low stock rows
+        javax.swing.table.DefaultTableCellRenderer renderer =
                 new javax.swing.table.DefaultTableCellRenderer() {
                     @Override
                     public java.awt.Component getTableCellRendererComponent(
@@ -396,27 +439,50 @@ public class DashboardController {
                         super.getTableCellRendererComponent(
                                 table, value, isSelected, hasFocus, row, column);
 
-                        // Get the status column value for this row
-                        Object statusVal = table.getModel().getValueAt(
-                                table.convertRowIndexToModel(row), 8);
-                        String status = statusVal != null ? statusVal.toString() : "";
+                        int modelRow = table.convertRowIndexToModel(row);
 
-                        if (!isSelected) {
-                            if (status.contains("Suspended")) {
-                                setBackground(new java.awt.Color(255, 243, 205)); // amber
-                                setForeground(new java.awt.Color(133, 77, 14));
-                            } else if (status.contains("In Default")) {
-                                setBackground(new java.awt.Color(254, 226, 226)); // red
-                                setForeground(new java.awt.Color(153, 27, 27));
-                            } else {
+                        Object availObj = table.getModel().getValueAt(modelRow, 6);
+                        Object limitObj = table.getModel().getValueAt(modelRow, 7);
+
+                        if (!isSelected && availObj != null && limitObj != null) {
+                            try {
+                                int availability = Integer.parseInt(availObj.toString());
+                                int stockLimit   = Integer.parseInt(limitObj.toString());
+
+                                if (availability == 0) {
+                                    setBackground(new java.awt.Color(254, 226, 226));
+                                    setForeground(new java.awt.Color(153, 27, 27));
+                                } else if (availability < stockLimit) {
+                                    setBackground(new java.awt.Color(255, 243, 205));
+                                    setForeground(new java.awt.Color(120, 60, 0));
+                                } else {
+                                    setBackground(java.awt.Color.WHITE);
+                                    setForeground(java.awt.Color.BLACK);
+                                }
+                            } catch (NumberFormatException e) {
                                 setBackground(java.awt.Color.WHITE);
                                 setForeground(java.awt.Color.BLACK);
                             }
                         }
+
+                        // Reset colours when selected so selection highlight still works
+                        if (isSelected) {
+                            setBackground(table.getSelectionBackground());
+                            setForeground(table.getSelectionForeground());
+                        }
+
                         return this;
                     }
-                });
+                };
+
+// Apply renderer to ALL column types so entire row is coloured
+        view.CatalogueTable.setDefaultRenderer(Object.class,  renderer);
+        view.CatalogueTable.setDefaultRenderer(Integer.class, renderer);
+        view.CatalogueTable.setDefaultRenderer(String.class,  renderer);
+
+
     }
+
 
     public void addMerchant() {
         String username = view.merchant_usernameField.getText().trim();
