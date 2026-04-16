@@ -1066,7 +1066,15 @@ public class Dashboard extends JFrame {
 
         jButton5.setText("Edit Selected User");
         jButton5.addActionListener(this::jButton5ActionPerformed);
-        jComboBox5.setModel(new DefaultComboBoxModel<>(new String[]{"role...", "admin", "manager"}));
+        jComboBox5.setModel(new DefaultComboBoxModel<>(new String[]{
+                "role...",
+                "admin",
+                "manager",
+                "senior accountant",
+                "accountant",
+                "warehouse employee",
+                "delivery department employee"
+        }));
         jComboBox5.setToolTipText("Role");
         jTextField19.setText("Password");
         jTextField20.setText("Username");

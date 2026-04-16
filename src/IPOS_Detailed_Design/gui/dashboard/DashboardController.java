@@ -521,6 +521,11 @@ public class DashboardController {
         }
         newMerchant.setCreditLimit(creditLimit);
 
+        // Auto-generate account number
+        String accountNo = "ACC" + String.format("%04d",
+                userDAO.getAllMerchants().size() + 1);
+        newMerchant.setAccountNo(accountNo);
+
         int id = userDAO.createUser(newMerchant);
         if (id > 0) {
             JOptionPane.showMessageDialog(view, "Merchant created with ID: " + id);
@@ -1275,6 +1280,7 @@ public class DashboardController {
 
         view.jButton14.addActionListener(e -> addStaffUser());
         view.jButton15.addActionListener(e -> removeSelectedUser());
+        view.jButton5.addActionListener(e -> editSelectedUser());
 
         view.jToggleButton5.addActionListener(e -> approveSelectedApplication());
         view.jToggleButton6.addActionListener(e -> rejectSelectedApplication());
@@ -1325,6 +1331,123 @@ public class DashboardController {
             loadMerchantsTable();
             loadDashboardStats();
         });
+
+        view.jTable3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                int row = view.jTable3.getSelectedRow();
+                if (row < 0) return;
+                int modelRow = view.jTable3.convertRowIndexToModel(row);
+
+                String accountNo = (String) view.jTable3.getModel().getValueAt(modelRow, 0);
+                String username  = (String) view.jTable3.getModel().getValueAt(modelRow, 1);
+                String role      = (String) view.jTable3.getModel().getValueAt(modelRow, 3);
+
+                // Autofill the edit fields
+                view.jTextField20.setText(username);
+                view.jTextField19.setText(""); // clear password for security
+
+                // Set the role dropdown to match current role
+                String roleForCombo = switch (role) {
+                    case "ADMIN"                        -> "admin";
+                    case "DIRECTOR_OF_OPERATIONS"       -> "manager";
+                    case "SENIOR_ACCOUNTANT"            -> "senior accountant";
+                    case "ACCOUNTANT"                   -> "accountant";
+                    case "WAREHOUSE_EMPLOYEE"           -> "warehouse employee";
+                    case "DELIVERY_DEPARTMENT_EMPLOYEE" -> "delivery department employee";
+                    default                             -> "role...";
+                };
+
+                // Set combo box selection
+                for (int i = 0; i < view.jComboBox5.getItemCount(); i++) {
+                    if (view.jComboBox5.getItemAt(i).equalsIgnoreCase(roleForCombo)) {
+                        view.jComboBox5.setSelectedIndex(i);
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+    public void editSelectedUser() {
+        int row = view.jTable3.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(view, "Please select a user first.");
+            return;
+        }
+
+        int modelRow = view.jTable3.convertRowIndexToModel(row);
+        String originalUsername = (String) view.jTable3.getModel().getValueAt(modelRow, 1);
+
+        String newUsername = view.jTextField20.getText().trim();
+        String newPassword = view.jTextField19.getText().trim();
+        String roleStr     = (String) view.jComboBox5.getSelectedItem();
+
+        if (newUsername.isBlank() || "role...".equals(roleStr)) {
+            JOptionPane.showMessageDialog(view,
+                    "Username and role are required.");
+            return;
+        }
+
+        // Map combo selection to UserRole
+        UserRole selectedRole = switch (roleStr.toLowerCase()) {
+            case "admin"                        -> UserRole.ADMIN;
+            case "manager", "director"          -> UserRole.DIRECTOR_OF_OPERATIONS;
+            case "senior accountant"            -> UserRole.SENIOR_ACCOUNTANT;
+            case "accountant"                   -> UserRole.ACCOUNTANT;
+            case "warehouse employee"           -> UserRole.WAREHOUSE_EMPLOYEE;
+            case "delivery department employee" -> UserRole.DELIVERY_DEPARTMENT_EMPLOYEE;
+            default                             -> UserRole.MERCHANT;
+        };
+
+        // Build update SQL
+        StringBuilder sql = new StringBuilder(
+                "UPDATE Users SET Username = ?, Role = ?");
+        boolean updatingPassword = !newPassword.isBlank();
+        if (updatingPassword) sql.append(", Password = ?");
+        sql.append(" WHERE Username = ?");
+
+        // Map role enum to DB string
+        String roleDb = switch (selectedRole) {
+            case ADMIN                        -> "Admin";
+            case DIRECTOR_OF_OPERATIONS       -> "Director of Operations";
+            case SENIOR_ACCOUNTANT            -> "Senior accountant";
+            case ACCOUNTANT                   -> "Accountant";
+            case WAREHOUSE_EMPLOYEE           -> "Warehouse employee";
+            case DELIVERY_DEPARTMENT_EMPLOYEE -> "Delivery department employee";
+            default                           -> "Merchant";
+        };
+
+        try (java.sql.Connection conn = DatabaseConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            ps.setString(1, newUsername);
+            ps.setString(2, roleDb);
+            if (updatingPassword) {
+                ps.setString(3, newPassword);
+                ps.setString(4, originalUsername);
+            } else {
+                ps.setString(3, originalUsername);
+            }
+
+            int updated = ps.executeUpdate();
+            if (updated > 0) {
+                JOptionPane.showMessageDialog(view,
+                        "User '" + originalUsername + "' updated successfully.");
+                loadUsersTable();
+                loadDashboardStats();
+                // Clear edit fields
+                view.jTextField20.setText("Username");
+                view.jTextField19.setText("Password");
+                view.jComboBox5.setSelectedIndex(0);
+            } else {
+                JOptionPane.showMessageDialog(view,
+                        "Update failed.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (java.sql.SQLException e) {
+            System.err.println("editSelectedUser error: " + e.getMessage());
+            JOptionPane.showMessageDialog(view,
+                    "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     // ─────────────────────────────────────────────────────────────
