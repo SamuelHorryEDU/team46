@@ -1286,8 +1286,7 @@ public class DashboardController {
         view.debtorReminders.addActionListener(e -> loadDebtorRemindersReport());
         view.jButton7.addActionListener(e -> sendDebtorReminder());
 
-        view.generatePDFButton.addActionListener(e ->
-                JOptionPane.showMessageDialog(view, "PDF export: copy the text above into a document or use a library like iText."));
+        view.generatePDFButton.addActionListener(e -> generateReportPDF());
 
         view.jButton8.addActionListener(e -> recordPayment());
         view.jButton2.addActionListener(e -> generateInvoiceForSelectedOrder());
@@ -1654,6 +1653,115 @@ public class DashboardController {
             JOptionPane.showMessageDialog(view,
                     "Failed to log reminder: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void generateReportPDF() {
+        // Get the current report text
+        String reportText = view.reportTextPane.getText().trim();
+        if (reportText.isBlank() || reportText.startsWith("<REPORT")) {
+            JOptionPane.showMessageDialog(view,
+                    "Please generate a report first before exporting to PDF.",
+                    "No Report", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Ask user where to save
+        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+        fileChooser.setDialogTitle("Save Report as PDF");
+        fileChooser.setSelectedFile(new java.io.File("IPOS_Report_"
+                + java.time.LocalDate.now() + ".pdf"));
+        fileChooser.setFileFilter(
+                new javax.swing.filechooser.FileNameExtensionFilter("PDF Files", "pdf"));
+
+        int result = fileChooser.showSaveDialog(view);
+        if (result != javax.swing.JFileChooser.APPROVE_OPTION) return;
+
+        java.io.File outputFile = fileChooser.getSelectedFile();
+        if (!outputFile.getName().endsWith(".pdf")) {
+            outputFile = new java.io.File(outputFile.getAbsolutePath() + ".pdf");
+        }
+
+        try {
+            // Create PDF document
+            com.itextpdf.text.Document document =
+                    new com.itextpdf.text.Document(com.itextpdf.text.PageSize.A4);
+            com.itextpdf.text.pdf.PdfWriter.getInstance(
+                    document, new java.io.FileOutputStream(outputFile));
+            document.open();
+
+            // Header
+            com.itextpdf.text.Font headerFont = new com.itextpdf.text.Font(
+                    com.itextpdf.text.Font.FontFamily.HELVETICA, 18,
+                    com.itextpdf.text.Font.BOLD);
+            com.itextpdf.text.Font bodyFont = new com.itextpdf.text.Font(
+                    com.itextpdf.text.Font.FontFamily.COURIER, 10,
+                    com.itextpdf.text.Font.NORMAL);
+            com.itextpdf.text.Font smallFont = new com.itextpdf.text.Font(
+                    com.itextpdf.text.Font.FontFamily.HELVETICA, 9,
+                    com.itextpdf.text.Font.ITALIC,
+                    com.itextpdf.text.BaseColor.GRAY);
+
+            // InfoPharma header
+            com.itextpdf.text.Paragraph title =
+                    new com.itextpdf.text.Paragraph("InfoPharma Ltd", headerFont);
+            title.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+            document.add(title);
+
+            com.itextpdf.text.Paragraph subtitle =
+                    new com.itextpdf.text.Paragraph(
+                            "IPOS-SA System Report", smallFont);
+            subtitle.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+            document.add(subtitle);
+
+            com.itextpdf.text.Paragraph generated =
+                    new com.itextpdf.text.Paragraph(
+                            "Generated: " + java.time.LocalDateTime.now()
+                                    .format(java.time.format.DateTimeFormatter
+                                            .ofPattern("dd/MM/yyyy HH:mm")),
+                            smallFont);
+            generated.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+            document.add(generated);
+
+            // Divider line
+            document.add(new com.itextpdf.text.Paragraph(
+                    "─────────────────────────────────────────────────────",
+                    bodyFont));
+            document.add(com.itextpdf.text.Chunk.NEWLINE);
+
+            // Report content — split by line and add each
+            String[] lines = reportText.split("\n");
+            for (String line : lines) {
+                document.add(new com.itextpdf.text.Paragraph(line, bodyFont));
+            }
+
+            // Footer
+            document.add(com.itextpdf.text.Chunk.NEWLINE);
+            com.itextpdf.text.Paragraph footer =
+                    new com.itextpdf.text.Paragraph(
+                            "CONFIDENTIAL — InfoPharma Ltd internal use only",
+                            smallFont);
+            footer.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+            document.add(footer);
+
+            document.close();
+
+            // Ask if user wants to open it
+            int open = JOptionPane.showConfirmDialog(view,
+                    "PDF saved to:\n" + outputFile.getAbsolutePath() +
+                            "\n\nOpen it now?",
+                    "PDF Saved", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            if (open == JOptionPane.YES_OPTION) {
+                java.awt.Desktop.getDesktop().open(outputFile);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(view,
+                    "Failed to generate PDF: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("generateReportPDF error: " + e.getMessage());
         }
     }
 
