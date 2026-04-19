@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * OrderDAO — handles all database operations for Orders and OrderItems tables.
+ * OrderDAO — Data Access Object for the Orders and OrderItems tables.
  *
- * Uses your exact field names from Order.java:
- *   getOrderId(), getMerchantId(), getStatus(), getItems() etc.
+ * <p>Provides all CRUD operations for orders placed by merchants
+ * in the IPOS-SA system. Handles order creation, status updates,
+ * order item insertion and retrieval of order history.</p>
+ *
  */
 public class OrderDAO {
 
@@ -24,9 +26,15 @@ public class OrderDAO {
     // ─────────────────────────────────────────────
 
     /**
-     * Save a new order and all its items to the database.
-     * Also deducts stock for each item automatically.
-     * Call this from OrderService.placeOrder() instead of just adding to the list.
+     * Saves a new order and all its line items to the database.
+     *
+     * <p>Inserts the order header into the Orders table, then inserts
+     * each associated OrderItem into the OrderItems table.
+     * Stock deduction should be handled separately via ProductDAO.</p>
+     *
+     * @param order the Order object to persist, including its list of items
+     * @return {@code true} if the order was saved successfully,
+     *         {@code false} otherwise
      */
     public boolean createOrder(Order order) {
         String sql = "INSERT INTO Orders (OrderID, MerchantID, OrderDate, TotalAmount, " +
@@ -59,6 +67,15 @@ public class OrderDAO {
         }
     }
 
+    /**
+     * Inserts a single order line item into the OrderItems table.
+     *
+     * <p>Called internally by {@link #createOrder(Order)} for each
+     * item in the order.</p>
+     *
+     * @param item    the OrderItem to insert
+     * @param orderId the parent order ID this item belongs to
+     */
     private void insertOrderItem(OrderItem item, String orderId) {
         String sql = "INSERT INTO OrderItems (OrderID, ProductID, Quantity, UnitCost) VALUES (?,?,?,?)";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -77,6 +94,13 @@ public class OrderDAO {
     // READ
     // ─────────────────────────────────────────────
 
+    /**
+     * Retrieves a single order by its unique order ID, including all line items.
+     *
+     * @param orderId the unique order identifier (e.g. "ORD-2026-0001")
+     * @return the matching {@link Order} with items populated,
+     *         or {@code null} if not found
+     */
     public Order getOrderById(String orderId) {
         String sql = "SELECT * FROM Orders WHERE OrderID = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -95,8 +119,11 @@ public class OrderDAO {
     }
 
     /**
-     * Get all orders for a merchant.
-     * Used in the merchant tracking view and balance calculations.
+     * Retrieves all orders placed by a specific merchant, most recent first.
+     *
+     * @param merchantId the UserID of the merchant
+     * @return list of {@link Order} objects for the merchant,
+     *         empty list if none found
      */
     public List<Order> getOrdersByMerchant(int merchantId) {
         List<Order> orders = new ArrayList<>();
@@ -117,9 +144,16 @@ public class OrderDAO {
     }
 
     /**
-     * Get orders for a merchant within a date range.
-     * Matches OrderService.getOrderHistory(LocalDate from, LocalDate to).
-     * Used for UC-SA-RPT-02 merchant orders report.
+     * Retrieves orders for a merchant within a specified date range.
+     *
+     * <p>Used to generate the merchant orders summary report
+     * (UC-SA-RPT-02).</p>
+     *
+     * @param merchantId the UserID of the merchant
+     * @param fromDate   the start date of the range (inclusive)
+     * @param toDate     the end date of the range (inclusive)
+     * @return list of {@link Order} objects within the date range,
+     *         empty list if none found
      */
     public List<Order> getOrderHistory(int merchantId, LocalDate fromDate, LocalDate toDate) {
         List<Order> orders = new ArrayList<>();
@@ -143,8 +177,13 @@ public class OrderDAO {
     }
 
     /**
-     * Get all orders not yet delivered or cancelled.
-     * Powers the "orders not completed" view on dashboard — 1 mark on sheet.
+     * Retrieves all orders that have not yet been delivered or cancelled.
+     *
+     * <p>Powers the incomplete orders view on the dashboard,
+     * satisfying the requirement to observe orders taken but not completed.</p>
+     *
+     * @return list of active {@link Order} objects ordered by date ascending,
+     *         empty list if none found
      */
     public List<Order> getIncompleteOrders() {
         List<Order> orders = new ArrayList<>();
@@ -161,7 +200,12 @@ public class OrderDAO {
     }
 
     /**
-     * Get all orders regardless of status — powers the "Show All" view.
+     * Retrieves all orders regardless of status, most recent first.
+     *
+     * <p>Used by the "Show All" toggle in the orders tab to display
+     * the complete order history including delivered and cancelled orders.</p>
+     *
+     * @return list of all {@link Order} objects, empty list if none found
      */
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
@@ -177,7 +221,12 @@ public class OrderDAO {
     }
 
     /**
-     * Count pending orders — for the dashboard home panel pendingOrders label.
+     * Counts all orders that are not yet delivered or cancelled.
+     *
+     * <p>Used to populate the "Pending Orders" counter on the
+     * dashboard home panel.</p>
+     *
+     * @return the number of pending/active orders, or 0 if none
      */
     public int getPendingOrderCount() {
         String sql = "SELECT COUNT(*) FROM Orders WHERE OrderStatus NOT IN ('DELIVERED','CANCELLED')";
@@ -192,8 +241,10 @@ public class OrderDAO {
     }
 
     /**
-     * Get status of one order.
-     * Matches OrderService.getOrderStatus(String orderId).
+     * Retrieves the current status of a single order.
+     *
+     * @param orderId the unique order identifier
+     * @return the {@link OrderStatus} of the order, or {@code null} if not found
      */
     public OrderStatus getOrderStatus(String orderId) {
         String sql = "SELECT OrderStatus FROM Orders WHERE OrderID = ?";
@@ -211,6 +262,16 @@ public class OrderDAO {
         return null;
     }
 
+    /**
+     * Retrieves all line items associated with a specific order.
+     *
+     * <p>Called internally when building a full Order object with items,
+     * and used in report generation to display itemised order details.</p>
+     *
+     * @param orderId the unique order identifier
+     * @return list of {@link OrderItem} objects for the order,
+     *         empty list if none found
+     */
     public List<OrderItem> getItemsForOrder(String orderId) {
         List<OrderItem> items = new ArrayList<>();
         String sql = "SELECT * FROM OrderItems WHERE OrderID = ?";
@@ -237,8 +298,19 @@ public class OrderDAO {
     // ─────────────────────────────────────────────
 
     /**
-     * Update order status and optionally save dispatch details.
-     * UC-SA-ORD-04 — Warehouse staff updates order status.
+     * Updates the status of an existing order and optionally records dispatch details.
+     *
+     * <p>Used by warehouse staff and delivery staff to progress an order
+     * through the workflow: ACCEPTED → PROCESSING → PACKED →
+     * DISPATCHED → DELIVERED. Dispatch details (courier name, reference
+     * number, estimated delivery time) are recorded when status is
+     * set to DISPATCHED.</p>
+     *
+     * @param orderId         the unique order identifier to update
+     * @param status          the new {@link OrderStatus} to apply
+     * @param dispatchDetails optional dispatch information such as courier
+     *                        name and reference number; may be {@code null}
+     * @return {@code true} if the update was successful, {@code false} otherwise
      */
     public boolean updateOrderStatus(String orderId, OrderStatus status, String dispatchDetails) {
         String sql = "UPDATE Orders SET OrderStatus = ?, DispatchDetails = ? WHERE OrderID = ?";
@@ -255,9 +327,21 @@ public class OrderDAO {
     }
 
     // ─────────────────────────────────────────────
-    // HELPER — map DB row to your Order object
+    // HELPER
     // ─────────────────────────────────────────────
 
+    /**
+     * Maps a single database result set row to an {@link Order} object.
+     *
+     * <p>Called internally by all read methods to convert raw SQL
+     * results into typed Order objects. Does not populate the items
+     * list — callers must call {@link #getItemsForOrder(String)}
+     * separately if needed.</p>
+     *
+     * @param rs the {@link ResultSet} positioned at the row to map
+     * @return a populated {@link Order} object
+     * @throws SQLException if a database access error occurs
+     */
     private Order mapOrder(ResultSet rs) throws SQLException {
         Order o = new Order();
         o.setOrderId(rs.getString("OrderID"));
