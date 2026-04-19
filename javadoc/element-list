@@ -1,0 +1,9 @@
+IPOS_Detailed_Design.api
+IPOS_Detailed_Design.app
+IPOS_Detailed_Design.dao
+IPOS_Detailed_Design.gui.dashboard
+IPOS_Detailed_Design.gui.login
+IPOS_Detailed_Design.model
+IPOS_Detailed_Design.model.enums
+IPOS_Detailed_Design.model.users
+IPOS_Detailed_Design.service
